@@ -6,7 +6,7 @@ import {
   Shield, Flame, Crown, Lock, Calendar, ArrowRight, Gem, MoreVertical,
   Send, Paperclip, Smile, Trophy, ArrowDown, Minus, Play, TrendingUp,
   Target, Zap, Award, Medal, Clock, Brain, BookOpen, Gamepad2, X, RefreshCw,
-  Image as ImageIcon, Edit2, LayoutGrid, Activity, Sparkles, Star, ChevronRight, Info, Palette
+  Image as ImageIcon, Edit2, LayoutGrid, Activity, Sparkles, Star, ChevronRight, Info, Palette, ChevronDown
 } from 'lucide-react';
 
 // --- DATA ---
@@ -71,7 +71,13 @@ const APP_CHALLENGES_BANK = [
   // WHATSAPP
   { id: 'ch_wa_1', appId: 'wa', gender: 'any', title: 'Modo Asíncrono', subtitle: 'Respuestas por lote', xp: 200, diamonds: 70, duration: 7, desc: 'Desactiva notificaciones. Revisa y responde mensajes solo 2 veces al día (ej. 1pm y 8pm).' },
   { id: 'ch_wa_2', appId: 'wa', gender: 'any', title: 'Cero Estados', subtitle: 'Vida privada', xp: 180, diamonds: 60, duration: 14, desc: 'Prohibido ver los estados de tus contactos y prohibido subir estados propios.' },
-  { id: 'ch_wa_3', appId: 'wa', gender: 'any', title: 'Limpieza de Grupos', subtitle: 'Silencio total', xp: 150, diamonds: 50, duration: 3, desc: 'Archiva y silencia permanentemente todos los grupos que no sean de trabajo/estudio urgente.' }
+  { id: 'ch_wa_3', appId: 'wa', gender: 'any', title: 'Limpieza de Grupos', subtitle: 'Silencio total', xp: 150, diamonds: 50, duration: 3, desc: 'Archiva y silencia permanentemente todos los grupos que no sean de trabajo/estudio urgente.' },
+  { id: 'ch_insta_4', appId: 'insta', gender: 'any', title: 'Desintoxicación Total', subtitle: 'Borrado temporal', xp: 500, diamonds: 200, duration: 30, desc: 'Desinstala la aplicación durante 30 días seguidos. Rompe la adicción de raíz.' },
+  { id: 'ch_fb_4', appId: 'fb', gender: 'any', title: 'Apagón Social', subtitle: 'Sin rastro', xp: 400, diamonds: 150, duration: 21, desc: 'Desactiva tu cuenta de Facebook (o desinstala la app) por 21 días.' },
+  { id: 'ch_tt_4', appId: 'tt', gender: 'any', title: 'Modo Monje Estricto', subtitle: 'Cero estimulación', xp: 800, diamonds: 300, duration: 30, desc: 'Ni un solo video de formato corto en 30 días. Tu cerebro te lo agradecerá.' },
+  { id: 'ch_yt_4', appId: 'yt', gender: 'any', title: 'Intención Pura', subtitle: 'Cero recomendaciones', xp: 400, diamonds: 150, duration: 21, desc: 'Usa YouTube solo buscando canales específicos. Nada de feed de recomendaciones.' },
+  { id: 'ch_x_4', appId: 'x', gender: 'any', title: 'Silencio Absoluto', subtitle: 'Cero ruido', xp: 450, diamonds: 180, duration: 21, desc: 'Desinstala X por 21 días. Escapa de la cámara de eco.' },
+  { id: 'ch_wa_4', appId: 'wa', gender: 'any', title: 'Solo Texto', subtitle: 'Comunicación clara', xp: 300, diamonds: 100, duration: 14, desc: 'Prohibido enviar audios o fotos/stickers. Comunícate de manera concisa y solo con texto.' }
 ];
 
 const WWII_TRIVIA = [
@@ -106,8 +112,8 @@ const AVISOS_DATA = [
 ];
 
 const INITIAL_FORUM_POSTS = [
-  { id: '1', author: { name: 'FocusMaster', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop' }, text: '¡Acabo de completar 7 días en Modo Monje! La claridad mental es increíble.', likes: 24, time: 'Hace 2h', liked: false, comments: [] },
-  { id: '2', author: { name: 'ZenSeeker', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop' }, text: '¿Algún consejo para resistir la tentación de abrir TikTok en la mañana?', likes: 12, time: 'Hace 5h', liked: false, comments: [{ id: 'c1', author: 'FocusMaster', text: 'Guarda el teléfono en otra habitación al dormir.' }] }
+  { id: '1', author: { name: 'FocusMaster', avatarId: 'a_flame' }, text: '¡Acabo de completar 7 días en Modo Monje! La claridad mental es increíble.', likes: 24, time: 'Hace 2h', liked: false, comments: [] },
+  { id: '2', author: { name: 'ZenSeeker', avatarId: 'a_base' }, text: '¿Algún consejo para resistir la tentación de abrir TikTok en la mañana?', likes: 12, time: 'Hace 5h', liked: false, comments: [{ id: 'c1', author: 'FocusMaster', text: 'Guarda el teléfono en otra habitación al dormir.' }] }
 ];
 
 const MESSAGES_DATA = [
@@ -116,7 +122,7 @@ const MESSAGES_DATA = [
   { id: 'm_sophia', name: 'Sophia', role: 'Diosa del Silencio', type: 'animated', avatarId: 'a_sophia', unread: false, time: 'Ayer', isBot: true, botId: 'sophia' },
   { id: 'm_atlas', name: 'Atlas', role: 'Guardián del Saber', type: 'animated', avatarId: 'a_atlas', unread: false, time: 'Lun', isBot: true, botId: 'atlas' },
   { id: 'm_vento', name: 'Vento', role: 'Dragón de Papel', type: 'animated', avatarId: 'a_vento', unread: false, time: 'Dom', isBot: true, botId: 'vento' },
-  { id: 'm2', name: 'Alex_99', role: 'Usuario Nivel 12', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop', type: 'image', unread: false, time: 'Ayer', isBot: false }
+  { id: 'm2', name: 'Alex_99', role: 'Usuario Nivel 12', type: 'animated', avatarId: 'a_hacker', unread: false, time: 'Ayer', isBot: false }
 ];
 
 // SISTEMA DE CALIDADES Y TEMAS GLOBAL
@@ -131,12 +137,12 @@ const RARITY_ORDER = ['mythic', 'legendary', 'epic', 'rare', 'common'];
 
 // Precios ajustados a la nueva economía
 const BACKGROUNDS = {
-  bg_default: { id: 'bg_default', name: 'El Vacío', css: 'bg-[#050505]', themeProps: { navBg: 'bg-[#181818]', navBorder: 'border-white/5' }, img: 'https://images.unsplash.com/photo-1605379399642-870262d3d051?q=80&w=400&fit=crop', rarity: 'common', price: 0, desc: 'El comienzo de todo. Simple y oscuro. Ideal para mentes que necesitan un reinicio total.' },
-  bg_grid: { id: 'bg_grid', name: 'Matriz Cyber', css: 'bg-[#000814] bg-[linear-gradient(rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.05)_1px,transparent_1px)] bg-[size:30px_30px]', themeProps: { navBg: 'bg-[#001122]', navBorder: 'border-blue-500/30', navGlow: 'shadow-[0_0_20px_rgba(59,130,246,0.2)]' }, img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400&fit=crop', rarity: 'rare', price: 150, desc: 'Fondo de cuadrícula analítica. Activa el escáner neuronal para mentes calculadoras.' },
-  bg_zen: { id: 'bg_zen', name: 'Jardín Zen', css: 'bg-gradient-to-b from-[#02120a] to-[#000000]', themeProps: { navBg: 'bg-[#051a0f]', navBorder: 'border-emerald-500/30', navGlow: 'shadow-[0_0_20px_rgba(16,185,129,0.15)]' }, img: 'https://images.unsplash.com/photo-1596436889106-be35e843f974?q=80&w=400&fit=crop', rarity: 'epic', price: 300, desc: 'Para aquellos que buscan la paz interior extrema. Incluye orbes de calma para sincronizar tu respiración.' },
-  bg_ocean: { id: 'bg_ocean', name: 'Abismo Oceánico', css: 'bg-gradient-to-b from-[#000b18] to-[#000000]', themeProps: { navBg: 'bg-[#001429]', navBorder: 'border-cyan-500/30', navGlow: 'shadow-[0_0_25px_rgba(6,182,212,0.2)]' }, img: 'https://images.unsplash.com/photo-1551244072-5d12893278ab?q=80&w=400&fit=crop', rarity: 'epic', price: 450, desc: 'La presión de las profundidades forja diamantes. Ideal para concentración extrema.' },
-  bg_nebula: { id: 'bg_nebula', name: 'Nebulosa Cósmica', css: 'bg-gradient-to-br from-[#120524] to-[#000000]', themeProps: { navBg: 'bg-[#1a0b2e]', navBorder: 'border-purple-500/40', navGlow: 'shadow-[0_0_25px_rgba(168,85,247,0.2)]' }, img: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=400&fit=crop', rarity: 'legendary', price: 800, desc: 'Un viaje por las estrellas oscuras. Tu disciplina expande la galaxia. Activa el campo estelar.' },
-  bg_inferno: { id: 'bg_inferno', name: 'Foso Infernal', css: 'bg-gradient-to-t from-[#2a0000] to-[#000000]', themeProps: { navBg: 'bg-[#2a0000]', navBorder: 'border-red-500/50', navGlow: 'shadow-[0_0_30px_rgba(239,68,68,0.3)]', isAgresive: true }, img: 'https://images.unsplash.com/photo-1473976340520-22fb18967b5e?q=80&w=400&fit=crop', rarity: 'mythic', price: 1500, desc: 'Solo para voluntades forjadas en el fuego más intenso. El entorno reacciona con llamas a tu progreso.' }
+  bg_default: { id: 'bg_default', name: 'El Vacío', css: 'bg-[#050505]', themeProps: { navBg: 'bg-[#181818]', navBorder: 'border-white/5' }, img: 'animated', rarity: 'common', price: 0, desc: 'El comienzo de todo. Simple y oscuro. Ideal para mentes que necesitan un reinicio total.' },
+  bg_grid: { id: 'bg_grid', name: 'Matriz Cyber', css: 'bg-[#000814] bg-[linear-gradient(rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.05)_1px,transparent_1px)] bg-[size:30px_30px]', themeProps: { navBg: 'bg-[#001122]', navBorder: 'border-blue-500/30', navGlow: 'shadow-[0_0_20px_rgba(59,130,246,0.2)]' }, img: 'animated', rarity: 'rare', price: 150, desc: 'Fondo de cuadrícula analítica. Activa el escáner neuronal para mentes calculadoras.' },
+  bg_zen: { id: 'bg_zen', name: 'Jardín Zen', css: 'bg-gradient-to-b from-[#02120a] to-[#000000]', themeProps: { navBg: 'bg-[#051a0f]', navBorder: 'border-emerald-500/30', navGlow: 'shadow-[0_0_20px_rgba(16,185,129,0.15)]' }, img: 'animated', rarity: 'epic', price: 300, desc: 'Para aquellos que buscan la paz interior extrema. Incluye orbes de calma para sincronizar tu respiración.' },
+  bg_ocean: { id: 'bg_ocean', name: 'Abismo Oceánico', css: 'bg-gradient-to-b from-[#000b18] to-[#000000]', themeProps: { navBg: 'bg-[#001429]', navBorder: 'border-cyan-500/30', navGlow: 'shadow-[0_0_25px_rgba(6,182,212,0.2)]' }, img: 'animated', rarity: 'epic', price: 450, desc: 'La presión de las profundidades forja diamantes. Ideal para concentración extrema.' },
+  bg_nebula: { id: 'bg_nebula', name: 'Nebulosa Cósmica', css: 'bg-gradient-to-br from-[#120524] to-[#000000]', themeProps: { navBg: 'bg-[#1a0b2e]', navBorder: 'border-purple-500/40', navGlow: 'shadow-[0_0_25px_rgba(168,85,247,0.2)]' }, img: 'animated', rarity: 'legendary', price: 800, desc: 'Un viaje por las estrellas oscuras. Tu disciplina expande la galaxia. Activa el campo estelar.' },
+  bg_inferno: { id: 'bg_inferno', name: 'Foso Infernal', css: 'bg-gradient-to-t from-[#2a0000] to-[#000000]', themeProps: { navBg: 'bg-[#2a0000]', navBorder: 'border-red-500/50', navGlow: 'shadow-[0_0_30px_rgba(239,68,68,0.3)]', isAgresive: true }, img: 'animated', rarity: 'mythic', price: 1500, desc: 'Solo para voluntades forjadas en el fuego más intenso. El entorno reacciona con llamas a tu progreso.' }
 };
 
 const LEVELS = [
@@ -171,7 +177,54 @@ const MINIGAMES_BANK = [
   { id: 'mg_2', type: 'memory', title: 'Memoriza', subtitle: 'Progresión Visual', desc: 'Encuentra las parejas ocultas. La dificultad (cantidad de cartas) aumenta tras cada victoria.', icon: LayoutGrid, color: 'from-blue-500 to-cyan-600', rewardXP: 45, rewardDia: 15 },
   { id: 'mg_3', type: 'millionaire', title: 'Mente Maestra', subtitle: 'Prueba de 5 Preguntas', desc: 'Demuestra tu cultura general. Responde 5 preguntas seguidas sin margen de error.', icon: Brain, color: 'from-purple-500 to-indigo-600', rewardXP: 60, rewardDia: 20 },
   { id: 'mg_4', type: 'math', title: 'Genio Matemático', subtitle: 'Agilidad Numérica', desc: 'Resuelve operaciones matemáticas. Fomenta la inteligencia y la rapidez mental.', icon: Activity, color: 'from-green-500 to-emerald-600', rewardXP: 40, rewardDia: 10 },
-  { id: 'mg_5', type: 'sequence', title: 'Secuencia Lógica', subtitle: 'Orden y Enfoque', desc: 'Toca los números en orden ascendente. Entrena tu concentración y memoria de trabajo.', icon: LayoutGrid, color: 'from-indigo-500 to-purple-600', rewardXP: 35, rewardDia: 10 }
+  { id: 'mg_5', type: 'sequence', title: 'Secuencia Lógica', subtitle: 'Orden y Enfoque', desc: 'Toca los números en orden ascendente. Entrena tu concentración y memoria de trabajo.', icon: LayoutGrid, color: 'from-indigo-500 to-purple-600', rewardXP: 35, rewardDia: 10 },
+  { id: 'mg_6', type: 'whack', title: 'Destructor', subtitle: 'Caza de Distracciones', desc: 'Destruye los iconos de distracciones antes de que desaparezcan, pero NO toques los de trabajo.', icon: Target, color: 'from-red-500 to-pink-600', rewardXP: 50, rewardDia: 15 },
+  { id: 'mg_7', type: 'stoic', title: 'Sabiduría Estoica', subtitle: 'Ordena la frase', desc: 'Ordena las palabras para formar famosas frases de pensadores estoicos.', icon: BookOpen, color: 'from-slate-500 to-gray-700', rewardXP: 40, rewardDia: 15 }
+];
+
+const FOCUS_TIPS_VIDEOS = [
+  {
+    id: 'v_dopamina',
+    title: 'Desintoxicación de Dopamina',
+    duration: '5:42',
+    category: 'Mentalidad',
+    thumbnail: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Elimina todo estímulo ultra-procesado en las primeras 2 horas del día.',
+      'Sustituye el scroll rápido por aburrimiento controlado para reiniciar receptores.',
+      'Escribe tus metas en papel para activar el sistema de recompensa real.'
+    ],
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    desc: 'Cómo hackear tu química cerebral para recuperar la atención y eliminar la procrastinación indefinida.'
+  },
+  {
+    id: 'v_estoico',
+    title: 'Maestría Estoica de la Atención',
+    duration: '4:15',
+    category: 'Estoicismo',
+    thumbnail: 'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Divide tus retos en controlables y no controlables (Dicotomía del Control).',
+      'Realiza una pre-meditación de los males antes de comenzar a trabajar.',
+      'Recuerda tu finitud (Memento Mori) para valorar cada minuto enfocado.'
+    ],
+    videoUrl: 'https://www.w3schools.com/html/movie.mp4',
+    desc: 'Aplica las enseñanzas antiguas de Séneca y Epicteto al caos del mundo digital moderno.'
+  },
+  {
+    id: 'v_pomodoro',
+    title: 'El Secreto del Bloque de Enfoque',
+    duration: '6:30',
+    category: 'Productividad',
+    thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Trabaja en bloques puros de 90 minutos en lugar de 25.',
+      'Durante el descanso de 15 min, evita cualquier pantalla (camina o estira).',
+      'Usa audio binaural de 40Hz para inducir estados de flujo cognitivo rápidos.'
+    ],
+    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    desc: 'Optimiza tus ciclos ultradianos naturales para mantener un alto rendimiento mental sin fatiga.'
+  }
 ];
 
 const MILLIONAIRE_QS = [
@@ -354,6 +407,293 @@ const MascotVento = () => (
   </div>
 );
 
+const BgPreviewDefault = () => (
+  <div className="w-full h-full bg-[#050505] rounded-xl border border-white/10 overflow-hidden relative flex items-center justify-center">
+    <motion.div animate={{ opacity: [0.1, 0.4, 0.1], scale: [0.95, 1.05, 0.95] }} transition={{ duration: 4, repeat: Infinity }} className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
+    <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} className="w-4 h-4 bg-white/20 rounded-full blur-[2px]" />
+    {Array.from({ length: 4 }).map((_, i) => (
+      <motion.div key={i} animate={{ y: [-10, 110], x: [0, Math.random() * 20 - 10], opacity: [0, 0.8, 0] }} transition={{ duration: 5 + i, repeat: Infinity, ease: "linear", delay: i * 1.5 }} className="absolute w-0.5 h-0.5 bg-white/40 rounded-full" style={{ top: -10, left: `${20 + i * 20}%` }} />
+    ))}
+  </div>
+);
+
+const BgPreviewGrid = () => (
+  <div className="w-full h-full bg-[#000814] bg-[linear-gradient(rgba(59,130,246,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.1)_1px,transparent_1px)] bg-[size:16px_16px] rounded-xl border border-blue-500/20 overflow-hidden relative">
+    <motion.div animate={{ y: ['-10%', '110%'] }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent shadow-[0_0_8px_#3b82f6]" />
+    {Array.from({ length: 5 }).map((_, i) => (
+      <motion.div key={i} animate={{ opacity: [0.1, 1, 0.1] }} transition={{ duration: 1.5 + i * 0.3, repeat: Infinity, ease: "easeInOut" }} className="absolute w-1 h-1 bg-cyan-400 rounded-full shadow-[0_0_4px_cyan]" style={{ left: `${16 + i * 16}px`, top: `${32 + (i % 2) * 16}px` }} />
+    ))}
+  </div>
+);
+
+const BgPreviewZen = () => (
+  <div className="w-full h-full bg-gradient-to-b from-[#02120a] to-[#000000] rounded-xl border border-emerald-500/20 overflow-hidden relative flex items-center justify-center">
+    <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute w-20 h-20 border border-emerald-500/10 rounded-full border-dashed" />
+    <motion.div animate={{ scale: [0.8, 1.2, 0.8], opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 4, repeat: Infinity }} className="absolute w-8 h-8 rounded-full border-2 border-emerald-400/20" />
+    {Array.from({ length: 5 }).map((_, i) => (
+      <motion.div key={i} animate={{ y: [110, -10], x: [0, Math.sin(i) * 15], opacity: [0, 0.7, 0] }} transition={{ duration: 4 + i, repeat: Infinity, ease: "easeOut", delay: i * 0.8 }} className="absolute w-1 h-1 bg-emerald-400 rounded-full blur-[0.5px] shadow-[0_0_6px_#10b981]" style={{ bottom: -10, left: `${15 + i * 18}%` }} />
+    ))}
+  </div>
+);
+
+const BgPreviewOcean = () => (
+  <div className="w-full h-full bg-gradient-to-b from-[#000b18] to-[#000000] rounded-xl border border-cyan-500/20 overflow-hidden relative">
+    {/* Floating Manta Ray / Fish Silhouette */}
+    <motion.div animate={{ x: [-20, 120], y: [40, 25, 40] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }} className="absolute w-6 h-3 bg-cyan-400/10 rounded-full blur-[0.5px] pointer-events-none" style={{ clipPath: 'polygon(0% 50%, 40% 0%, 100% 50%, 40% 100%)' }} />
+    {/* Bubbles */}
+    {Array.from({ length: 6 }).map((_, i) => (
+      <motion.div key={i} animate={{ y: [110, -10], x: [0, Math.cos(i) * 10], scale: [0.6, 1, 0.6] }} transition={{ duration: 3.5 + i * 0.5, repeat: Infinity, ease: "linear", delay: i * 0.6 }} className="absolute w-1.5 h-1.5 border border-cyan-400/60 rounded-full animate-pulse" style={{ bottom: -10, left: `${10 + i * 16}%` }} />
+    ))}
+  </div>
+);
+
+const BgPreviewNebula = () => (
+  <div className="w-full h-full bg-gradient-to-br from-[#120524] to-[#000000] rounded-xl border border-purple-500/30 overflow-hidden relative flex items-center justify-center">
+    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 15, ease: "linear" }} className="absolute inset-[-40%] bg-[radial-gradient(circle,rgba(168,85,247,0.2)_0%,transparent_60%)]" />
+    <motion.div animate={{ rotate: -360 }} transition={{ repeat: Infinity, duration: 25, ease: "linear" }} className="absolute w-[80%] h-[80%] bg-[radial-gradient(circle,rgba(236,72,153,0.1)_0%,transparent_50%)]" />
+    {/* Tiny falling meteor */}
+    <motion.div animate={{ x: [-20, 120], y: [-20, 120] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute w-4 h-0.5 bg-gradient-to-r from-purple-400 to-transparent blur-[0.5px] transform rotate-45" />
+    {Array.from({ length: 4 }).map((_, i) => (
+      <motion.div key={i} animate={{ opacity: [0.2, 1, 0.2] }} transition={{ duration: 2 + i * 0.5, repeat: Infinity }} className="absolute w-0.5 h-0.5 bg-white rounded-full" style={{ left: `${20 + i * 20}%`, top: `${15 + (i % 2) * 30}%` }} />
+    ))}
+  </div>
+);
+
+const BgPreviewInferno = () => (
+  <div className="w-full h-full bg-gradient-to-t from-[#2a0000] to-[#000000] rounded-xl border border-red-500/30 overflow-hidden relative">
+    <motion.div animate={{ opacity: [0.1, 0.4, 0.1] }} transition={{ duration: 1.5, repeat: Infinity }} className="absolute bottom-0 w-full h-[50%] bg-[radial-gradient(ellipse_at_bottom,rgba(239,68,68,0.3)_0%,transparent_70%)]" />
+    {/* Upward rising sparks */}
+    {Array.from({ length: 7 }).map((_, i) => {
+      const size = Math.random() * 2 + 1;
+      return (
+        <motion.div key={i} animate={{ y: [110, -10], x: [0, (Math.random() * 20 - 10)], opacity: [0, 1, 0] }} transition={{ duration: 2.5 + i * 0.4, repeat: Infinity, ease: "easeIn", delay: i * 0.4 }} className="absolute rounded-full bg-orange-400 blur-[0.5px] shadow-[0_0_4px_#f97316]" style={{ width: size, height: size, bottom: -10, left: `${8 + i * 14}%` }} />
+      );
+    })}
+  </div>
+);
+
+const MascotOrb = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ scale: [1, 1.2, 1], rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="w-[60%] aspect-square rounded-full bg-gradient-to-tr from-blue-600 via-cyan-300 to-white flex items-center justify-center shadow-[0_0_30px_#67e8f9]">
+      <motion.div animate={{ scale: [1, 0.5, 1], opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }} className="w-[40%] aspect-square bg-white rounded-full blur-[2px]" />
+    </motion.div>
+  </div>
+);
+
+const MascotPrism = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ rotateY: 360, y: [-5, 5, -5] }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} className="w-[50%] aspect-square relative flex items-center justify-center" style={{ transformStyle: 'preserve-3d' }}>
+      <div className="absolute w-full h-full bg-emerald-500/80 border-[3px] border-emerald-200" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }} />
+      <div className="absolute w-full h-full bg-emerald-700/80 border-[3px] border-emerald-200 origin-bottom" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)', transform: 'rotateX(-60deg)' }} />
+      <motion.div animate={{ opacity: [0.4, 0.8, 0.4] }} transition={{ duration: 1.5, repeat: Infinity }} className="absolute -bottom-4 w-[80%] h-2 bg-emerald-400 blur-md rounded-full" />
+    </motion.div>
+  </div>
+);
+
+const MascotEye = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 2, repeat: Infinity }} className="w-[70%] h-[40%] bg-purple-900 border-4 border-purple-400 rounded-[100%] flex items-center justify-center shadow-[0_0_25px_#c084fc] relative overflow-hidden">
+      <motion.div animate={{ x: [-5, 5, -5], y: [-2, 2, -2] }} transition={{ duration: 3, repeat: Infinity }} className="w-[40%] aspect-square bg-white rounded-full flex items-center justify-center">
+        <motion.div animate={{ scale: [1, 0.5, 1] }} transition={{ duration: 4, repeat: Infinity }} className="w-[50%] aspect-square bg-purple-600 rounded-full flex items-center justify-center">
+          <div className="w-[30%] aspect-square bg-black rounded-full" />
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  </div>
+);
+
+const MascotCrown = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ y: [-4, 4, -4], rotateZ: [-5, 5, -5] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} className="w-[60%] h-[40%] relative flex items-end">
+      <div className="w-[33%] h-full bg-gradient-to-t from-yellow-600 to-yellow-300 border-2 border-yellow-200 rounded-t-xl z-10" />
+      <div className="w-[34%] h-[130%] bg-gradient-to-t from-yellow-600 to-yellow-200 border-2 border-yellow-100 rounded-t-xl z-20 -mx-1" />
+      <div className="w-[33%] h-full bg-gradient-to-t from-yellow-600 to-yellow-300 border-2 border-yellow-200 rounded-t-xl z-10" />
+      <motion.div animate={{ scale: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }} className="absolute -top-4 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rounded-full shadow-[0_0_15px_white] z-30" />
+    </motion.div>
+  </div>
+);
+
+const MascotVoid = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ rotate: -360 }} transition={{ duration: 8, repeat: Infinity, ease: "linear" }} className="w-[60%] aspect-square rounded-full border-4 border-dashed border-gray-500 flex items-center justify-center p-2 relative">
+      <motion.div animate={{ scale: [1, 1.2, 1], rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="w-full h-full rounded-full bg-black border-2 border-purple-500/50 shadow-[0_0_30px_#a855f7] flex items-center justify-center overflow-hidden">
+        <motion.div animate={{ opacity: [0.2, 0.8, 0.2] }} transition={{ duration: 2, repeat: Infinity }} className="w-[80%] h-[80%] bg-[radial-gradient(circle,rgba(0,0,0,1)_0%,rgba(168,85,247,0.5)_100%)] rounded-full blur-[2px]" />
+      </motion.div>
+    </motion.div>
+  </div>
+);
+
+const MascotLotus = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="w-[50%] aspect-square relative flex items-center justify-center">
+      {[0, 45, 90, 135, 180, 225, 270, 315].map((deg, i) => (
+        <motion.div key={i} animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, delay: i * 0.2, repeat: Infinity }} className="absolute w-[40%] h-[120%] bg-pink-500/50 border border-pink-300 rounded-full mix-blend-screen shadow-[0_0_10px_#ec4899]" style={{ transform: `rotate(${deg}deg)` }} />
+      ))}
+      <div className="w-[30%] aspect-square bg-white rounded-full z-10 shadow-[0_0_15px_white]" />
+    </motion.div>
+  </div>
+);
+
+const MascotHelix = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ rotateY: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="w-[40%] h-[70%] flex flex-col justify-between" style={{ transformStyle: 'preserve-3d' }}>
+      {[0, 1, 2, 3].map((idx) => (
+        <div key={idx} className="w-full flex justify-between relative h-[20%] items-center">
+          <div className="w-[20%] aspect-square rounded-full bg-cyan-400 z-10 shadow-[0_0_10px_#22d3ee]" />
+          <div className="absolute w-full h-[3px] bg-white/30 z-0" />
+          <div className="w-[20%] aspect-square rounded-full bg-fuchsia-400 z-10 shadow-[0_0_10px_#e879f9]" />
+        </div>
+      ))}
+    </motion.div>
+  </div>
+);
+
+const MascotShield = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ y: [-3, 3, -3] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="w-[60%] h-[70%] bg-blue-600/80 border-4 border-blue-300 shadow-[0_0_30px_#60a5fa] relative flex justify-center pt-2" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%)' }}>
+      <motion.div animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 1.5, repeat: Infinity }} className="w-[60%] h-[80%] border-2 border-white/50" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%)' }} />
+    </motion.div>
+  </div>
+);
+
+const MascotSword = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ y: [-5, 5, -5] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }} className="w-[20%] h-[80%] flex flex-col items-center">
+      <motion.div animate={{ filter: ['brightness(1)', 'brightness(1.5)', 'brightness(1)'] }} transition={{ duration: 1, repeat: Infinity }} className="w-full flex-1 bg-gradient-to-t from-cyan-400 to-white shadow-[0_0_20px_#22d3ee] rounded-t-full" style={{ clipPath: 'polygon(50% 0%, 100% 20%, 100% 100%, 0% 100%, 0% 20%)' }} />
+      <div className="w-[200%] h-[10%] bg-gray-300 rounded-sm border-y-2 border-gray-500" />
+      <div className="w-[80%] h-[20%] bg-gray-800 rounded-b-md border-x-2 border-b-2 border-gray-600 flex justify-center items-end pb-1">
+        <div className="w-2 h-2 bg-red-500 rounded-full" />
+      </div>
+    </motion.div>
+  </div>
+);
+
+const MascotGhost = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ y: [-5, 5, -5], scaleY: [1, 1.05, 1] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} className="w-[50%] h-[60%] bg-white/80 rounded-t-full relative shadow-[0_0_30px_white] backdrop-blur-sm" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 80%, 75% 100%, 50% 80%, 25% 100%, 0 80%)' }}>
+      <div className="flex justify-center gap-2 mt-[40%]">
+        <div className="w-3 h-4 bg-black rounded-full" />
+        <div className="w-3 h-4 bg-black rounded-full" />
+      </div>
+    </motion.div>
+  </div>
+);
+
+const MascotPyramid = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ rotateY: 360, y: [-4, 4, -4] }} transition={{ rotateY: { duration: 5, repeat: Infinity, ease: "linear" }, y: { duration: 3, repeat: Infinity, ease: "easeInOut" } }} className="w-[50%] aspect-square relative flex items-center justify-center" style={{ transformStyle: 'preserve-3d' }}>
+      <div className="absolute w-full h-full bg-cyan-500/20 border-2 border-cyan-400" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }} />
+      <motion.div animate={{ opacity: [0.3, 0.7, 0.3], scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }} className="absolute -bottom-4 w-[70%] h-2 bg-cyan-400 blur-md rounded-full" />
+    </motion.div>
+  </div>
+);
+
+const MascotRing = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <div className="relative w-[60%] aspect-square flex items-center justify-center">
+      <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} className="absolute inset-0 rounded-full border-4 border-dashed border-sky-400 shadow-[0_0_15px_#38bdf8]" />
+      <motion.div animate={{ rotate: -360 }} transition={{ duration: 5, repeat: Infinity, ease: "linear" }} className="absolute inset-4 rounded-full border-2 border-sky-200 shadow-[0_0_10px_#bae6fd]" />
+      <motion.div animate={{ scale: [0.8, 1.1, 0.8] }} transition={{ duration: 2, repeat: Infinity }} className="w-4 h-4 bg-white rounded-full shadow-[0_0_10px_white]" />
+    </div>
+  </div>
+);
+
+const MascotDagger = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ y: [-5, 5, -5], rotate: [45, 50, 45] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="w-[15%] h-[70%] flex flex-col items-center relative">
+      <motion.div animate={{ opacity: [0.3, 0.8, 0.3] }} transition={{ duration: 1, repeat: Infinity }} className="w-full flex-1 bg-gradient-to-t from-purple-500 to-indigo-300 shadow-[0_0_20px_#a855f7] rounded-t-full" />
+      <div className="w-[250%] h-[8%] bg-indigo-900 border border-indigo-400 rounded-sm" />
+      <div className="w-3 h-12 bg-indigo-950 border border-indigo-800 rounded-b-md" />
+      <motion.div animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.6, 0.2] }} transition={{ duration: 1.5, repeat: Infinity }} className="absolute inset-0 bg-purple-500/20 blur-md rounded-full pointer-events-none" />
+    </motion.div>
+  </div>
+);
+
+const MascotCube = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ rotateX: 360, rotateY: 360 }} transition={{ duration: 6, repeat: Infinity, ease: "linear" }} className="w-[45%] aspect-square relative flex items-center justify-center border-4 border-emerald-400 shadow-[0_0_25px_#34d399] rounded-lg" style={{ transformStyle: 'preserve-3d' }}>
+      <motion.div animate={{ scale: [0.6, 0.9, 0.6] }} transition={{ duration: 2, repeat: Infinity }} className="w-[60%] aspect-square border-2 border-dashed border-emerald-200 rounded" />
+    </motion.div>
+  </div>
+);
+
+const MascotAtom = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <div className="relative w-[60%] aspect-square flex items-center justify-center">
+      <motion.div animate={{ scale: [0.9, 1.1, 0.9], filter: ['brightness(1)', 'brightness(1.3)', 'brightness(1)'] }} transition={{ duration: 1.5, repeat: Infinity }} className="w-6 h-6 bg-pink-500 rounded-full shadow-[0_0_20px_#ec4899] z-10" />
+      <motion.div animate={{ rotateX: 70, rotateY: 30, rotateZ: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="absolute w-full h-full border-2 border-pink-400/50 rounded-full" />
+      <motion.div animate={{ rotateX: 30, rotateY: 70, rotateZ: -360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="absolute w-full h-full border-2 border-pink-400/50 rounded-full" />
+    </div>
+  </div>
+);
+
+const MascotComet = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
+    <motion.div animate={{ x: [-10, 10, -10], y: [-10, 10, -10] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="relative flex items-center justify-center w-16 h-16">
+      <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity }} className="w-6 h-6 bg-yellow-300 rounded-full shadow-[0_0_20px_#fde047] z-10" />
+      <div className="absolute right-[-20px] w-20 h-4 bg-gradient-to-l from-transparent via-yellow-500/40 to-yellow-300/80 rounded-full blur-[2px] transform rotate-45" />
+    </motion.div>
+  </div>
+);
+
+const MascotMirror = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ y: [-3, 3, -3] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} className="w-[50%] h-[70%] border-4 border-[#8ab4f8] rounded-[100px] bg-black/60 shadow-[0_0_25px_rgba(138,180,248,0.5)] overflow-hidden relative p-1">
+      <motion.div animate={{ rotate: 360 }} transition={{ duration: 8, repeat: Infinity, ease: "linear" }} className="absolute inset-0 bg-[conic-gradient(from_0deg,#3b82f6,#a855f7,#3b82f6)] opacity-40 blur-sm" />
+      <div className="absolute inset-2 bg-black/80 rounded-[100px] z-10" />
+    </motion.div>
+  </div>
+);
+
+const MascotHourglass = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ rotate: [0, 180, 180, 360, 360], y: [-2, 2, -2] }} transition={{ duration: 6, repeat: Infinity, times: [0, 0.45, 0.5, 0.95, 1] }} className="w-[35%] h-[60%] flex flex-col justify-between items-center relative">
+      <div className="w-full h-[45%] border-x-4 border-t-4 border-amber-500 rounded-t-xl bg-black/50 overflow-hidden relative">
+        <motion.div animate={{ height: ['90%', '0%', '0%', '90%', '90%'] }} transition={{ duration: 6, repeat: Infinity, times: [0, 0.45, 0.5, 0.95, 1], ease: "linear" }} className="w-full bg-amber-400/80 absolute bottom-0" />
+      </div>
+      <div className="w-2 h-2 bg-amber-500 rounded-full z-10" />
+      <div className="w-full h-[45%] border-x-4 border-b-4 border-amber-500 rounded-b-xl bg-black/50 overflow-hidden relative">
+        <motion.div animate={{ height: ['0%', '90%', '90%', '0%', '0%'] }} transition={{ duration: 6, repeat: Infinity, times: [0, 0.45, 0.5, 0.95, 1], ease: "linear" }} className="w-full bg-amber-400/80 absolute top-0" />
+      </div>
+    </motion.div>
+  </div>
+);
+
+const MascotPhoenix = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ y: [-4, 4, -4] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} className="w-[60%] aspect-square relative flex items-center justify-center">
+      <motion.div animate={{ scale: [1, 1.15, 1], opacity: [0.6, 0.9, 0.6] }} transition={{ duration: 1.5, repeat: Infinity }} className="absolute inset-[-10%] bg-[radial-gradient(circle,rgba(239,68,68,0.4)_0%,transparent_70%)] rounded-full blur-md" />
+      <div className="w-[50%] h-[50%] bg-gradient-to-tr from-red-500 via-orange-500 to-yellow-400 rounded-full border-2 border-red-300 relative z-10 flex items-center justify-center shadow-[0_0_20px_#ef4444]">
+        <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute inset-2 border-2 border-dashed border-white/40 rounded-full" />
+      </div>
+      <motion.div animate={{ rotate: [-20, 20, -20] }} transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }} className="absolute left-[-20%] w-[50%] h-[30%] bg-gradient-to-r from-red-600 to-orange-400 rounded-l-full origin-right border-l-2 border-orange-300" style={{ clipPath: 'polygon(0 50%, 100% 0, 100% 100%)' }} />
+      <motion.div animate={{ rotate: [20, -20, 20] }} transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }} className="absolute right-[-20%] w-[50%] h-[30%] bg-gradient-to-l from-red-600 to-orange-400 rounded-r-full origin-left border-r-2 border-orange-300" style={{ clipPath: 'polygon(100% 50%, 0 0, 0 100%)' }} />
+    </motion.div>
+  </div>
+);
+
+const MascotPegasus = () => (
+  <div className="relative w-full h-full flex flex-col items-center justify-center">
+    <motion.div animate={{ y: [-4, 4, -4], scale: [1, 1.05, 1] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} className="w-[60%] aspect-square relative flex items-center justify-center">
+      <motion.div animate={{ rotate: 360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} className="absolute inset-0 border-2 border-dashed border-cyan-400/40 rounded-full" />
+      <div className="relative w-[70%] h-[70%] bg-black/60 border-[3px] border-cyan-400 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.5)] overflow-hidden">
+        <div className="absolute top-[20%] left-[30%] w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_5px_white]" />
+        <div className="absolute top-[40%] left-[60%] w-2 h-2 bg-cyan-200 rounded-full shadow-[0_0_8px_cyan]" />
+        <div className="absolute top-[65%] left-[25%] w-1 h-1 bg-white rounded-full" />
+        <div className="absolute top-[70%] left-[55%] w-1.5 h-1.5 bg-white rounded-full" />
+        <div className="absolute top-[30%] left-[45%] w-1 h-1 bg-white rounded-full" />
+        <svg className="absolute inset-0 w-full h-full opacity-40 stroke-cyan-400 stroke-1" fill="none">
+          <line x1="30%" y1="20%" x2="45%" y2="30%" />
+          <line x1="45%" y1="30%" x2="60%" y2="40%" />
+          <line x1="60%" y1="40%" x2="55%" y2="70%" />
+          <line x1="55%" y1="70%" x2="25%" y2="65%" />
+          <line x1="25%" y1="65%" x2="30%" y2="20%" />
+        </svg>
+      </div>
+    </motion.div>
+  </div>
+);
+
 const ANIMATED_AVATARS = {
   'a_base': MascotBase,
   'a_bot': MascotBot,
@@ -365,11 +705,44 @@ const ANIMATED_AVATARS = {
   'a_icaro': MascotIcaro,
   'a_sophia': MascotSophia,
   'a_atlas': MascotAtlas,
-  'a_vento': MascotVento
+  'a_vento': MascotVento,
+  
+  'a_orb': MascotOrb,
+  'a_prism': MascotPrism,
+  'a_eye': MascotEye,
+  'a_crown': MascotCrown,
+  'a_void': MascotVoid,
+  'a_lotus': MascotLotus,
+  'a_helix': MascotHelix,
+  'a_shield': MascotShield,
+  'a_sword': MascotSword,
+  'a_ghost': MascotGhost,
+
+  'a_pyramid': MascotPyramid,
+  'a_ring': MascotRing,
+  'a_dagger': MascotDagger,
+  'a_cube': MascotCube,
+  'a_atom': MascotAtom,
+  'a_comet': MascotComet,
+  'a_mirror': MascotMirror,
+  'a_hourglass': MascotHourglass,
+  'a_phoenix': MascotPhoenix,
+  'a_pegasus': MascotPegasus,
+
+  'bg_default': BgPreviewDefault,
+  'bg_grid': BgPreviewGrid,
+  'bg_zen': BgPreviewZen,
+  'bg_ocean': BgPreviewOcean,
+  'bg_nebula': BgPreviewNebula,
+  'bg_inferno': BgPreviewInferno,
 };
 
 const AvatarDisplay = ({ id, src, className, freeStanding = false, isLocked = false, skinFilters = null }) => {
   const Anim = ANIMATED_AVATARS[id];
+  const itemData = SHOP_ITEMS.find(i => i.id === id);
+  const rarity = itemData ? itemData.rarity : 'common';
+  const rColor = RARITIES[rarity]?.hex || '#ffffff';
+  
   const filterStyle = skinFilters ? `hue-rotate(${skinFilters.hue || 0}deg) brightness(${skinFilters.brightness || 1}) saturate(${skinFilters.saturate !== undefined ? skinFilters.saturate : 1})` : 'none';
   const content = Anim ? (
     <div className={`relative transition-all duration-500 ${freeStanding ? className.replace(/bg-[\w-]+\/?\d*/g, '').replace(/border(?:-[\w-]+)?/g, '').replace(/rounded-[\w-]+/g, '').replace('overflow-hidden', '') : className}`} style={{ filter: filterStyle }}>
@@ -381,7 +754,13 @@ const AvatarDisplay = ({ id, src, className, freeStanding = false, isLocked = fa
 
   return (
     <div className="relative w-full h-full flex items-center justify-center">
-      <div className={`w-full h-full flex items-center justify-center transition-all ${isLocked ? 'brightness-0 opacity-40 grayscale pointer-events-none' : ''}`}>
+      {!isLocked && rarity !== 'common' && (
+        <motion.div animate={ rarity === 'mythic' ? { scale: [1, 1.2, 1], rotate: [0, 90, 180, 270, 360], opacity: [0.3, 0.6, 0.3] } : rarity === 'legendary' ? { scale: [1, 1.15, 1], opacity: [0.2, 0.5, 0.2] } : rarity === 'epic' ? { scale: [1, 1.1, 1], opacity: [0.1, 0.3, 0.1] } : { opacity: [0.1, 0.2, 0.1] } } transition={{ duration: rarity === 'mythic' ? 4 : 3, repeat: Infinity, ease: "linear" }} className="absolute inset-[-20%] rounded-full blur-[15px] pointer-events-none z-0" style={{ backgroundColor: rColor }} />
+      )}
+      {!isLocked && (rarity === 'mythic' || rarity === 'legendary') && (
+        <motion.div animate={{ scale: [0.8, 1.1, 0.8], opacity: [0, 0.5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="absolute inset-[10%] rounded-full border-2 pointer-events-none z-10 mix-blend-overlay" style={{ borderColor: rColor }} />
+      )}
+      <div className={`relative w-full h-full flex items-center justify-center transition-all z-20 ${isLocked ? 'brightness-0 opacity-40 grayscale pointer-events-none' : ''}`}>
         {content}
       </div>
       {isLocked && (
@@ -394,15 +773,36 @@ const AvatarDisplay = ({ id, src, className, freeStanding = false, isLocked = fa
 };
 
 const SHOP_ITEMS = [
-  // Avatares Base
+  // Avatares Base (16)
   { id: 'a_base', category: 'avatar', name: 'NÚCLEO BASE', price: 0, rarity: 'common', img: 'animated', desc: 'Tu primer paso en el vacío. Sencillo, estable.' },
+  { id: 'a_orb', category: 'avatar', name: 'ORBE PRIMORDIAL', price: 100, rarity: 'common', img: 'animated', desc: 'Energía en estado puro, lista para ser moldeada.' },
   { id: 'a_bot', category: 'avatar', name: 'UNIDAD OMEGA', price: 200, rarity: 'rare', img: 'animated', desc: 'Precisión robótica. Cero distracciones.' },
+  { id: 'a_ghost', category: 'avatar', name: 'ESPECTRO', price: 250, rarity: 'rare', img: 'animated', desc: 'Atraviesa los muros de la procrastinación.' },
+  { id: 'a_prism', category: 'avatar', name: 'PRISMA DE ENFOQUE', price: 300, rarity: 'rare', img: 'animated', desc: 'Divide tus tareas y conquista la luz.' },
   { id: 'a_ninja', category: 'avatar', name: 'SOMBRA', price: 400, rarity: 'rare', img: 'animated', desc: 'Silencioso y letal contra las notificaciones e impulsos.' },
+  { id: 'a_shield', category: 'avatar', name: 'ÉGIDA', price: 500, rarity: 'epic', img: 'animated', desc: 'Tu barrera inquebrantable ante el caos exterior.' },
   { id: 'a_flame', category: 'avatar', name: 'FUEGO INTERNO', price: 600, rarity: 'epic', img: 'animated', desc: 'La llama de la voluntad. Quema la procrastinación.' },
+  { id: 'a_sword', category: 'avatar', name: 'ESPADA LUMINOSA', price: 700, rarity: 'epic', img: 'animated', desc: 'Corta las distracciones de un solo tajo.' },
   { id: 'a_hacker', category: 'avatar', name: 'GLITCH', price: 800, rarity: 'epic', img: 'animated', desc: 'Hackea tus propios hábitos. Reescribe el código de tu mente.' },
+  { id: 'a_lotus', category: 'avatar', name: 'LOTO SAGRADO', price: 900, rarity: 'legendary', img: 'animated', desc: 'Florece incluso en las aguas más turbias.' },
+  { id: 'a_helix', category: 'avatar', name: 'HÉLICE GENÉTICA', price: 1000, rarity: 'legendary', img: 'animated', desc: 'La disciplina codificada en tu propio ADN.' },
   { id: 'a_brain', category: 'avatar', name: 'MENTE CÓSMICA', price: 1200, rarity: 'legendary', img: 'animated', desc: 'Consciencia expandida. Tu mente domina el espacio y tiempo.' },
+  { id: 'a_eye', category: 'avatar', name: 'OJO PANÓPTICO', price: 1500, rarity: 'mythic', img: 'animated', desc: 'Lo observa todo, no pierde detalle. Visión absoluta.' },
+  { id: 'a_void', category: 'avatar', name: 'AGUJERO NEGRO', price: 1800, rarity: 'mythic', img: 'animated', desc: 'Absorbe todo el ruido del universo. Deja solo el vacío perfecto.' },
+  { id: 'a_crown', category: 'avatar', name: 'CORONA REAL', price: 2500, rarity: 'mythic', img: 'animated', desc: 'El rey de reyes del enfoque. No aceptas menos.' },
 
-  // Avatares Mentores IA
+  { id: 'a_pyramid', category: 'avatar', name: 'PIRÁMIDE ASTRAL', price: 350, rarity: 'rare', img: 'animated', desc: 'Una pirámide flotante que concentra la energía del cosmos en tu mente.' },
+  { id: 'a_ring', category: 'avatar', name: 'ANILLOS ORBITALES', price: 150, rarity: 'common', img: 'animated', desc: 'Dos anillos de pura energía que orbitan alrededor de tu enfoque.' },
+  { id: 'a_dagger', category: 'avatar', name: 'DAGA DE SOMBRAS', price: 450, rarity: 'rare', img: 'animated', desc: 'Una hoja forjada en el vacío para cortar cualquier distracción.' },
+  { id: 'a_cube', category: 'avatar', name: 'HIPERCUBO', price: 550, rarity: 'epic', img: 'animated', desc: 'Un tesseract que pliega las dimensiones para acortar tus tareas.' },
+  { id: 'a_atom', category: 'avatar', name: 'NÚCLEO ATÓMICO', price: 650, rarity: 'epic', img: 'animated', desc: 'Electrones en perfecta órbita alrededor de tu núcleo de disciplina.' },
+  { id: 'a_comet', category: 'avatar', name: 'COMETA STELLAR', price: 750, rarity: 'epic', img: 'animated', desc: 'Viaja a la velocidad de la luz hacia tus objetivos dejando una estela dorada.' },
+  { id: 'a_mirror', category: 'avatar', name: 'PORTAL DEL VACÍO', price: 850, rarity: 'epic', img: 'animated', desc: 'Un espejo místico que absorbe la procrastinación hacia otra dimensión.' },
+  { id: 'a_hourglass', category: 'avatar', name: 'ARENA INFINITA', price: 1100, rarity: 'legendary', img: 'animated', desc: 'Un reloj de arena que desafía el tiempo, permitiéndote dominar cada segundo.' },
+  { id: 'a_phoenix', category: 'avatar', name: 'FÉNIX NEON', price: 1300, rarity: 'legendary', img: 'animated', desc: 'Renace de las cenizas del cansancio con energía renovada e inquebrantable.' },
+  { id: 'a_pegasus', category: 'avatar', name: 'CONSTELACIÓN PEGASO', price: 2200, rarity: 'mythic', img: 'animated', desc: 'La mítica constelación de Pegaso que guía tu mente por encima de lo terrenal.' },
+
+  // Avatares Mentores IA (5)
   { id: 'a_vento', category: 'avatar', name: 'VENTO', price: 800, rarity: 'rare', img: 'animated', desc: 'Dragón de Papel. Fluye con gracia sobre la procrastinación.' },
   { id: 'a_crono', category: 'avatar', name: 'CRONO', price: 1000, rarity: 'epic', img: 'animated', desc: 'Vigilante de Arena. Domina el flujo del tiempo y tu enfoque absoluto.' },
   { id: 'a_sophia', category: 'avatar', name: 'SOPHIA', price: 1200, rarity: 'epic', img: 'animated', desc: 'Diosa del Silencio. Su presencia invoca una paz incorruptible.' },
@@ -422,52 +822,396 @@ const staggerItem = { hidden: { opacity: 0, y: 20, scale: 0.9 }, show: { opacity
 const GlobalThemeEffects = ({ themeId }) => {
   if (themeId === 'bg_inferno') {
     return (
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute bottom-0 left-0 right-0 h-[40vh] bg-gradient-to-t from-red-600/20 to-transparent"></div>
-        {Array.from({ length: 15 }).map((_, i) => (
-          <motion.div key={`fire-${i}`} initial={{ y: '100vh', x: `${Math.random() * 100}vw`, opacity: 0, scale: Math.random() * 1.5 + 0.5 }} animate={{ y: '-10vh', opacity: [0, 0.8, 0], scale: [1, 0.5] }} transition={{ duration: Math.random() * 3 + 2, repeat: Infinity, ease: 'easeIn', delay: Math.random() * 2 }} className="absolute bottom-0 w-3 h-3 rounded-full bg-red-500 blur-[2px] shadow-[0_0_10px_#ef4444]" />
-        ))}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-gradient-to-t from-[#100000] via-[#200000] to-[#000000]">
+        {/* Heat shimmer distortion backdrop */}
+        <motion.div 
+          animate={{ opacity: [0.3, 0.5, 0.3], scale: [1, 1.03, 1] }} 
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} 
+          className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(239,68,68,0.25)_0%,transparent_60%)]" 
+        />
+        
+        {/* High-fidelity Vector SVG Waving Flames at the base */}
+        <div className="absolute bottom-[-10px] left-[-10px] right-[-10px] h-[25vh] z-10 opacity-70">
+          <svg viewBox="0 0 400 100" preserveAspectRatio="none" className="w-full h-full">
+            {/* Dark flame backing */}
+            <motion.path 
+              d="M0,80 Q20,30 40,80 T80,80 T120,80 T160,80 T200,80 T240,80 T280,80 T320,80 T360,80 T400,80 L400,100 L0,100 Z" 
+              fill="rgba(185, 28, 28, 0.3)" 
+              animate={{ 
+                d: [
+                  "M0,80 Q20,35 40,75 T80,85 T120,70 T160,82 T200,75 T240,85 T280,72 T320,80 T360,75 T400,80 L400,100 L0,100 Z",
+                  "M0,85 Q20,25 40,85 T80,75 T120,80 T160,72 T200,85 T240,70 T280,82 T320,75 T360,85 T400,85 L400,100 L0,100 Z",
+                  "M0,80 Q20,35 40,75 T80,85 T120,70 T160,82 T200,75 T240,85 T280,72 T320,80 T360,75 T400,80 L400,100 L0,100 Z"
+                ] 
+              }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            />
+            {/* Midground orange flame */}
+            <motion.path 
+              d="M0,90 Q30,50 60,90 T120,90 T180,90 T240,90 T300,90 T360,90 T400,90 L400,100 L0,100 Z" 
+              fill="rgba(249, 115, 22, 0.4)" 
+              animate={{ 
+                d: [
+                  "M0,90 Q30,45 60,85 T120,92 T180,80 T240,95 T300,85 T360,92 T400,90 L400,100 L0,100 Z",
+                  "M0,92 Q30,55 60,95 T120,80 T180,92 T240,85 T300,95 T360,82 T400,92 L400,100 L0,100 Z",
+                  "M0,90 Q30,45 60,85 T120,92 T180,80 T240,95 T300,85 T360,92 T400,90 L400,100 L0,100 Z"
+                ] 
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+            />
+            {/* Foreground bright yellow/orange flame */}
+            <motion.path 
+              d="M0,95 Q40,70 80,95 T160,95 T240,95 T320,95 T400,95 L400,100 L0,100 Z" 
+              fill="rgba(234, 179, 8, 0.5)" 
+              animate={{ 
+                d: [
+                  "M0,95 Q40,65 80,92 T160,97 T240,90 T320,96 T400,93 L400,100 L0,100 Z",
+                  "M0,96 Q40,75 80,98 T160,90 T240,97 T320,90 T400,97 L400,100 L0,100 Z",
+                  "M0,95 Q40,65 80,92 T160,97 T240,90 T320,96 T400,93 L400,100 L0,100 Z"
+                ] 
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            />
+          </svg>
+        </div>
+
+        {/* Rising spark fire embers */}
+        {Array.from({ length: 30 }).map((_, i) => {
+          const size = Math.random() * 5 + 2;
+          return (
+            <motion.div 
+              key={`fire-${i}`} 
+              initial={{ y: '110vh', x: `${Math.random() * 100}vw`, opacity: 0 }} 
+              animate={{ 
+                y: '-10vh', 
+                x: `${Math.random() * 100 + (Math.random() * 20 - 10)}vw`, 
+                opacity: [0, 0.9, 0],
+                scale: [0.8, 1.2, 0.5]
+              }} 
+              transition={{ 
+                duration: Math.random() * 4 + 3, 
+                repeat: Infinity, 
+                ease: 'easeIn', 
+                delay: Math.random() * 4 
+              }} 
+              className="absolute rounded-full bg-gradient-to-t from-red-500 to-yellow-400 blur-[0.5px] shadow-[0_0_12px_rgba(249,115,22,0.8)] z-20" 
+              style={{ width: size, height: size, bottom: 0 }} 
+            />
+          );
+        })}
       </div>
     );
   }
-  if (themeId === 'bg_nebula') {
-    return (
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {Array.from({ length: 30 }).map((_, i) => (
-          <motion.div key={`star-${i}`} initial={{ opacity: Math.random(), scale: Math.random() * 1.5 }} animate={{ opacity: [0.2, 1, 0.2] }} transition={{ duration: Math.random() * 3 + 2, repeat: Infinity, ease: 'easeInOut' }} className="absolute rounded-full bg-white blur-[1px]" style={{ top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%`, width: `${Math.random() * 3 + 1}px`, height: `${Math.random() * 3 + 1}px` }} />
-        ))}
-        <motion.div animate={{ rotate: 360, scale: [1, 1.1, 1] }} transition={{ duration: 30, repeat: Infinity, ease: 'linear' }} className="absolute -top-[20%] -left-[20%] w-[140%] h-[140%] bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.08)_0%,transparent_60%)]" />
-      </div>
-    );
-  }
-  if (themeId === 'bg_zen') {
-    return (
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <motion.div key={`orb-${i}`} animate={{ y: ['100vh', '-10vh'], x: ['0px', '20px', '-20px', '0px'], opacity: [0, 0.4, 0] }} transition={{ duration: Math.random() * 8 + 8, repeat: Infinity, ease: 'linear', delay: Math.random() * 5 }} className="absolute w-12 h-12 rounded-full bg-emerald-400/20 blur-xl" style={{ left: `${Math.random() * 100}%` }} />
-        ))}
-      </div>
-    );
-  }
-  if (themeId === 'bg_grid') {
-    return (
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {Array.from({ length: 10 }).map((_, i) => (
-          <motion.div key={`code-${i}`} initial={{ y: '-10vh', opacity: 0 }} animate={{ y: '110vh', opacity: [0, 0.5, 0] }} transition={{ duration: Math.random() * 5 + 3, repeat: Infinity, ease: 'linear', delay: Math.random() * 3 }} className="absolute w-px h-24 bg-gradient-to-b from-transparent via-blue-500 to-transparent shadow-[0_0_10px_#3b82f6]" style={{ left: `${(i + 1) * 10}%` }} />
-        ))}
-      </div>
-    );
-  }
+
   if (themeId === 'bg_ocean') {
     return (
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <motion.div key={`bubble-${i}`} initial={{ y: '110vh', x: `${Math.random() * 100}vw`, opacity: 0, scale: Math.random() * 0.5 + 0.2 }} animate={{ y: '-10vh', x: `${Math.random() * 100}vw`, opacity: [0, 0.6, 0] }} transition={{ duration: Math.random() * 6 + 4, repeat: Infinity, ease: 'linear', delay: Math.random() * 5 }} className="absolute rounded-full border border-cyan-400/30 bg-cyan-400/10 shadow-[0_0_10px_rgba(6,182,212,0.2)]" style={{ width: `${Math.random() * 20 + 5}px`, height: `${Math.random() * 20 + 5}px` }} />
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-gradient-to-b from-[#000d22] via-[#000511] to-[#000000]">
+        {/* Dynamic Water Caustic Shimmer Sun rays from top */}
+        <motion.div 
+          animate={{ rotate: [-2, 2, -2], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-0 left-[-20%] w-[140%] h-[60vh] bg-gradient-to-b from-cyan-500/10 via-cyan-400/5 to-transparent blur-[60px] transform -skew-x-12" 
+        />
+        <motion.div 
+          animate={{ rotate: [2, -2, 2], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute top-0 left-[20%] w-[50%] h-[70vh] bg-gradient-to-b from-blue-400/10 to-transparent blur-[50px] transform rotate-12" 
+        />
+
+        {/* Fauna Marina 1: Slow Majestic Giant Manta Ray Silhouette */}
+        <motion.div 
+          initial={{ x: '-40vw', y: '30vh', opacity: 0 }}
+          animate={{ 
+            x: '140vw', 
+            y: ['25vh', '35vh', '25vh'],
+            opacity: [0, 0.25, 0.25, 0] 
+          }}
+          transition={{ 
+            duration: 32, 
+            repeat: Infinity, 
+            ease: "linear",
+            delay: 2 
+          }}
+          className="absolute w-24 h-12 bg-cyan-400/10 blur-[1px] z-10 flex items-center justify-center"
+          style={{ clipPath: 'polygon(0% 50%, 35% 0%, 50% 10%, 100% 50%, 50% 90%, 35% 100%)' }}
+        >
+          {/* wing flap animation */}
+          <motion.div 
+            animate={{ scaleY: [1, 0.5, 1] }} 
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} 
+            className="w-full h-full bg-cyan-400/10 rounded-full" 
+          />
+        </motion.div>
+
+        {/* Fauna Marina 2: Speedy deep-water fish group (2 fishes) */}
+        {Array.from({ length: 3 }).map((_, i) => (
+          <motion.div 
+            key={`fish-${i}`}
+            initial={{ x: '120vw', y: `${45 + i * 12}vh`, opacity: 0 }}
+            animate={{ 
+              x: '-40vw', 
+              y: [`${45 + i * 12}vh`, `${42 + i * 12}vh`, `${45 + i * 12}vh`],
+              opacity: [0, 0.15, 0.15, 0] 
+            }}
+            transition={{ 
+              duration: 15 + i * 3, 
+              repeat: Infinity, 
+              ease: "linear",
+              delay: i * 4 
+            }}
+            className="absolute w-6 h-3 bg-cyan-300/10 blur-[0.5px] z-5 pointer-events-none"
+            style={{ clipPath: 'polygon(0% 50%, 60% 0%, 100% 50%, 60% 100%)' }}
+          />
+        ))}
+
+        {/* Dynamic wobbling bubbles */}
+        {Array.from({ length: 30 }).map((_, i) => {
+          const size = Math.random() * 18 + 5;
+          return (
+            <motion.div 
+              key={`bubble-${i}`} 
+              initial={{ y: '110vh', x: 0, opacity: 0 }} 
+              animate={{ 
+                y: '-10vh', 
+                x: [0, Math.random() * 40 - 20, 0], 
+                opacity: [0, 0.55, 0],
+                scale: [0.8, 1.1, 0.8]
+              }} 
+              transition={{ 
+                duration: Math.random() * 9 + 7, 
+                repeat: Infinity, 
+                ease: 'linear', 
+                delay: Math.random() * 6 
+              }} 
+              className="absolute rounded-full border border-cyan-300/40 bg-cyan-200/5 backdrop-blur-[0.5px] shadow-[inset_0_2px_4px_rgba(255,255,255,0.2)] z-10" 
+              style={{ width: size, height: size, left: `${Math.random() * 100}%` }} 
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (themeId === 'bg_zen') {
+    return (
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-gradient-to-b from-[#010e07] via-[#000603] to-[#000000]">
+        <motion.div animate={{ opacity: [0.1, 0.25, 0.1] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }} className="absolute inset-0 bg-emerald-950/20" />
+        
+        {/* Calm Water Drop Zen Ripples (4 points) */}
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={`ripple-container-${i}`} className="absolute" style={{ left: `${15 + i * 23}%`, top: `${25 + (i % 2) * 35}%` }}>
+            <motion.div 
+              animate={{ 
+                scale: [0, 5], 
+                opacity: [0, 0.35, 0] 
+              }} 
+              transition={{ 
+                duration: 6, 
+                repeat: Infinity, 
+                ease: "easeOut", 
+                delay: i * 2.2 
+              }} 
+              className="w-10 h-10 border border-emerald-400/30 rounded-full flex items-center justify-center"
+            >
+              <div className="w-[60%] h-[60%] border border-emerald-500/20 rounded-full" />
+            </motion.div>
+          </div>
+        ))}
+
+        {/* 3D Falling forest leaves */}
+        {Array.from({ length: 14 }).map((_, i) => (
+          <motion.div 
+            key={`leaf-${i}`} 
+            initial={{ y: '-10vh', x: `${Math.random() * 100}vw`, rotateY: 0, rotate: 0, opacity: 0 }} 
+            animate={{ 
+              y: '110vh', 
+              x: `${Math.random() * 100 + 30}vw`, 
+              rotateY: 720, 
+              rotate: 360, 
+              opacity: [0, 0.65, 0] 
+            }} 
+            transition={{ 
+              duration: Math.random() * 12 + 10, 
+              repeat: Infinity, 
+              ease: 'linear', 
+              delay: Math.random() * 8 
+            }} 
+            className="absolute w-4 h-2 bg-emerald-500/20 rounded-full blur-[0.5px] border border-emerald-400/20 z-10" 
+            style={{ borderTopRightRadius: '12px', borderBottomLeftRadius: '12px' }} 
+          />
+        ))}
+
+        {/* Glowing Fireflies */}
+        {Array.from({ length: 12 }).map((_, i) => (
+          <motion.div 
+            key={`fly-${i}`} 
+            animate={{ 
+              y: ['0vh', '-15vh', '10vh', '0vh'], 
+              x: ['0vw', '8vw', '-6vw', '0vw'], 
+              opacity: [0, 0.9, 0],
+              scale: [0.7, 1.2, 0.7] 
+            }} 
+            transition={{ 
+              duration: Math.random() * 9 + 8, 
+              repeat: Infinity, 
+              ease: 'easeInOut', 
+              delay: Math.random() * 6 
+            }} 
+            className="absolute w-2 h-2 rounded-full bg-emerald-300 shadow-[0_0_12px_#34d399] z-20" 
+            style={{ bottom: `${15 + Math.random() * 50}%`, left: `${Math.random() * 100}%` }} 
+          />
         ))}
       </div>
     );
   }
-  return null;
+
+  if (themeId === 'bg_nebula') {
+    return (
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-[#020006]">
+        {/* Sharp shining background stars */}
+        {Array.from({ length: 45 }).map((_, i) => (
+          <motion.div 
+            key={`star-d-${i}`} 
+            animate={{ opacity: [0.15, 0.9, 0.15] }} 
+            transition={{ 
+              duration: Math.random() * 4 + 2, 
+              repeat: Infinity, 
+              ease: 'easeInOut',
+              delay: Math.random() * 3
+            }} 
+            className="absolute rounded-full bg-white shadow-[0_0_4px_white]" 
+            style={{ top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%`, width: '1.5px', height: '1.5px' }} 
+          />
+        ))}
+
+        {/* Space Constellation vector mapping */}
+        <svg className="absolute inset-0 w-full h-full opacity-10 z-5">
+          <motion.path 
+            d="M 50,150 L 120,80 L 220,130 L 300,60" 
+            stroke="cyan" strokeWidth="0.5" fill="none"
+            animate={{ opacity: [0.2, 0.7, 0.2] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.path 
+            d="M 80,400 L 150,480 L 280,420 L 320,530" 
+            stroke="purple" strokeWidth="0.5" fill="none"
+            animate={{ opacity: [0.3, 0.8, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          />
+        </svg>
+
+        {/* Zooming Shooting stars / comets */}
+        {Array.from({ length: 3 }).map((_, i) => (
+          <motion.div 
+            key={`shooting-${i}`}
+            initial={{ x: '-150px', y: `${10 + i * 20}vh`, opacity: 0 }}
+            animate={{ 
+              x: '110vw', 
+              y: `${25 + i * 20}vh`,
+              opacity: [0, 1, 1, 0] 
+            }}
+            transition={{ 
+              duration: 2.2, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: i * 6 + 1 
+            }}
+            className="absolute w-24 h-0.5 bg-gradient-to-r from-cyan-400 to-transparent blur-[0.5px] transform rotate-[15deg] z-10" 
+          />
+        ))}
+
+        {/* Dual Rotating massive cosmic cloud formations */}
+        <motion.div 
+          animate={{ rotate: 360, scale: [1, 1.1, 1], opacity: [0.25, 0.4, 0.25] }} 
+          transition={{ duration: 60, repeat: Infinity, ease: 'linear' }} 
+          className="absolute -top-[40%] -left-[40%] w-[180%] h-[180%] bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.18)_0%,transparent_60%)] mix-blend-screen z-1" 
+        />
+        <motion.div 
+          animate={{ rotate: -360, scale: [1.1, 1, 1.1], opacity: [0.2, 0.35, 0.2] }} 
+          transition={{ duration: 80, repeat: Infinity, ease: 'linear' }} 
+          className="absolute -bottom-[40%] -right-[40%] w-[180%] h-[180%] bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.18)_0%,transparent_60%)] mix-blend-screen z-1" 
+        />
+      </div>
+    );
+  }
+
+  if (themeId === 'bg_grid') {
+    return (
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-[#000308] perspective-[400px]">
+        {/* Horizon glowing base */}
+        <div className="absolute top-[35%] left-0 right-0 h-[25vh] bg-gradient-to-b from-blue-600/10 via-cyan-500/5 to-transparent blur-[40px] z-5" />
+        
+        {/* Futuristic Laser Scanner Bar */}
+        <motion.div 
+          animate={{ y: ['-10%', '110%'] }} 
+          transition={{ duration: 4.5, repeat: Infinity, ease: 'linear' }} 
+          className="absolute left-0 right-0 h-[1.5px] bg-cyan-400/60 shadow-[0_0_15px_#22d3ee] z-20" 
+        />
+
+        {/* 3D Flying Grid perspective floor */}
+        <motion.div 
+          animate={{ backgroundPositionY: ['0px', '40px'] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-0 left-[-50%] right-[-50%] h-[55vh] z-10 opacity-30 origin-top bg-[linear-gradient(rgba(59,130,246,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.15)_1px,transparent_1px)] bg-[size:20px_20px]"
+          style={{ transform: 'rotateX(75deg)' }}
+        />
+
+        {/* Falling cyber data binary code packets */}
+        {Array.from({ length: 18 }).map((_, i) => (
+          <motion.div 
+            key={`stream-${i}`} 
+            initial={{ y: '-20vh', opacity: 0 }} 
+            animate={{ 
+              y: '120vh', 
+              opacity: [0, 0.75, 0],
+              scaleY: [1, 1.5, 1] 
+            }} 
+            transition={{ 
+              duration: Math.random() * 3 + 2, 
+              repeat: Infinity, 
+              ease: 'linear', 
+              delay: Math.random() * 4 
+            }} 
+            className="absolute w-[1px] h-28 bg-gradient-to-b from-transparent via-cyan-400 to-transparent shadow-[0_0_8px_#22d3ee] z-10" 
+            style={{ left: `${(i + 1) * 5.3}%` }} 
+          />
+        ))}
+      </div>
+    );
+  }
+
+  // default / el vacio
+  return (
+    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-[#050505]">
+      {/* Slow-breathing Void orb in the center */}
+      <motion.div 
+        animate={{ 
+          scale: [0.92, 1.08, 0.92], 
+          opacity: [0.12, 0.22, 0.12] 
+        }} 
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }} 
+        className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06)_0%,transparent_60%)] z-1" 
+      />
+      {/* Slow falling calm particles */}
+      {Array.from({ length: 10 }).map((_, i) => (
+        <motion.div 
+          key={`calm-${i}`}
+          animate={{ 
+            y: ['-5vh', '105vh'],
+            x: [`${10 + i * 8}vw`, `${13 + i * 8}vw`],
+            opacity: [0, 0.4, 0] 
+          }}
+          transition={{ 
+            duration: 18 + i * 3, 
+            repeat: Infinity, 
+            ease: "linear",
+            delay: i * 2.5 
+          }}
+          className="absolute w-0.5 h-0.5 bg-white/30 rounded-full z-10"
+        />
+      ))}
+    </div>
+  );
 };
 
 // --- COMPONENTES BASE ---
@@ -785,8 +1529,8 @@ const BackgroundDetailModal = ({ item, userDiamonds, onClose, onAction, inventor
       <div className="relative z-10 flex flex-col h-full px-6 pt-16 pb-8">
         <button onClick={onClose} className="absolute top-16 left-6 p-2 bg-[#111]/80 backdrop-blur-md border border-white/10 text-white z-50 transform -skew-x-12 hover:bg-white/10 transition-colors"><ChevronLeft size={20} className="skew-x-12" /></button>
         <div className="flex-1 flex flex-col items-center justify-center relative mt-10">
-          <div className="w-[90%] h-[40vh] relative z-10 flex items-center justify-center mb-8 rounded-3xl overflow-hidden border-2 border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)]">
-            <img src={item.img} className="absolute inset-0 w-full h-full object-cover z-20 opacity-90" alt={item.name} />
+          <div className="w-[90%] h-[40vh] relative z-10 flex items-center justify-center mb-8 rounded-3xl overflow-hidden border-2 border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] bg-black/40">
+            <AvatarDisplay id={item.id} className="absolute inset-0 w-full h-full z-20" />
           </div>
           <div className="text-center w-full bg-[#0a0a0a]/50 backdrop-blur-md p-6 border-y border-white/5">
             <span className="text-[10px] font-black uppercase tracking-[0.4em] mb-3 inline-block px-4 py-1 border" style={{ color: rarity.hex, borderColor: rarity.hex, backgroundColor: `${rarity.hex}11` }}>{rarity.name}</span>
@@ -908,9 +1652,21 @@ const ChatView = ({ person, onBack }) => {
     if (person.isBot) {
       const responses = BOT_RESPONSES[person.botId] || BOT_RESPONSES['default'];
       setTimeout(() => {
+        let replyText = responses[Math.floor(Math.random() * responses.length)];
+        const lowerInput = input.toLowerCase();
+        if (lowerInput.includes('hola') || lowerInput.includes('saludos')) {
+          replyText = `Saludos. Sigue enfocando tu energía.`;
+        } else if (lowerInput.includes('ayuda') || lowerInput.includes('estres') || lowerInput.includes('ansiedad')) {
+          replyText = `Respira profundo. Recuerda por qué empezaste esto. Tú tienes el control.`;
+        } else if (lowerInput.includes('?')) {
+          replyText = `Esa es una buena pregunta. La respuesta está en mantener tu disciplina inquebrantable.`;
+        } else if (lowerInput.includes('gracias')) {
+          replyText = `No me lo agradezcas a mí. Agradéceselo a tu futuro yo.`;
+        }
+
         const botReply = {
           id: Date.now() + 1,
-          text: responses[Math.floor(Math.random() * responses.length)],
+          text: replyText,
           sender: 'bot',
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
@@ -974,7 +1730,7 @@ const ChatView = ({ person, onBack }) => {
   );
 };
 
-const Forum = ({ onSelectChat, unreadFilter, setUnreadFilter, activeTab, setActiveTab, forumPosts, setForumPosts, userAvatarItem }) => {
+const Forum = ({ onSelectChat, unreadFilter, setUnreadFilter, activeTab, setActiveTab, forumPosts, setForumPosts, userAvatarItem, username }) => {
   const [expandedPost, setExpandedPost] = useState(null);
   const [newPostText, setNewPostText] = useState('');
   const [newCommentText, setNewCommentText] = useState('');
@@ -984,8 +1740,8 @@ const Forum = ({ onSelectChat, unreadFilter, setUnreadFilter, activeTab, setActi
     const newPost = {
       id: Date.now().toString(),
       author: {
-        name: 'Tú',
-        avatar: userAvatarItem?.img || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop'
+        name: username || 'Tú',
+        avatarId: userAvatarItem?.id || 'a_base'
       },
       text: newPostText,
       likes: 0,
@@ -1021,7 +1777,7 @@ const Forum = ({ onSelectChat, unreadFilter, setUnreadFilter, activeTab, setActi
   };
 
   return (
-    <div className="absolute inset-0 flex flex-col z-10 text-white overflow-hidden pb-[100px] bg-black/40 backdrop-blur-sm">
+    <div className="absolute inset-0 flex flex-col z-10 text-white overflow-hidden bg-black/40 backdrop-blur-sm">
       <div className="px-6 pt-16 pb-4 bg-gradient-to-b from-black/80 to-transparent border-b border-white/5">
         <h1 className="text-3xl font-black uppercase tracking-tighter mb-4 text-white drop-shadow-lg">Comunicaciones</h1>
         <div className="flex gap-2 bg-black/60 p-1.5 rounded-full border border-white/5 shadow-inner backdrop-blur-md">
@@ -1031,7 +1787,7 @@ const Forum = ({ onSelectChat, unreadFilter, setUnreadFilter, activeTab, setActi
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-4 custom-scroll space-y-4">
+      <div className="flex-1 overflow-y-auto px-6 py-4 pb-36 custom-scroll space-y-4">
         {activeTab === 'avisos' && AVISOS_DATA.map(aviso => (
           <div key={aviso.id} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] p-6 shadow-lg group hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer flex flex-col">
             <div className="flex items-center gap-3 mb-4">
@@ -1061,7 +1817,15 @@ const Forum = ({ onSelectChat, unreadFilter, setUnreadFilter, activeTab, setActi
             {forumPosts.map(post => (
               <div key={post.id} className="bg-black/50 backdrop-blur-md border border-white/5 rounded-3xl p-5 shadow-lg">
                 <div className="flex items-center gap-3 mb-4">
-                  <img src={post.author.avatar} alt="avatar" className="w-10 h-10 rounded-full object-cover border border-white/10" />
+                  {post.author.avatarId ? (
+                    <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10 bg-[#111] flex items-center justify-center shrink-0">
+                      <div className="w-full h-full transform scale-[1.3] pt-2 flex items-center justify-center">
+                        <AvatarDisplay id={post.author.avatarId} className="w-full h-full" freeStanding={true} />
+                      </div>
+                    </div>
+                  ) : (
+                    <img src={post.author.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop'} alt="avatar" className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0" />
+                  )}
                   <div>
                     <h4 className="text-xs font-black uppercase tracking-tight">{post.author.name}</h4>
                     <p className="text-[9px] font-black uppercase tracking-widest text-white/40">{post.time}</p>
@@ -1070,13 +1834,13 @@ const Forum = ({ onSelectChat, unreadFilter, setUnreadFilter, activeTab, setActi
                 <p className="text-sm font-medium mb-5 text-white/80 leading-relaxed">{post.text}</p>
 
                 <div className="flex gap-6 border-t border-white/5 pt-4">
-                  <button onClick={() => toggleLike(post.id)} className={`flex items-center gap-2 transition-colors ${post.liked ? 'text-red-500' : 'text-white/40 hover:text-white'}`}>
-                    <Heart size={16} fill={post.liked ? "currentColor" : "none"} className={post.liked ? "text-red-500" : ""} />
+                  <motion.button whileTap={{ scale: 0.8 }} onClick={() => toggleLike(post.id)} className={`flex items-center gap-2 transition-colors ${post.liked ? 'text-red-500' : 'text-white/40 hover:text-white'}`}>
+                    <motion.div animate={post.liked ? { scale: [1, 1.5, 1] } : {}} transition={{ duration: 0.3 }}><Heart size={16} fill={post.liked ? "currentColor" : "none"} className={post.liked ? "text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.8)]" : ""} /></motion.div>
                     <span className="text-[10px] font-black">{post.likes}</span>
-                  </button>
-                  <button onClick={() => setExpandedPost(expandedPost === post.id ? null : post.id)} className={`flex items-center gap-2 transition-colors ${expandedPost === post.id ? 'text-blue-400' : 'text-white/40 hover:text-white'}`}>
+                  </motion.button>
+                  <motion.button whileTap={{ scale: 0.8 }} onClick={() => setExpandedPost(expandedPost === post.id ? null : post.id)} className={`flex items-center gap-2 transition-colors ${expandedPost === post.id ? 'text-blue-400' : 'text-white/40 hover:text-white'}`}>
                     <MessageCircle size={16} /> <span className="text-[10px] font-black">{post.comments.length}</span>
-                  </button>
+                  </motion.button>
                 </div>
 
                 {expandedPost === post.id && (
@@ -1128,7 +1892,7 @@ const Forum = ({ onSelectChat, unreadFilter, setUnreadFilter, activeTab, setActi
   );
 };
 
-const Rankings = ({ userXP, username }) => {
+const Rankings = ({ userXP, username, inventory }) => {
   const userLeagueIndex = LEAGUES.findIndex((l, i) => {
     if (i === LEAGUES.length - 1) return true;
     const maxXP = parseInt(l.req.split('-')[1]?.replace(/,/g, '') || '999999');
@@ -1145,23 +1909,24 @@ const Rankings = ({ userXP, username }) => {
     const minXP = parseInt(viewingLeague.req.split('-')[0]?.replace(/,/g, '') || '0');
     const maxXP = parseInt(viewingLeague.req.split('-')[1]?.replace(/,/g, '') || (minXP + 5000).toString());
     const range = maxXP - minXP;
+    const MOCK_AVATARS = ['a_base', 'a_bot', 'a_flame', 'a_ninja', 'a_hacker', 'a_brain', 'a_vento', 'a_crono', 'a_sophia', 'a_icaro', 'a_atlas'];
 
     let players = mockNames.map((name, i) => {
       const xp = minXP + Math.floor((range * (mockNames.length - i)) / (mockNames.length + 2));
-      return { id: `mock_${i}`, name, xp, isUser: false, avatar: `https://i.pravatar.cc/150?u=${name}${viewLeagueIndex}` };
+      return { id: `mock_${i}`, name, xp, isUser: false, avatarId: MOCK_AVATARS[i % MOCK_AVATARS.length] };
     });
 
     if (isUserLeague) {
-      players[7] = { id: 'user', name: username || 'Tú', xp: userXP, isUser: true, avatar: null };
+      players.push({ id: 'user', name: username || 'Tú', xp: userXP, isUser: true, avatarId: inventory?.equippedAvatar || 'a_base' });
     } else {
-      players[7] = { id: 'bot_middle', name: 'FocusBot', xp: minXP + Math.floor(range / 2), isUser: false, avatar: `https://i.pravatar.cc/150?u=bot${viewLeagueIndex}` };
+      players.push({ id: 'bot_middle', name: 'FocusBot', xp: minXP + Math.floor(range / 2), isUser: false, avatarId: 'a_bot' });
     }
 
     return players.sort((a, b) => b.xp - a.xp);
-  }, [viewLeagueIndex, isUserLeague, userXP, username, viewingLeague]);
+  }, [viewLeagueIndex, isUserLeague, userXP, username, viewingLeague, inventory]);
 
   return (
-    <div className="absolute inset-0 flex flex-col z-10 text-white overflow-hidden pb-[100px] bg-black/40 backdrop-blur-sm">
+    <div className="absolute inset-0 flex flex-col z-10 text-white overflow-hidden bg-black/40 backdrop-blur-sm">
       {/* Header - Ligas */}
       <div className="pt-16 pb-4 bg-gradient-to-b from-black/90 to-transparent border-b border-white/5 relative z-20">
         <div className="flex justify-center items-center gap-6 px-6 overflow-x-auto custom-scroll snap-x py-2">
@@ -1183,28 +1948,30 @@ const Rankings = ({ userXP, username }) => {
       </div>
 
       {/* Leaderboard Body */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 custom-scroll">
+      <div className="flex-1 overflow-y-auto px-4 py-4 pb-36 custom-scroll">
         <div className="bg-black/50 backdrop-blur-md rounded-[32px] p-2 border border-white/10 shadow-lg flex flex-col">
           {leaderboard.map((p, i) => {
             return (
               <React.Fragment key={p.id}>
-                <div className={`flex items-center justify-between p-3 transition-all ${p.isUser ? 'bg-white border-2 border-white text-black shadow-[0_0_20px_rgba(255,255,255,0.2)] rounded-[20px] my-2 scale-[1.02]' : 'hover:bg-white/5 rounded-[20px]'}`}>
+                <motion.div layout initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className={`flex items-center justify-between p-3 transition-all ${p.isUser ? 'bg-white border-2 border-white text-black shadow-[0_0_20px_rgba(255,255,255,0.2)] rounded-[20px] my-2 scale-[1.02] relative z-10' : 'hover:bg-white/5 rounded-[20px]'}`}>
                   <div className="flex items-center gap-4">
-                    <span className={`text-sm font-black w-6 text-center ${p.isUser ? 'text-black' : i === 0 ? 'text-yellow-400' : i === 1 ? 'text-gray-300' : i === 2 ? 'text-orange-400' : 'text-white/30'}`}>{i + 1}</span>
-                    {p.avatar ? <img src={p.avatar} alt="avatar" className="w-10 h-10 rounded-full object-cover border border-white/10" /> : <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center border-2 border-black text-sm font-black text-white shadow-inner">{p.name.charAt(0)}</div>}
+                    <span className={`text-sm font-black w-6 text-center ${p.isUser ? 'text-black' : i === 0 ? 'text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.5)]' : i === 1 ? 'text-gray-300' : i === 2 ? 'text-orange-400' : 'text-white/30'}`}>{i + 1}</span>
+                    <div className="w-10 h-10 border border-white/10 rounded-full flex items-center justify-center bg-[#111] overflow-hidden shrink-0">
+                      <AvatarDisplay id={p.avatarId} className="w-[120%] h-[120%]" freeStanding={true} />
+                    </div>
                     <span className={`text-xs font-black tracking-wide ${p.isUser ? 'text-black' : 'text-white'}`}>{p.name}</span>
                   </div>
                   <span className={`text-[10px] font-black px-3 py-1.5 rounded-full ${p.isUser ? 'bg-black text-white' : 'text-[#8ab4f8] bg-[#8ab4f8]/10 border border-[#8ab4f8]/20'}`}>{p.xp} XP</span>
-                </div>
+                </motion.div>
                 {i === 2 && viewLeagueIndex < LEAGUES.length - 1 && (
-                  <div className="h-[2px] w-full bg-green-500/30 my-3 relative flex items-center justify-center">
+                  <motion.div layout className="h-[2px] w-full bg-green-500/30 my-3 relative flex items-center justify-center">
                     <span className="absolute bg-green-950 text-green-400 text-[8px] font-black uppercase px-3 py-1 rounded-full border border-green-500/50 tracking-widest z-10 shadow-[0_0_10px_rgba(34,197,94,0.3)]">Zona de Ascenso</span>
-                  </div>
+                  </motion.div>
                 )}
                 {i === leaderboard.length - 4 && viewLeagueIndex > 0 && (
-                  <div className="h-[2px] w-full bg-red-500/30 my-3 relative flex items-center justify-center">
+                  <motion.div layout className="h-[2px] w-full bg-red-500/30 my-3 relative flex items-center justify-center">
                     <span className="absolute bg-red-950 text-red-400 text-[8px] font-black uppercase px-3 py-1 rounded-full border border-red-500/50 tracking-widest z-10 shadow-[0_0_10px_rgba(239,68,68,0.3)]">Zona de Descenso</span>
-                  </div>
+                  </motion.div>
                 )}
               </React.Fragment>
             );
@@ -1231,7 +1998,7 @@ const ShopView = ({ userDiamonds, onSelectItem, inventory }) => {
   );
 
   return (
-    <div className="absolute inset-0 flex flex-col z-10 text-white overflow-hidden pb-[100px] bg-black/40 backdrop-blur-sm">
+    <div className="absolute inset-0 flex flex-col z-10 text-white overflow-hidden bg-black/40 backdrop-blur-sm">
       <div className="px-6 pt-16 pb-4 flex justify-between items-end relative z-10 border-b border-white/5 bg-gradient-to-b from-[#111]/80 to-transparent">
         <div>
           <span className="text-[10px] font-black text-white/50 tracking-[0.3em] uppercase block mb-1">Mercado Negro</span>
@@ -1248,7 +2015,7 @@ const ShopView = ({ userDiamonds, onSelectItem, inventory }) => {
           <button onClick={() => setShopTab('entornos')} className={`flex-1 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${shopTab === 'entornos' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Entornos</button>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto px-6 py-4 custom-scroll relative z-10">
+      <div className="flex-1 overflow-y-auto px-6 py-4 pb-36 custom-scroll relative z-10">
         {shopTab === 'personajes' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <SectionTitle title="Reclutas" hex="#ffffff" />
@@ -1286,9 +2053,9 @@ const ShopView = ({ userDiamonds, onSelectItem, inventory }) => {
                 return (
                   <PolygonCard key={item.id} onClick={() => onSelectItem(item)} rarityColor={rColor} isLocked={false}>
                     <div className="flex h-24">
-                      <div className="w-1/3 relative overflow-hidden">
-                        <img src={item.img} className="absolute inset-0 w-full h-full object-cover grayscale-[0.2]" alt={item.name} />
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/80"></div>
+                      <div className="w-1/3 relative overflow-hidden bg-black/40">
+                        <AvatarDisplay id={item.id} className="absolute inset-0 w-full h-full" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/80 z-10"></div>
                       </div>
                       <div className="w-2/3 p-4 flex flex-col justify-center bg-black/50">
                         <span className="text-[8px] font-black uppercase tracking-widest mb-1 w-max px-2 py-0.5" style={{ color: rColor, backgroundColor: `${rColor}22` }}>{RARITIES[item.rarity].name}</span>
@@ -1311,9 +2078,10 @@ const ShopView = ({ userDiamonds, onSelectItem, inventory }) => {
   );
 };
 
-const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, completedCount, activityLog, selectedApps }) => {
+const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, completedCount, activityLog, selectedApps, setSelectedApps }) => {
   const [activeProfileTab, setActiveProfileTab] = useState('estado');
   const [activeTab, setActiveTab] = useState('avatars');
+  const [showAppSelector, setShowAppSelector] = useState(false);
 
   const equippedAvatarItem = SHOP_ITEMS.find(i => i.id === inventory.equippedAvatar);
   const activeSkinId = inventory.equippedSkins[equippedAvatarItem?.id];
@@ -1332,8 +2100,8 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
   const groupedBackgrounds = RARITY_ORDER.map(r => ({ rarity: RARITIES[r], items: allBackgrounds.filter(i => i.rarity === r) })).filter(g => g.items.length > 0);
 
   return (
-    <div className="absolute inset-0 flex flex-col z-10 text-white overflow-hidden pb-[100px] bg-black/20 backdrop-blur-sm">
-      <div className="flex-1 overflow-y-auto custom-scroll">
+    <div className="absolute inset-0 flex flex-col z-10 text-white overflow-hidden bg-black/20 backdrop-blur-sm">
+      <div className="flex-1 overflow-y-auto pb-36 custom-scroll">
         <div className="flex flex-col items-center mt-16 mb-8 relative px-6">
           <div className="relative group w-32 h-32 flex items-center justify-center">
             <div className="absolute inset-0 bg-white/5 blur-2xl rounded-full pointer-events-none"></div>
@@ -1405,6 +2173,38 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
                 </div>
               </div>
             )}
+
+            <div className="mt-8">
+              <button onClick={() => setShowAppSelector(!showAppSelector)} className="w-full bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm p-4 rounded-[20px] border border-white/10 shadow-lg flex items-center justify-between group">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"><LayoutGrid size={18} className="text-white" /></div>
+                  <h3 className="text-sm font-black uppercase tracking-tight drop-shadow-md">Selecciona otras apps</h3>
+                </div>
+                <ChevronDown size={20} className={`text-white/50 transition-transform duration-300 ${showAppSelector ? 'rotate-180' : ''}`} />
+              </button>
+              <AnimatePresence>
+                {showAppSelector && (
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                    <div className="grid grid-cols-3 gap-x-4 gap-y-6 bg-white/5 backdrop-blur-sm p-6 rounded-[24px] border border-white/10 shadow-lg mt-4">
+                      {APPS.map(app => {
+                        const isSelected = selectedApps?.includes(app.id);
+                        return (
+                          <motion.button key={app.id} onClick={() => setSelectedApps && setSelectedApps(p => p.includes(app.id) ? p.filter(x => x !== app.id) : [...p, app.id])} whileTap={{ scale: 0.9 }} className="relative flex flex-col items-center gap-2 outline-none mx-auto">
+                            <div className="relative w-12 h-12 flex items-center justify-center transition-all duration-500">
+                              <img src={app.icon} className={`w-full h-full object-contain transition-all duration-500 ${isSelected ? 'grayscale-0 opacity-100 scale-110 brightness-150 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]' : 'grayscale opacity-30 scale-90 brightness-200'}`} alt={app.name} />
+                              <AnimatePresence>
+                                {isSelected && <motion.div key={`check-${app.id}`} initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} className="absolute -top-1 -right-1 w-4 h-4 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 shadow-lg"><Check size={10} color="white" strokeWidth={3} /></motion.div>}
+                              </AnimatePresence>
+                            </div>
+                            <span className={`text-[7px] font-black uppercase tracking-widest transition-colors duration-500 ${isSelected ? 'text-white' : 'text-white/20'}`}>{app.name}</span>
+                          </motion.button>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </motion.div>
         )}
 
@@ -1460,7 +2260,9 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
 
                       return (
                         <div key={`inv-bg-${item.id}`} onClick={() => onOpenItem(item)} className={`relative h-32 rounded-[24px] overflow-hidden cursor-pointer border-2 transition-all bg-black/50 backdrop-blur-md ${isEquipped ? 'scale-[1.02] shadow-[0_0_20px_rgba(255,255,255,0.2)]' : isOwned ? 'hover:border-white/30' : ''}`} style={{ borderColor: isEquipped ? group.rarity.hex : isOwned ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.5)' }}>
-                          <img src={item.img} className={`absolute inset-0 w-full h-full object-cover z-0 ${isOwned ? 'grayscale-[0.4]' : 'brightness-0 opacity-30'}`} alt="bg" />
+                          <div className={`absolute inset-0 w-full h-full z-0 transition-all ${isOwned ? '' : 'brightness-[0.2] opacity-40'}`}>
+                            <AvatarDisplay id={item.id} className="absolute inset-0 w-full h-full" />
+                          </div>
                           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none z-10"></div>
                           {!isOwned && (
                             <div className="absolute inset-0 flex items-center justify-center z-20">
@@ -1487,6 +2289,7 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
 
 const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpenActive, onOpenAll, onCompleteChallenge, onPlayMinigame, userGender }) => {
   const [homeTab, setHomeTab] = useState('desafios');
+  const [selectedVideo, setSelectedVideo] = useState(null);
 
   const appFeatured = APP_CHALLENGES_BANK
     .filter(challenge => selectedApps.includes(challenge.appId) && (!challenge.gender || challenge.gender === 'any' || challenge.gender === userGender))
@@ -1502,11 +2305,12 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
   ];
 
   return (
-    <div className="absolute inset-0 flex flex-col z-40 text-white overflow-hidden pb-[100px] bg-black/10 backdrop-blur-sm">
-      <div className="flex-1 overflow-y-auto px-6 pt-16 pb-10 custom-scroll">
+    <div className="absolute inset-0 flex flex-col z-40 text-white overflow-hidden bg-black/10 backdrop-blur-sm">
+      <div className="flex-1 overflow-y-auto px-6 pt-16 pb-36 custom-scroll">
         <div className="flex gap-2 bg-black/60 p-1.5 rounded-full border border-white/5 shadow-inner backdrop-blur-md mb-8">
           <button onClick={() => setHomeTab('desafios')} className={`flex-1 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${homeTab === 'desafios' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Desafíos</button>
           <button onClick={() => setHomeTab('minijuegos')} className={`flex-1 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${homeTab === 'minijuegos' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Minijuegos</button>
+          <button onClick={() => setHomeTab('consejos')} className={`flex-1 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${homeTab === 'consejos' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Consejos</button>
         </div>
 
         {homeTab === 'desafios' && (
@@ -1610,7 +2414,109 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
             <p className="text-center text-[10px] text-white/40 font-bold uppercase tracking-widest mt-10">Más minijuegos próximamente...</p>
           </motion.div>
         )}
+
+        {homeTab === 'consejos' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <div className="flex justify-between items-end mb-6">
+              <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md">Consejos de Enfoque</h3>
+            </div>
+            
+            <div className="bg-gradient-to-br from-blue-900/60 to-purple-900/60 backdrop-blur-md rounded-[32px] p-6 border border-white/10 shadow-2xl relative overflow-hidden mb-8 group hover:border-white/20 transition-all cursor-pointer" onClick={() => setSelectedVideo(FOCUS_TIPS_VIDEOS[0])}>
+              <div className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-overlay transition-transform duration-700 group-hover:scale-105" style={{ backgroundImage: `url(${FOCUS_TIPS_VIDEOS[0].thumbnail})` }} />
+              <div className="absolute top-4 left-4 bg-[#8ab4f8] text-black text-[8px] font-black tracking-widest px-2.5 py-1 rounded-full uppercase">Recomendado</div>
+              <div className="relative z-10 pt-16">
+                <h4 className="text-xl font-black tracking-tight uppercase leading-tight mb-2 text-white drop-shadow-md">{FOCUS_TIPS_VIDEOS[0].title}</h4>
+                <p className="text-[10px] text-white/75 font-semibold leading-relaxed mb-4 max-w-md">{FOCUS_TIPS_VIDEOS[0].desc}</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white text-black rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <Play size={16} className="ml-0.5 fill-black text-black" />
+                  </div>
+                  <span className="text-[9px] font-black tracking-widest uppercase text-white/60">{FOCUS_TIPS_VIDEOS[0].duration} MINS • HACK DE ENFOQUE</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-end mb-4">
+              <h4 className="text-[10px] font-black tracking-widest text-white/40 uppercase">Biblioteca de Videos</h4>
+            </div>
+
+            <div className="space-y-4">
+              {FOCUS_TIPS_VIDEOS.map((video) => (
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => setSelectedVideo(video)} key={video.id} className="bg-white/5 backdrop-blur-md rounded-[24px] p-4 flex items-center justify-between border border-white/10 cursor-pointer shadow-md">
+                  <div className="flex items-center gap-4 w-full">
+                    <div className="w-20 h-20 shrink-0 rounded-2xl bg-black border border-white/10 relative overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${video.thumbnail})` }}>
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <Play size={16} className="text-white drop-shadow-md" />
+                      </div>
+                      <span className="absolute bottom-1 right-1 bg-black/75 px-1.5 py-0.5 rounded text-[8px] font-bold text-white tracking-widest">{video.duration}</span>
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[8px] font-black bg-blue-500/20 text-[#8ab4f8] border border-blue-500/30 px-2 py-0.5 rounded-full tracking-widest uppercase mb-1.5 inline-block">{video.category}</span>
+                      <h4 className="text-sm font-black tracking-tight uppercase leading-tight truncate text-white">{video.title}</h4>
+                      <p className="text-[9px] font-medium text-white/50 leading-tight mt-1 line-clamp-2">{video.desc}</p>
+                    </div>
+                    
+                    <ChevronRight size={18} className="text-white/20 shrink-0 ml-2" />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
       </div>
+
+      <AnimatePresence>
+        {selectedVideo && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col p-6 overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <span className="text-[8px] font-black bg-[#8ab4f8]/20 text-[#8ab4f8] border border-[#8ab4f8]/30 px-2.5 py-1 rounded-full tracking-widest uppercase block w-max mb-1.5">{selectedVideo.category}</span>
+                <h3 className="text-xl font-black uppercase tracking-tight text-white leading-tight">{selectedVideo.title}</h3>
+              </div>
+              <button onClick={() => setSelectedVideo(null)} className="w-10 h-10 bg-white/5 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors">
+                <X size={18} className="text-white" />
+              </button>
+            </div>
+
+            <div className="relative w-full aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black mb-6">
+              <video 
+                src={selectedVideo.videoUrl} 
+                controls 
+                autoPlay 
+                loop 
+                playsInline
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <div className="flex-1 space-y-6 pb-6">
+              <div>
+                <h4 className="text-[10px] font-black tracking-widest text-white/40 uppercase mb-2">Resumen</h4>
+                <p className="text-xs text-white/70 font-medium leading-relaxed">{selectedVideo.desc}</p>
+              </div>
+
+              <div className="bg-white/5 border border-white/5 rounded-3xl p-5 shadow-lg">
+                <h4 className="text-[10px] font-black tracking-widest text-[#8ab4f8] uppercase mb-4 flex items-center gap-2">
+                  <Sparkles size={14} /> 3 HACKS DE ENFOQUE CLAVE
+                </h4>
+                <ul className="space-y-4">
+                  {selectedVideo.points.map((point, index) => (
+                    <li key={index} className="flex gap-3">
+                      <div className="w-5 h-5 rounded-full bg-[#8ab4f8]/20 border border-[#8ab4f8]/30 flex items-center justify-center text-[10px] font-bold text-[#8ab4f8] shrink-0 mt-0.5">{index + 1}</div>
+                      <p className="text-[11px] text-white/80 font-semibold leading-relaxed">{point}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <button onClick={() => setSelectedVideo(null)} className="w-full bg-white text-black py-4 rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-lg mt-4">
+                Cerrar y Aplicar Consejo
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -2244,6 +3150,177 @@ const MinigameMath = ({ game, onClose, addXP, addDiamonds }) => {
   );
 };
 
+const MinigameWhack = ({ game, onClose, addXP, addDiamonds }) => {
+  const [moles, setMoles] = useState([]);
+  const [score, setScore] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const [gameOver, setGameOver] = useState(false);
+  const [win, setWin] = useState(false);
+
+  useEffect(() => {
+    if (gameOver) return;
+    const timer = setInterval(() => setTimeLeft(t => {
+      if (t <= 1) { setGameOver(true); setWin(score >= 15); return 0; }
+      return t - 1;
+    }), 1000);
+    return () => clearInterval(timer);
+  }, [gameOver, score]);
+
+  useEffect(() => {
+    if (gameOver) return;
+    const interval = setInterval(() => {
+      const type = Math.random() > 0.7 ? 'work' : 'distraction';
+      const id = Date.now();
+      const x = Math.random() * 80 + 10;
+      const y = Math.random() * 80 + 10;
+      setMoles(prev => [...prev, { id, type, x, y }]);
+      setTimeout(() => {
+        setMoles(prev => prev.filter(m => m.id !== id));
+      }, type === 'work' ? 2000 : 1500);
+    }, 800);
+    return () => clearInterval(interval);
+  }, [gameOver]);
+
+  const handleHit = (mole) => {
+    if (mole.type === 'work') {
+      setScore(s => Math.max(0, s - 3));
+    } else {
+      setScore(s => s + 1);
+    }
+    setMoles(prev => prev.filter(m => m.id !== mole.id));
+  };
+
+  return (
+    <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} transition={{ type: "spring", damping: 25, stiffness: 200 }} className="absolute inset-0 bg-black/90 backdrop-blur-xl z-[100] flex flex-col items-center justify-center text-white p-6">
+      <div className="w-full max-w-sm bg-gradient-to-br from-gray-900 to-black border-2 border-red-500/30 rounded-[32px] p-6 shadow-[0_0_50px_rgba(239,68,68,0.2)] flex flex-col items-center relative overflow-hidden">
+        <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-white/50 hover:text-white"><X size={16} /></button>
+        <game.icon size={48} className="text-red-400 mb-4 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)]" />
+        <h2 className="text-2xl font-black uppercase text-white mb-1 tracking-tight text-center">{game.title}</h2>
+        <p className="text-xs text-white/50 uppercase tracking-widest text-center mb-6">{game.subtitle}</p>
+
+        {!gameOver ? (
+          <>
+            <div className="flex w-full justify-between mb-4">
+              <div className="bg-red-500/20 px-4 py-2 rounded-xl border border-red-500/30"><span className="text-xl font-black text-white">{timeLeft}s</span></div>
+              <div className="bg-blue-500/20 px-4 py-2 rounded-xl border border-blue-500/30"><span className="text-xl font-black text-white">{score} Pts</span></div>
+            </div>
+            <div className="w-full aspect-square bg-white/5 border border-white/10 rounded-2xl relative overflow-hidden shadow-inner">
+              <AnimatePresence>
+                {moles.map(mole => (
+                  <motion.button key={mole.id} initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} whileTap={{ scale: 0.8 }} onClick={() => handleHit(mole)} className={`absolute w-12 h-12 flex items-center justify-center rounded-full shadow-lg border-2 ${mole.type === 'work' ? 'bg-blue-500 border-blue-300' : 'bg-red-500 border-red-300'}`} style={{ left: `${mole.x}%`, top: `${mole.y}%`, transform: 'translate(-50%, -50%)' }}>
+                    {mole.type === 'work' ? <Activity size={24} className="text-white" /> : <Zap size={24} className="text-white" />}
+                  </motion.button>
+                ))}
+              </AnimatePresence>
+            </div>
+            <p className="text-[10px] uppercase text-white/50 text-center mt-4">Golpea lo rojo, evita lo azul. Objetivo: 15 Pts</p>
+          </>
+        ) : (
+          <div className="flex flex-col items-center py-6">
+            <h3 className={`text-4xl font-black uppercase mb-2 drop-shadow-lg ${win ? 'text-green-400' : 'text-red-400'}`}>{win ? 'VICTORIA' : 'DERROTA'}</h3>
+            <p className="text-white/60 mb-8 uppercase tracking-widest font-bold text-center">Puntuación: {score}</p>
+            {win && (
+              <button onClick={() => { addXP(game.rewardXP); addDiamonds(game.rewardDia); onClose(); }} className="w-full py-4 rounded-full bg-green-500 text-black font-black uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:scale-105 active:scale-95 transition-all">Reclamar Recompensa</button>
+            )}
+            {!win && (
+              <button onClick={onClose} className="w-full py-4 rounded-full bg-white/10 text-white font-black uppercase tracking-widest text-sm hover:bg-white/20 transition-all">Intentar de Nuevo</button>
+            )}
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+};
+
+const MinigameStoic = ({ game, onClose, addXP, addDiamonds }) => {
+  const QUOTES = [
+    { phrase: "La riqueza no consiste en tener muchas posesiones sino en tener pocas necesidades", author: "Epicteto" },
+    { phrase: "No nos afecta lo que nos sucede sino lo que nos decimos sobre lo que nos sucede", author: "Epicteto" },
+    { phrase: "Elige no ser dañado y no te sentirás dañado", author: "Marco Aurelio" },
+    { phrase: "La felicidad de tu vida depende de la calidad de tus pensamientos", author: "Marco Aurelio" },
+    { phrase: "Si no es correcto no lo hagas, si no es verdad no lo digas", author: "Marco Aurelio" }
+  ];
+
+  const [quoteIdx, setQuoteIdx] = useState(0);
+  const [words, setWords] = useState([]);
+  const [selectedWords, setSelectedWords] = useState([]);
+  const [win, setWin] = useState(false);
+
+  useEffect(() => {
+    const arr = QUOTES[quoteIdx].phrase.split(" ").map((w, i) => ({ id: i, text: w }));
+    setWords(arr.sort(() => Math.random() - 0.5));
+    setSelectedWords([]);
+  }, [quoteIdx]);
+
+  const handleSelect = (word) => {
+    setSelectedWords([...selectedWords, word]);
+    setWords(words.filter(w => w.id !== word.id));
+  };
+
+  const handleDeselect = (word) => {
+    setWords([...words, word]);
+    setSelectedWords(selectedWords.filter(w => w.id !== word.id));
+  };
+
+  const checkAnswer = () => {
+    const currentStr = selectedWords.map(w => w.text).join(" ");
+    if (currentStr.toLowerCase() === QUOTES[quoteIdx].phrase.toLowerCase()) {
+      if (quoteIdx < 1) { // just do 2 quotes for the minigame
+        setQuoteIdx(quoteIdx + 1);
+      } else {
+        setWin(true);
+      }
+    } else {
+      const arr = QUOTES[quoteIdx].phrase.split(" ").map((w, i) => ({ id: i, text: w }));
+      setWords(arr.sort(() => Math.random() - 0.5));
+      setSelectedWords([]);
+    }
+  };
+
+  return (
+    <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} transition={{ type: "spring", damping: 25, stiffness: 200 }} className="absolute inset-0 bg-black/90 backdrop-blur-xl z-[100] flex flex-col items-center justify-center text-white p-6">
+      <div className="w-full max-w-sm bg-gradient-to-br from-slate-900 to-black border-2 border-slate-500/30 rounded-[32px] p-6 shadow-[0_0_50px_rgba(100,116,139,0.2)] flex flex-col items-center relative overflow-hidden">
+        <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-white/50 hover:text-white"><X size={16} /></button>
+        <game.icon size={48} className="text-slate-400 mb-4 drop-shadow-[0_0_15px_rgba(148,163,184,0.8)]" />
+        <h2 className="text-2xl font-black uppercase text-white mb-1 tracking-tight text-center">{game.title}</h2>
+        <p className="text-xs text-white/50 uppercase tracking-widest text-center mb-6">{game.subtitle}</p>
+
+        {!win ? (
+          <>
+            <div className="w-full mb-6 text-center">
+              <span className="text-[10px] font-black uppercase text-blue-400 tracking-widest">Autor: {QUOTES[quoteIdx].author}</span>
+              <span className="text-[10px] font-black uppercase text-white/40 tracking-widest block mt-1">Frase {quoteIdx + 1}/2</span>
+            </div>
+            <div className="w-full min-h-[100px] border-b-2 border-white/20 mb-6 flex flex-wrap gap-2 items-start justify-center pb-4">
+              <AnimatePresence>
+                {selectedWords.map(w => (
+                  <motion.button key={`sel-${w.id}`} initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} onClick={() => handleDeselect(w)} className="bg-blue-500 text-white font-black uppercase text-[10px] px-3 py-1.5 rounded shadow-lg hover:scale-105 active:scale-95">{w.text}</motion.button>
+                ))}
+              </AnimatePresence>
+            </div>
+            <div className="flex flex-wrap gap-2 justify-center mb-8">
+              <AnimatePresence>
+                {words.map(w => (
+                  <motion.button key={`w-${w.id}`} initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} onClick={() => handleSelect(w)} className="bg-white/10 border border-white/20 text-white font-black uppercase text-[10px] px-3 py-1.5 rounded hover:bg-white/20 hover:scale-105 active:scale-95">{w.text}</motion.button>
+                ))}
+              </AnimatePresence>
+            </div>
+            {words.length === 0 && (
+              <button onClick={checkAnswer} className="w-full py-4 rounded-full bg-white text-black font-black uppercase tracking-widest text-sm hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(255,255,255,0.4)]">Verificar</button>
+            )}
+          </>
+        ) : (
+          <div className="flex flex-col items-center py-6">
+            <h3 className="text-4xl font-black uppercase mb-2 drop-shadow-lg text-green-400">ILUMINADO</h3>
+            <p className="text-white/60 mb-8 uppercase tracking-widest font-bold text-center">Sabiduría Adquirida</p>
+            <button onClick={() => { addXP(game.rewardXP); addDiamonds(game.rewardDia); onClose(); }} className="w-full py-4 rounded-full bg-green-500 text-black font-black uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(34,197,94,0.4)] hover:scale-105 active:scale-95 transition-all">Reclamar Recompensa</button>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+};
+
 const MinigameSequence = ({ game, onClose, addXP, addDiamonds }) => {
   const [gameState, setGameState] = useState('idle');
   const [level, setLevel] = useState(1);
@@ -2588,10 +3665,10 @@ export default function App() {
             <motion.div key="main" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-40">
               <AnimatePresence mode="wait">
                 {mainNav === 'home' && <motion.div key="h" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><HomeDashboard selectedApps={selectedApps} activeChallenge={activeChallenge} onSelectChallenge={setShowChallengeDetail} onOpenActive={() => setShowActiveInteractive(true)} onOpenAll={() => setShowAllChallenges(true)} onCompleteChallenge={handleCompleteChallenge} onPlayMinigame={setActiveMinigame} userGender={userGender} /></motion.div>}
-                {mainNav === 'forum' && <motion.div key="f" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><Forum onSelectChat={(p) => { setChatPerson(p); setStep('chat'); }} unreadFilter={unreadFilter} setUnreadFilter={setUnreadFilter} activeTab={activeForumTab} setActiveTab={setActiveForumTab} forumPosts={forumPosts} setForumPosts={setForumPosts} userAvatarItem={SHOP_ITEMS.find(i => i.id === inventory.equippedAvatar)} /></motion.div>}
+                {mainNav === 'forum' && <motion.div key="f" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><Forum onSelectChat={(p) => { setChatPerson(p); setStep('chat'); }} unreadFilter={unreadFilter} setUnreadFilter={setUnreadFilter} activeTab={activeForumTab} setActiveTab={setActiveForumTab} forumPosts={forumPosts} setForumPosts={setForumPosts} userAvatarItem={SHOP_ITEMS.find(i => i.id === inventory.equippedAvatar)} username={username} /></motion.div>}
                 {mainNav === 'rankings' && <motion.div key="r" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><Rankings userXP={userXP} inventory={inventory} username={username} /></motion.div>}
                 {mainNav === 'shop' && <motion.div key="s" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><ShopView userDiamonds={userDiamonds} onSelectItem={openShopItem} inventory={inventory} /></motion.div>}
-                {mainNav === 'profile' && <motion.div key="p" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><ProfileView inventory={inventory} setInventory={setInventory} userXP={userXP} username={username} onOpenItem={openInventoryItem} completedCount={completedCount} activityLog={activityLog} selectedApps={selectedApps} /></motion.div>}
+                {mainNav === 'profile' && <motion.div key="p" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><ProfileView inventory={inventory} setInventory={setInventory} userXP={userXP} username={username} onOpenItem={openInventoryItem} completedCount={completedCount} activityLog={activityLog} selectedApps={selectedApps} setSelectedApps={setSelectedApps} /></motion.div>}
               </AnimatePresence>
 
               <BottomNav activeTab={mainNav} onChange={setMainNav} currentThemeBg={inventory.equippedBg} />
@@ -2606,6 +3683,8 @@ export default function App() {
                 {activeMinigame && activeMinigame.type === 'millionaire' && <MinigameMillionaire key="modal-minigame-millionaire" game={activeMinigame} onClose={() => setActiveMinigame(null)} addXP={handleAddXP} addDiamonds={handleAddDiamonds} />}
                 {activeMinigame && activeMinigame.type === 'math' && <MinigameMath key="modal-minigame-math" game={activeMinigame} onClose={() => setActiveMinigame(null)} addXP={handleAddXP} addDiamonds={handleAddDiamonds} />}
                 {activeMinigame && activeMinigame.type === 'sequence' && <MinigameSequence key="modal-minigame-sequence" game={activeMinigame} onClose={() => setActiveMinigame(null)} addXP={handleAddXP} addDiamonds={handleAddDiamonds} />}
+                {activeMinigame && activeMinigame.type === 'whack' && <MinigameWhack key="modal-minigame-whack" game={activeMinigame} onClose={() => setActiveMinigame(null)} addXP={handleAddXP} addDiamonds={handleAddDiamonds} />}
+                {activeMinigame && activeMinigame.type === 'stoic' && <MinigameStoic key="modal-minigame-stoic" game={activeMinigame} onClose={() => setActiveMinigame(null)} addXP={handleAddXP} addDiamonds={handleAddDiamonds} />}
 
                 {selectedInventoryItem && <UniversalDetailModal key="modal-item" item={selectedInventoryItem} userDiamonds={userDiamonds} onClose={() => setSelectedInventoryItem(null)} onAction={handleItemAction} inventory={inventory} isShopMode={isShopMode} />}
 
