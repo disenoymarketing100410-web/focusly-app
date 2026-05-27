@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { supabase } from './supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bell, Users, Mail, ChevronLeft, Plus, Heart, MessageCircle, Megaphone,
@@ -77,7 +78,11 @@ const APP_CHALLENGES_BANK = [
   { id: 'ch_tt_4', appId: 'tt', gender: 'any', title: 'Modo Monje Estricto', subtitle: 'Cero estimulación', xp: 800, diamonds: 300, duration: 30, desc: 'Ni un solo video de formato corto en 30 días. Tu cerebro te lo agradecerá.' },
   { id: 'ch_yt_4', appId: 'yt', gender: 'any', title: 'Intención Pura', subtitle: 'Cero recomendaciones', xp: 400, diamonds: 150, duration: 21, desc: 'Usa YouTube solo buscando canales específicos. Nada de feed de recomendaciones.' },
   { id: 'ch_x_4', appId: 'x', gender: 'any', title: 'Silencio Absoluto', subtitle: 'Cero ruido', xp: 450, diamonds: 180, duration: 21, desc: 'Desinstala X por 21 días. Escapa de la cámara de eco.' },
-  { id: 'ch_wa_4', appId: 'wa', gender: 'any', title: 'Solo Texto', subtitle: 'Comunicación clara', xp: 300, diamonds: 100, duration: 14, desc: 'Prohibido enviar audios o fotos/stickers. Comunícate de manera concisa y solo con texto.' }
+  { id: 'ch_wa_4', appId: 'wa', gender: 'any', title: 'Solo Texto', subtitle: 'Comunicación clara', xp: 300, diamonds: 100, duration: 14, desc: 'Prohibido enviar audios o fotos/stickers. Comunícate de manera concisa y solo con texto.' },
+  // MÉTODOS DE ESTUDIO (NEW)
+  { id: 'ch_study_1', appId: 'yt', gender: 'any', title: 'Maestro Feynman', subtitle: 'Enseña para aprender', xp: 300, diamonds: 100, duration: 7, desc: 'Explica en voz alta tus apuntes a una audiencia imaginaria sin mirar el celular por 15 min diarios.' },
+  { id: 'ch_study_2', appId: 'insta', gender: 'any', title: 'Pomodoro Puro', subtitle: 'Sin interrupciones', xp: 400, diamonds: 120, duration: 10, desc: 'Haz 4 ciclos Pomodoro (25m estudio / 5m descanso). El celular debe estar en otra habitación.' },
+  { id: 'ch_study_3', appId: 'tt', gender: 'any', title: 'Detox Gris', subtitle: 'Apaga los colores', xp: 250, diamonds: 80, duration: 5, desc: 'Configura la pantalla de tu celular en escala de grises para reducir el enganche visual de TikTok/Insta.' }
 ];
 
 const WWII_TRIVIA = [
@@ -117,12 +122,11 @@ const INITIAL_FORUM_POSTS = [
 ];
 
 const MESSAGES_DATA = [
-  { id: 'm_crono', name: 'Crono', role: 'Vigilante de Arena', type: 'animated', avatarId: 'a_crono', unread: true, time: '10:00 AM', isBot: true, botId: 'crono' },
-  { id: 'm_icaro', name: 'Ícaro', role: 'Fénix de la Atención', type: 'animated', avatarId: 'a_icaro', unread: true, time: '09:30 AM', isBot: true, botId: 'icaro' },
-  { id: 'm_sophia', name: 'Sophia', role: 'Diosa del Silencio', type: 'animated', avatarId: 'a_sophia', unread: false, time: 'Ayer', isBot: true, botId: 'sophia' },
-  { id: 'm_atlas', name: 'Atlas', role: 'Guardián del Saber', type: 'animated', avatarId: 'a_atlas', unread: false, time: 'Lun', isBot: true, botId: 'atlas' },
-  { id: 'm_vento', name: 'Vento', role: 'Dragón de Papel', type: 'animated', avatarId: 'a_vento', unread: false, time: 'Dom', isBot: true, botId: 'vento' },
-  { id: 'm2', name: 'Alex_99', role: 'Usuario Nivel 12', type: 'animated', avatarId: 'a_hacker', unread: false, time: 'Ayer', isBot: false }
+  { id: 'm_lucas', name: 'Lucas_16', role: 'Estudiante (16 años)', type: 'animated', avatarId: 'a_ninja', unread: true, time: '10:00 AM', isBot: false, isSimulatedPeer: true, botId: 'lucas' },
+  { id: 'm_sofia', name: 'Sofi.Study', role: 'Estudiante (15 años)', type: 'animated', avatarId: 'a_base', unread: true, time: '09:30 AM', isBot: false, isSimulatedPeer: true, botId: 'sofia' },
+  { id: 'm_mateo', name: 'Mateo_Preu', role: 'Aspirante Univ (17 años)', type: 'animated', avatarId: 'a_brain', unread: false, time: 'Ayer', isBot: false, isSimulatedPeer: true, botId: 'mateo' },
+  { id: 'm_vale', name: 'Vale_Focus', role: 'Estudiante (14 años)', type: 'animated', avatarId: 'a_flame', unread: false, time: 'Lun', isBot: false, isSimulatedPeer: true, botId: 'vale' },
+  { id: 'm_thiago', name: 'Thiago.Code', role: 'Estudiante (18 años)', type: 'animated', avatarId: 'a_hacker', unread: false, time: 'Dom', isBot: false, isSimulatedPeer: true, botId: 'thiago' }
 ];
 
 // SISTEMA DE CALIDADES Y TEMAS GLOBAL
@@ -194,36 +198,369 @@ const FOCUS_TIPS_VIDEOS = [
       'Sustituye el scroll rápido por aburrimiento controlado para reiniciar receptores.',
       'Escribe tus metas en papel para activar el sistema de recompensa real.'
     ],
-    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    desc: 'Cómo hackear tu química cerebral para recuperar la atención y eliminar la procrastinación indefinida.'
+    youtubeId: 'p1zI1x37e2M',
+    desc: 'Cómo hackear tu química cerebral para recuperar la atención y eliminar la procrastinación inducida por TikTok e Instagram.',
+    activityText: 'Desactiva las notificaciones de Instagram y TikTok por las próximas 4 horas.'
   },
   {
-    id: 'v_estoico',
-    title: 'Maestría Estoica de la Atención',
+    id: 'v_fomo',
+    title: 'Venciendo el FOMO (Miedo a perderse algo)',
     duration: '4:15',
-    category: 'Estoicismo',
+    category: 'Redes Sociales',
     thumbnail: 'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=600&auto=format&fit=crop',
     points: [
-      'Divide tus retos en controlables y no controlables (Dicotomía del Control).',
-      'Realiza una pre-meditación de los males antes de comenzar a trabajar.',
-      'Recuerda tu finitud (Memento Mori) para valorar cada minuto enfocado.'
+      'Entiende que la vida en redes es un filtro irreal de la realidad.',
+      'Tus verdaderos amigos no te juzgarán por no responder en 5 minutos.',
+      'Prioriza tu paz mental por encima de las rachas de Snapchat.'
     ],
-    videoUrl: 'https://www.w3schools.com/html/movie.mp4',
-    desc: 'Aplica las enseñanzas antiguas de Séneca y Epicteto al caos del mundo digital moderno.'
+    youtubeId: 'oTeq2ykLiBc',
+    desc: 'Aprende a superar la ansiedad que te genera no estar conectado 24/7 y recupera el control de tu tiempo.',
+    activityText: 'Deja un mensaje en tu grupo de WhatsApp diciendo que estarás desconectado estudiando por 2 horas.'
   },
   {
-    id: 'v_pomodoro',
-    title: 'El Secreto del Bloque de Enfoque',
+    id: 'v_pomodoro_teens',
+    title: 'Pomodoro Adaptado para Adolescentes',
     duration: '6:30',
+    category: 'Métodos de Estudio',
+    thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Empieza con bloques cortos de 20 minutos si tu atención está dañada.',
+      'Durante los 5 min de descanso, estira o bebe agua, ¡CERO PANTALLAS!',
+      'Usa el método gradualmente hasta alcanzar bloques de 45 minutos.'
+    ],
+    youtubeId: '1-g73ty9v04',
+    desc: 'La técnica Pomodoro es brutal, pero las notificaciones la destruyen. Aprende a adaptarla a tu ritmo actual.',
+    activityText: 'Completa 1 ciclo de Pomodoro (20 min) con el celular en "No Molestar".'
+  },
+  {
+    id: 'v_sleep_phone',
+    title: 'Por qué no dormir con el celular',
+    duration: '3:45',
+    category: 'Sueño',
+    thumbnail: 'https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'La luz azul engaña a tu cerebro haciéndole creer que es de día.',
+      'El contenido corto antes de dormir dispara tu cortisol y arruina tu descanso.',
+      'Un cerebro sin descanso no puede consolidar la memoria para los exámenes.'
+    ],
+    youtubeId: '5MgBikgcWYY',
+    desc: 'El peor hábito para un estudiante es hacer scroll antes de dormir. Destruye tu memoria y tu energía.',
+    activityText: 'Deja cargando tu celular fuera de tu habitación esta noche.'
+  },
+  {
+    id: 'v_grayscale',
+    title: 'El truco de la Escala de Grises',
+    duration: '2:10',
+    category: 'Entorno Digital',
+    thumbnail: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Las apps usan colores brillantes (rojo) para hackear tus instintos.',
+      'Poner la pantalla en blanco y negro vuelve el teléfono aburrido.',
+      'Reducirás el tiempo de pantalla un 40% casi sin esfuerzo.'
+    ],
+    youtubeId: 'p1zI1x37e2M',
+    desc: 'Cómo hacer que tu cerebro deje de ver tu teléfono como una máquina tragamonedas.',
+    activityText: 'Ve a Configuración > Accesibilidad y activa el filtro de color en Escala de Grises.'
+  },
+  {
+    id: 'v_feynman',
+    title: 'Técnica Feynman para Exámenes',
+    duration: '5:20',
+    category: 'Métodos de Estudio',
+    thumbnail: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Elige el concepto que quieres aprender.',
+      'Explícalo en voz alta como si se lo enseñaras a un niño de 10 años.',
+      'Identifica dónde te trabas y vuelve a los apuntes.'
+    ],
+    youtubeId: '1-g73ty9v04',
+    desc: 'La forma más rápida de dominar cualquier tema para la escuela secundaria o universidad.',
+    activityText: 'Toma el tema más difícil que debes estudiar hoy y explícalo en voz alta por 5 minutos.'
+  },
+  {
+    id: 'v_comparison',
+    title: 'La trampa de la Comparación Social',
+    duration: '7:15',
+    category: 'Mentalidad',
+    thumbnail: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Las redes sociales son un carrete de momentos destacados, no la realidad.',
+      'Comparar tu "detrás de escenas" con la película editada de otros genera depresión.',
+      'Enfócate en tu propio progreso, la única competencia eres tú mismo de ayer.'
+    ],
+    youtubeId: 'oTeq2ykLiBc',
+    desc: 'Cómo dejar de compararte con los influencers o tus compañeros de clase en Instagram y recuperar tu autoestima.',
+    activityText: 'Silencia a 3 cuentas en Instagram que te generen inseguridad al ver sus posts.'
+  },
+  {
+    id: 'v_active_recall',
+    title: 'Repaso Activo: Estudia Menos, Aprende Más',
+    duration: '8:40',
+    category: 'Métodos de Estudio',
+    thumbnail: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Leer y subrayar es la forma menos efectiva de estudiar.',
+      'El cerebro aprende cuando se esfuerza en "recordar" la información.',
+      'Usa tarjetas de memoria (flashcards) o hazte preguntas sin mirar el libro.'
+    ],
+    youtubeId: '5MgBikgcWYY',
+    desc: 'El secreto de los estudiantes top para no olvidar la información en pleno examen.',
+    activityText: 'Crea 5 preguntas sobre lo que estudiaste hoy y respóndelas sin mirar el cuaderno.'
+  },
+  {
+    id: 'v_morning_routine',
+    title: 'Rutina Matutina sin Pantallas',
+    duration: '4:50',
+    category: 'Entorno Digital',
+    thumbnail: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Al despertar, tu cerebro está en estado Alpha, altamente programable.',
+      'Si miras TikTok al despertar, configuras tu cerebro para la distracción todo el día.',
+      'Pospón el uso del teléfono al menos 1 hora después de despertar.'
+    ],
+    youtubeId: 'p1zI1x37e2M',
+    desc: 'Evita destruir tu atención desde el primer minuto del día con esta regla de oro.',
+    activityText: 'Compra un despertador físico y no uses el celular como alarma mañana.'
+  },
+  {
+    id: 'v_friction',
+    title: 'Añade Fricción a tus Malos Hábitos',
+    duration: '3:30',
     category: 'Productividad',
     thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop',
     points: [
-      'Trabaja en bloques puros de 90 minutos en lugar de 25.',
-      'Durante el descanso de 15 min, evita cualquier pantalla (camina o estira).',
-      'Usa audio binaural de 40Hz para inducir estados de flujo cognitivo rápidos.'
+      'Tu cerebro siempre elegirá el camino de menor resistencia.',
+      'Si TikTok está a 1 clic, lo abrirás. Si tienes que escribir una contraseña, lo dudarás.',
+      'Mueve las apps adictivas fuera de la pantalla de inicio o usa bloqueadores.'
     ],
-    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    desc: 'Optimiza tus ciclos ultradianos naturales para mantener un alto rendimiento mental sin fatiga.'
+    youtubeId: '1-g73ty9v04',
+    desc: 'Hackea tu entorno digital para que perder el tiempo sea difícil y estudiar sea fácil.',
+    activityText: 'Mueve las apps de redes sociales a una carpeta oculta en la segunda página de tu celular.'
+  },
+  {
+    id: 'v_identity',
+    title: 'Cambio de Identidad',
+    duration: '5:05',
+    category: 'Mentalidad',
+    thumbnail: 'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'No digas "Estoy intentando dejar el teléfono", di "No soy una persona adicta al teléfono".',
+      'Tus hábitos son el reflejo de la identidad que asumes.',
+      'Actúa como actuaría un estudiante de excelencia.'
+    ],
+    youtubeId: 'oTeq2ykLiBc',
+    desc: 'La verdadera transformación comienza cuando cambias cómo te ves a ti mismo.',
+    activityText: 'Escribe en un papel: "Soy un estudiante enfocado y dueño de mi tiempo" y pégalo en tu monitor.'
+  },
+  {
+    id: 'v_spaced_repetition',
+    title: 'Repetición Espaciada',
+    duration: '6:20',
+    category: 'Métodos de Estudio',
+    thumbnail: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'La Curva del Olvido demuestra que olvidamos el 70% de lo aprendido en 24h.',
+      'Repasar a intervalos (1 día, 3 días, 1 semana) detiene la curva del olvido.',
+      'Usa apps como Anki para gestionar los repasos eficientemente.'
+    ],
+    youtubeId: '5MgBikgcWYY',
+    desc: 'Estudiar todo el día antes del examen es ineficiente. Aprende a distribuir el esfuerzo.',
+    activityText: 'Descarga Anki o crea 10 tarjetas físicas para repasar durante los próximos 3 días.'
+  },
+  {
+    id: 'v_study_space',
+    title: 'Optimiza tu Entorno de Estudio',
+    duration: '4:10',
+    category: 'Entorno Digital',
+    thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Tu habitación está asociada al descanso, no al trabajo duro.',
+      'Limpia tu escritorio; el desorden visual agota la energía mental.',
+      'Ten agua y todos tus materiales listos antes de sentarte.'
+    ],
+    youtubeId: 'p1zI1x37e2M',
+    desc: 'Si estudias en la cama, tu cerebro se confundirá. Crea un santuario de concentración.',
+    activityText: 'Limpia completamente tu escritorio dejando solo el libro y el cuaderno necesarios hoy.'
+  },
+  {
+    id: 'v_music_focus',
+    title: 'Música y Enfoque',
+    duration: '3:50',
+    category: 'Productividad',
+    thumbnail: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'La música con letra distrae tu centro del lenguaje en el cerebro.',
+      'Usa ruido blanco, lo-fi beats, o bandas sonoras de videojuegos.',
+      'El sonido binaural (40Hz) puede ayudar a entrar en estado de flujo.'
+    ],
+    youtubeId: '1-g73ty9v04',
+    desc: 'Escuchar a tu artista favorito mientras estudias matemáticas es contraproducente. Aprende qué escuchar.',
+    activityText: 'Crea una playlist de música instrumental o Lo-Fi exclusiva para estudiar.'
+  },
+  {
+    id: 'v_time_blocking',
+    title: 'Bloqueo de Tiempo',
+    duration: '5:45',
+    category: 'Métodos de Estudio',
+    thumbnail: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Las listas de tareas pendientes generan estrés porque no tienen límite de tiempo.',
+      'Asigna una hora específica del día para cada tarea (Time Blocking).',
+      'Respeta el horario como si fuera una cita médica.'
+    ],
+    youtubeId: '5MgBikgcWYY',
+    desc: 'El método que usan los profesionales para evitar que el tiempo se les escape entre las manos.',
+    activityText: 'Abre el calendario y asigna un bloque de 2 horas exactas para hacer la tarea de mañana.'
+  },
+  {
+    id: 'v_5_seconds',
+    title: 'La Regla de los 5 Segundos',
+    duration: '2:50',
+    category: 'Mentalidad',
+    thumbnail: 'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Si tienes el impulso de hacer algo, debes actuar en 5 segundos o tu cerebro pondrá excusas.',
+      'Cuenta regresiva: 5, 4, 3, 2, 1 y ¡levántate de la cama o empieza a estudiar!',
+      'Rompe la parálisis por análisis.'
+    ],
+    youtubeId: 'oTeq2ykLiBc',
+    desc: 'Un pequeño hack mental para vencer la procrastinación en el momento exacto en que aparece.',
+    activityText: 'Cierra esta app, cuenta de 5 a 1, y comienza inmediatamente a estudiar.'
+  },
+  {
+    id: 'v_group_chats',
+    title: 'Manejo de Chats Grupales',
+    duration: '4:00',
+    category: 'Redes Sociales',
+    thumbnail: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Los grupos de clase de WhatsApp son 10% información y 90% distracción.',
+      'Silencia todos los grupos; la información importante sobrevivirá unas horas.',
+      'Define horarios específicos para revisar mensajes sociales.'
+    ],
+    youtubeId: 'p1zI1x37e2M',
+    desc: 'El miedo a quedar fuera de la conversación escolar te hace revisar el teléfono 100 veces al día.',
+    activityText: 'Archiva y silencia todos los chats grupales que no sean urgentes.'
+  },
+  {
+    id: 'v_reward_system',
+    title: 'Crea tu Sistema de Recompensas',
+    duration: '5:15',
+    category: 'Productividad',
+    thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'El estudio no da gratificación instantánea como un videojuego.',
+      'Combina una tarea difícil con una recompensa inmediata (Temptation Bundling).',
+      'Date permiso de jugar 30 min solo si terminas la guía de estudio primero.'
+    ],
+    youtubeId: '1-g73ty9v04',
+    desc: 'Aprende a negociar contigo mismo usando recompensas para fomentar la disciplina.',
+    activityText: 'Escribe tu recompensa de hoy y cúmplela solo si terminas tus pendientes.'
+  },
+  {
+    id: 'v_hydration',
+    title: 'Agua y Oxígeno para el Cerebro',
+    duration: '3:10',
+    category: 'Entorno Digital',
+    thumbnail: 'https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Una deshidratación del 2% reduce tu capacidad cognitiva dramáticamente.',
+      'La postura encorvada mirando el celular restringe la oxigenación.',
+      'Bebe un vaso de agua antes de empezar a estudiar.'
+    ],
+    youtubeId: 'oTeq2ykLiBc',
+    desc: 'El cansancio mental a veces es solo tu cerebro pidiendo agua y oxígeno. Soluciones simples de biología.',
+    activityText: 'Levántate ahora mismo, bebe un vaso de agua grande y respira profundo 3 veces.'
+  },
+  {
+    id: 'v_social_validation',
+    title: 'Adicción a los Likes',
+    duration: '6:30',
+    category: 'Redes Sociales',
+    thumbnail: 'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Las redes están diseñadas por casinos para explotar tu necesidad de validación.',
+      'Tu valor como persona no depende de cuántas visualizaciones tenga tu historia.',
+      'Crea valor en el mundo real, no solo un avatar digital bonito.'
+    ],
+    youtubeId: '5MgBikgcWYY',
+    desc: 'Comprende la psicología detrás de por qué subes fotos y cómo liberarte de la presión de los likes.',
+    activityText: 'Desactiva el contador de likes en Instagram temporalmente.'
+  },
+  {
+    id: 'v_single_tasking',
+    title: 'El Mito del Multitasking',
+    duration: '4:40',
+    category: 'Productividad',
+    thumbnail: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'El cerebro no hace varias tareas a la vez, cambia rápidamente entre ellas.',
+      'Cada cambio de tarea consume energía y tiempo (Coste de Cambio).',
+      'Hacer la tarea mientras miras una serie garantiza que harás ambas cosas mal.'
+    ],
+    youtubeId: '1-g73ty9v04',
+    desc: 'Deja de intentar ser productivo haciendo 3 cosas al mismo tiempo. El enfoque requiere exclusividad.',
+    activityText: 'Cierra todas las pestañas de tu navegador excepto las necesarias para tu tarea actual.'
+  },
+  {
+    id: 'v_meditation',
+    title: 'Mindfulness para Adolescentes',
+    duration: '7:00',
+    category: 'Ansiedad',
+    thumbnail: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'La meditación es como hacer flexiones para tu músculo de la atención.',
+      '10 minutos al día pueden revertir el daño causado por los videos cortos.',
+      'No se trata de "dejar la mente en blanco", sino de notar cuándo te distraes.'
+    ],
+    youtubeId: 'oTeq2ykLiBc',
+    desc: 'Cómo entrenar la atención plena te dará una ventaja injusta en tus exámenes y control emocional.',
+    activityText: 'Cierra los ojos y concéntrate en tu respiración por 2 minutos seguidos sin moverte.'
+  },
+  {
+    id: 'v_say_no',
+    title: 'El Poder de Decir NO',
+    duration: '4:20',
+    category: 'Mentalidad',
+    thumbnail: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Cada "Sí" a salir o jugar cuando deberías estudiar, es un "No" a tu futuro.',
+      'Tus amigos reales entenderán que tienes metas académicas.',
+      'Protege tu tiempo, es el único recurso que no puedes comprar.'
+    ],
+    youtubeId: 'p1zI1x37e2M',
+    desc: 'Cómo manejar la presión de grupo para no salir o no jugar online cuando necesitas prepararte para la universidad.',
+    activityText: 'Rechaza amablemente una invitación o plan que interfiera con tu bloque de estudio de hoy.'
+  },
+  {
+    id: 'v_digital_minimalism',
+    title: 'Minimalismo Digital',
+    duration: '8:10',
+    category: 'Redes Sociales',
+    thumbnail: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Aplica la filosofía de Cal Newport: usa la tecnología intencionalmente.',
+      'Borra las aplicaciones que no aporten un valor inmenso a tu vida.',
+      'Si necesitas una red social, entra desde el navegador, no uses la app móvil.'
+    ],
+    youtubeId: '5MgBikgcWYY',
+    desc: 'Cómo purgar tu vida digital para tener más tiempo para hobbies reales, amigos y descanso genuino.',
+    activityText: 'Desinstala 1 aplicación que sabes que te roba tiempo pero no te aporta valor.'
+  },
+  {
+    id: 'v_perfect_plan',
+    title: 'Planifica la Semana, no el Día',
+    duration: '5:30',
+    category: 'Productividad',
+    thumbnail: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=600&auto=format&fit=crop',
+    points: [
+      'Planificar a diario te deja ciego ante exámenes importantes de la próxima semana.',
+      'Dedica 15 minutos el domingo para visualizar los hitos académicos de la semana.',
+      'Divide los trabajos grandes en tareas pequeñas distribuidas en varios días.'
+    ],
+    youtubeId: '1-g73ty9v04',
+    desc: 'El antídoto contra dejar los trabajos prácticos para la noche anterior a la entrega.',
+    activityText: 'Toma una hoja y anota las fechas de entrega y exámenes de los próximos 7 días.'
   }
 ];
 
@@ -1607,75 +1944,100 @@ const ChallengeDetail = ({ challenge, onClose, onStart }) => (
   </motion.div>
 );
 
-const ChatView = ({ person, onBack }) => {
-  const BOT_RESPONSES = {
-    crono: ["El tiempo es el único recurso que no puedes recuperar. Úsalo sabiamente.", "Tick, tock... cada segundo que pasas aquí es una elección.", "No midas el tiempo en minutos, mídelo en enfoque.", "La arena cae, pero tu voluntad se mantiene."],
-    icaro: ["¡Quema tus distracciones hasta que solo quede ceniza!", "Renace de tus hábitos tóxicos. Eres fuego, no humo.", "Vuela alto, pero mantén la vista en tu objetivo.", "Que la pasión por tu meta sea más fuerte que la tentación."],
-    sophia: ["En el silencio encontrarás las respuestas que el ruido te oculta.", "Respira. Pausa. Observa el vacío de tu mente.", "La mayor fortaleza a veces es simplemente no reaccionar.", "Deja que el mundo gire; tú eres el centro inamovible."],
-    atlas: ["El conocimiento requiere paciencia. No hay atajos para la sabiduría.", "Carga el peso de tu disciplina hoy para disfrutar la ligereza de tu éxito mañana.", "Cada desafío superado es un libro más en tu biblioteca mental.", "Soporta la presión. Estás construyendo un imperio."],
-    vento: ["Fluye como el viento. Que las distracciones te atraviesen sin moverte.", "Eres ligero como el papel, pero fuerte como un dragón.", "Vuela por encima de la procrastinación.", "Adapta tu forma, pero nunca cambias tu dirección."],
-    default: ["La disciplina es un músculo. Sigue entrenando.", "Tu atención es tu moneda más valiosa. Invierte bien.", "Mantén el rumbo. La claridad mental es tu mayor arma."]
+const ChatView = ({ person, onBack, activeChatsHistory, setActiveChatsHistory }) => {
+  const PEER_RESPONSES = {
+    lucas: [
+      '😅 bro yo también lucho con eso, especialmente con TikTok antes de dormir',
+      'me pasó igual la semana pasada... lo peor es que después no puedo concentrarme en mate',
+      'oye prueba el truco de poner el cel en otra habitación cuando estudias, me cambió la vida lol',
+      'sí bro, el profe de biología nos dio un artículo de eso. el FOMO es real 😬',
+      '¡eso! yo me puse límites de 30 min diarios en insta y ya hasta duermo mejor',
+      'qué pesado eso... yo a veces siento que si no abro el grupo de clase pierdo algo importante pero nunca pasa nada jaja',
+      'oye cuántos días llevas sin abrir TikTok? yo voy por 4 y me está costando',
+      'exacto!! los snapchats también son una trampa, las rachas te obligan a entrar aunque no quieras'
+    ],
+    sofia: [
+      'yo siento lo mismo! sobre todo cuando veo a otras del colegio con mejores notas y más seguidores ugh',
+      'la comparación en insta me destruyó el año pasado ngl 😔 tuve que dejar de seguir a muchas',
+      'oye tú usas alguna técnica de estudio? yo empecé con el Pomodoro y me ayuda bastante',
+      'exactamente! además de noche el cel me quita el sueño y después en clase no entiendo nada',
+      'jajaja yo también tenía esa costumbre de ver reels justo antes de dormir... malísimo',
+      'el profe de psico nos habló del dopamina detox y me pareció súper interesante, ¿lo conoces?',
+      'estoy intentando hacer eso de anotar mis metas en papel en vez de en el cel, se siente diferente',
+      '😂 cero en eso, soy adicta a los estados de whatsapp pero sé que tengo que cortar'
+    ],
+    mateo: [
+      'bro el año pasado perdí materias por pasarme en YouTube y videojuegos, ya aprendí la lección',
+      'yo uso la técnica Feynman para estudiar, básicamente te explicas a ti mismo el tema en voz alta',
+      'el truco que me funcionó fue bloquear todas las apps con un horario, solo las abro a las 8pm',
+      'para la uni necesitás enfocarte sí o sí... los profesores no te esperan como en el colegio',
+      '100% de acuerdo, la neurociencia dice que el cerebro tarda 23 min en recuperar el foco después de una distracción',
+      'yo le quitá los colores al cel hace 2 semanas (modo gris) y baajé un montón el tiempo de pantalla',
+      'estoy haciendo el desafío de Pomodoro Puro de Focusly, vas bien?',
+      'los chats grupales son un pozo sin fondo bro, yo los silencio todos y los reviso 1 vez al día'
+    ],
+    vale: [
+      'a mí me da mucho miedo quedarme afuera de los chismes del colegio si no estoy siempre conectada 😬',
+      'mi mamá me quitó el cel a las 9pm y al principio odie pero ahora duermo mejor jajaja',
+      'cuándo fue la última vez que estudiaste sin música ni series de fondo? yo lo intento y me cuesta',
+      'yo todavía no sé bien qué hacer con las rachas de snap, es como una trampa emocional',
+      'oye pero tampoco es fácil cuando todos tus amigos están en insta todo el día y tú no',
+      '¡me pasó lo mismo! empecé con 5 min de meditación al día y se me hace más fácil concentrarme',
+      'ay sí el truco de la escala de grises lo leí en Focusly y voy a probarlo hoy',
+      'igual... a veces siento que si no respondo rápido al chat me odian pero sé que no es verdad 😅'
+    ],
+    thiago: [
+      'la clave es separar el tiempo de descanso del tiempo de estudio, no pueden mezclarse',
+      'yo uso Anki para flashcards y es brutal para memorizar cosas para los exámenes',
+      'el time blocking me salvó este semestre, no es difícil una vez que te acostumbrás',
+      'bro el multitasking es un mito total, yo aprendí eso leyendo sobre neurociencia 🧠',
+      'lo bueno es que a los 18 todavía podés revertir los hábitos antes de llegar a la uni',
+      'yo me propuse leer 10 páginas de un libro antes de dormir en vez de ver el cel, ya llevo 3 semanas',
+      'la repetición espaciada es lo mejor para no olvidar lo que estudiás, cambia todo',
+      'si querés te paso los videos que uso yo de productividad en YouTube, son buenísimos'
+    ]
   };
 
-  const [messages, setMessages] = useState(() => {
-    if (person.isBot) {
-      return [{ id: 1, text: `Saludos. Soy ${person.name}, ${person.role}. ¿En qué fase de tu disciplina te encuentras hoy?`, sender: 'bot', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }];
-    }
-    return [
-      { id: 1, text: '¡Hey! ¿Qué tal vas con los desafíos de hoy?', sender: 'other', time: '10:42 AM' },
-      { id: 2, text: 'Excelente. No he tocado las redes en todo el día.', sender: 'user', time: '10:45 AM' }
-    ];
-  });
+  const personHistory = activeChatsHistory?.[person.id] || [
+    { id: 1, text: `¡Hola! Soy ${person.name}, ¿cómo vas con los bloqueos de apps hoy?`, sender: 'other', time: '10:00 AM' }
+  ];
 
+  const [messages, setMessages] = useState(personHistory);
   const [input, setInput] = useState('');
   const [showEmojis, setShowEmojis] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef(null);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  }, [messages, isTyping]);
+
+  // Persist messages to global history
+  useEffect(() => {
+    if (setActiveChatsHistory) {
+      setActiveChatsHistory(prev => ({ ...prev, [person.id]: messages }));
+    }
   }, [messages]);
 
   const handleSend = () => {
     if (!input.trim()) return;
-    const newMsg = {
-      id: Date.now(),
-      text: input,
-      sender: 'user',
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
+    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const newMsg = { id: Date.now(), text: input, sender: 'user', time: now };
     setMessages(prev => [...prev, newMsg]);
     setInput('');
     setShowEmojis(false);
 
-    // Simular respuesta del bot
-    if (person.isBot) {
-      const responses = BOT_RESPONSES[person.botId] || BOT_RESPONSES['default'];
-      setTimeout(() => {
-        let replyText = responses[Math.floor(Math.random() * responses.length)];
-        const lowerInput = input.toLowerCase();
-        if (lowerInput.includes('hola') || lowerInput.includes('saludos')) {
-          replyText = `Saludos. Sigue enfocando tu energía.`;
-        } else if (lowerInput.includes('ayuda') || lowerInput.includes('estres') || lowerInput.includes('ansiedad')) {
-          replyText = `Respira profundo. Recuerda por qué empezaste esto. Tú tienes el control.`;
-        } else if (lowerInput.includes('?')) {
-          replyText = `Esa es una buena pregunta. La respuesta está en mantener tu disciplina inquebrantable.`;
-        } else if (lowerInput.includes('gracias')) {
-          replyText = `No me lo agradezcas a mí. Agradéceselo a tu futuro yo.`;
-        }
-
-        const botReply = {
-          id: Date.now() + 1,
-          text: replyText,
-          sender: 'bot',
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-        setMessages(prev => [...prev, botReply]);
-      }, 1000 + Math.random() * 1500);
-    }
+    // Simulate peer typing + reply
+    const peerResponses = PEER_RESPONSES[person.botId] || PEER_RESPONSES['lucas'];
+    setIsTyping(true);
+    setTimeout(() => {
+      setIsTyping(false);
+      const reply = peerResponses[Math.floor(Math.random() * peerResponses.length)];
+      setMessages(prev => [...prev, { id: Date.now() + 1, text: reply, sender: 'other', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+    }, 1200 + Math.random() * 1200);
   };
 
-  const EMOJIS = ["🔥", "💪", "🧘", "👑", "⚔️", "💎", "⏳", "👁️"];
+  const EMOJIS = ["🔥", "💪", "📚", "😅", "💡", "✅", "😬", "🧠"];
 
   return (
     <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: "spring", damping: 25, stiffness: 200 }} className="absolute inset-0 bg-black/40 backdrop-blur-md z-[100] flex flex-col text-white">
@@ -1692,7 +2054,7 @@ const ChatView = ({ person, onBack }) => {
         </div>
         <div>
           <h2 className="text-sm font-black uppercase tracking-tight">{person.name}</h2>
-          <span className="text-[9px] font-black text-green-500 uppercase tracking-widest flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_5px_#22c55e]"></span> En línea</span>
+          <span className="text-[9px] font-black text-green-500 uppercase tracking-widest flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_5px_#22c55e]"></span> {person.role}</span>
         </div>
       </div>
 
@@ -1706,6 +2068,12 @@ const ChatView = ({ person, onBack }) => {
             </span>
           </div>
         ))}
+        {isTyping && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/10 backdrop-blur-sm self-start rounded-[24px] rounded-tl-sm border border-white/10 px-5 py-3 flex items-center gap-1.5 shadow-md">
+            <span className="text-[10px] text-white/50 font-bold tracking-wide">{person.name.split('_')[0]} está escribiendo</span>
+            <motion.span animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1 }} className="text-white/60 text-lg leading-none">...</motion.span>
+          </motion.div>
+        )}
       </div>
 
       <div className="p-5 bg-black/60 backdrop-blur-xl border-t border-white/10 z-10 relative pb-8">
@@ -1729,6 +2097,7 @@ const ChatView = ({ person, onBack }) => {
     </motion.div>
   );
 };
+
 
 const Forum = ({ onSelectChat, unreadFilter, setUnreadFilter, activeTab, setActiveTab, forumPosts, setForumPosts, userAvatarItem, username }) => {
   const [expandedPost, setExpandedPost] = useState(null);
@@ -2287,9 +2656,13 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
   );
 };
 
-const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpenActive, onOpenAll, onCompleteChallenge, onPlayMinigame, userGender }) => {
-  const [homeTab, setHomeTab] = useState('desafios');
+const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpenActive, onOpenAll, onCompleteChallenge, onPlayMinigame, userGender, selectedCoach, setSelectedCoach, completedActivities, setCompletedActivities, userXP, setUserXP, userDiamonds, setUserDiamonds, calendarTasks, setCalendarTasks, blockedAppsConfig, setBlockedAppsConfig, onOpenAICalendar }) => {
+  const [homeTab, setHomeTab] = useState('desafiate');
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [coachChatOpen, setCoachChatOpen] = useState(false);
+  const [coachInput, setCoachInput] = useState('');
+  const [coachMessages, setCoachMessages] = useState([]);
+  const [activityDone, setActivityDone] = useState(null);
 
   const appFeatured = APP_CHALLENGES_BANK
     .filter(challenge => selectedApps.includes(challenge.appId) && (!challenge.gender || challenge.gender === 'any' || challenge.gender === userGender))
@@ -2307,13 +2680,13 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
   return (
     <div className="absolute inset-0 flex flex-col z-40 text-white overflow-hidden bg-black/10 backdrop-blur-sm">
       <div className="flex-1 overflow-y-auto px-6 pt-16 pb-36 custom-scroll">
-        <div className="flex gap-2 bg-black/60 p-1.5 rounded-full border border-white/5 shadow-inner backdrop-blur-md mb-8">
-          <button onClick={() => setHomeTab('desafios')} className={`flex-1 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${homeTab === 'desafios' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Desafíos</button>
-          <button onClick={() => setHomeTab('minijuegos')} className={`flex-1 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${homeTab === 'minijuegos' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Minijuegos</button>
-          <button onClick={() => setHomeTab('consejos')} className={`flex-1 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${homeTab === 'consejos' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Consejos</button>
+        <div className="flex gap-1.5 bg-black/60 p-1.5 rounded-full border border-white/5 shadow-inner backdrop-blur-md mb-8 overflow-x-auto no-scrollbar">
+          <button onClick={() => setHomeTab('desafiate')} className={`flex-1 py-2.5 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${homeTab === 'desafiate' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Desafíate</button>
+          <button onClick={() => setHomeTab('organizate')} className={`flex-1 py-2.5 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${homeTab === 'organizate' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Organízate</button>
+          <button onClick={() => setHomeTab('crece')} className={`flex-1 py-2.5 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${homeTab === 'crece' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Crece</button>
         </div>
 
-        {homeTab === 'desafios' && (
+        {homeTab === 'desafiate' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {activeChallenge ? (
               <div className="relative mb-10">
@@ -2378,11 +2751,8 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
                 )
               })}
             </motion.div>
-          </motion.div>
-        )}
 
-        {homeTab === 'minijuegos' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <div className="my-10 border-t border-white/10" />
             <div className="flex justify-between items-end mb-6">
               <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md">Centro de Pruebas</h3>
             </div>
@@ -2415,7 +2785,67 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
           </motion.div>
         )}
 
-        {homeTab === 'consejos' && (
+        {homeTab === 'organizate' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col gap-8">
+            {/* AI Assistant Button */}
+            <div className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80 rounded-[32px] p-6 border border-indigo-500/30 shadow-[0_0_30px_rgba(99,102,241,0.2)] flex items-center justify-between group cursor-pointer" onClick={onOpenAICalendar}>
+              <div>
+                <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md">Asistente IA</h3>
+                <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest mt-1">Sincroniza tus horarios</p>
+              </div>
+              <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner">
+                <Brain size={24} className="text-indigo-400" />
+              </div>
+            </div>
+
+            {/* Calendar View */}
+            <div>
+              <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md mb-6">Esta Semana</h3>
+              <div className="space-y-4">
+                {calendarTasks.map(task => (
+                  <div key={task.id} className="bg-white/5 backdrop-blur-md rounded-[24px] p-5 border border-white/10 flex items-center justify-between shadow-md">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
+                        <Calendar size={20} className="text-indigo-400" />
+                      </div>
+                      <div>
+                        <span className="text-[8px] font-black tracking-widest uppercase text-indigo-400 bg-indigo-400/10 px-2 py-0.5 rounded-full">{task.type}</span>
+                        <h4 className="text-sm font-black uppercase tracking-tight text-white mt-1">{task.title}</h4>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-white/40">{task.date}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* App Blocker config */}
+            <div>
+              <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md mb-6 flex items-center gap-2"><Lock size={20} /> Bloqueador</h3>
+              <div className="space-y-4">
+                {selectedApps.map(appId => {
+                  const appRef = APPS.find(a => a.id === appId);
+                  const blockedData = blockedAppsConfig[appId] || { limit: 15 };
+                  return (
+                    <div key={appId} className="bg-white/5 backdrop-blur-md rounded-[24px] p-4 border border-white/10 flex items-center justify-between shadow-md">
+                      <div className="flex items-center gap-4">
+                        <img src={appRef.icon} className="w-8 h-8 object-contain filter invert opacity-80" alt={appRef.name} />
+                        <h4 className="text-sm font-black uppercase tracking-tight text-white">{appRef.name}</h4>
+                      </div>
+                      <div className="flex items-center gap-3 bg-black/40 px-4 py-2 rounded-full border border-white/5">
+                        <button onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { limit: Math.max(0, blockedData.limit - 5) } }))} className="text-white/40 hover:text-white"><Minus size={14} /></button>
+                        <span className="text-[10px] font-black tracking-widest w-12 text-center">{blockedData.limit} m</span>
+                        <button onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { limit: blockedData.limit + 5 } }))} className="text-white/40 hover:text-white"><Plus size={14} /></button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {homeTab === 'crece' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <div className="flex justify-between items-end mb-6">
               <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md">Consejos de Enfoque</h3>
@@ -2462,9 +2892,123 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
                 </motion.div>
               ))}
             </div>
+
+            <div className="my-10 border-t border-white/10" />
+            
+            {/* Coach Selection */}
+            <div className="mb-8">
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-white/40 mb-1">Paso 1</h3>
+              <h4 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md mb-5">Elige tu Coach</h4>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { id: 'sophia', name: 'Sophia', type: 'Perfeccionista Ansioso/a', icon: '🌙', desc: 'Presión académica e Instagram', color: 'from-purple-700 to-indigo-900', borderColor: 'border-purple-500/50', tips: ['Recuerda: 1 like no define tu valor.', 'La perfección es enemiga del progreso.', 'Date permiso de equivocarte.', 'No compares tu interior con el exterior de otros.'] },
+                  { id: 'icaro', name: 'Ícaro', type: 'Procrastinador Impulsivo', icon: '🔥', desc: 'Adicción a TikTok y dopamina instantánea', color: 'from-orange-700 to-red-900', borderColor: 'border-orange-500/50', tips: ['5-4-3-2-1 ¡arráncate ya!', 'Cada video corto que rechazas es una victoria.', 'Tu cerebro puede reaprender el aburrimiento.', 'La acción imperfecta supera la inacción perfecta.'] },
+                  { id: 'atlas', name: 'Atlas', type: 'Competitivo Distraído', icon: '📚', desc: 'YouTube y videojuegos sobre el estudio', color: 'from-blue-700 to-cyan-900', borderColor: 'border-blue-500/50', tips: ['Trata el estudio como subes de nivel en un juego.', 'Cada hora de estudio = XP para tu futuro real.', 'Los mejores jugadores también leen y se forman.', 'Analiza tu tiempo de pantalla como analizas estadísticas.'] },
+                  { id: 'vento', name: 'Vento', type: 'Socialmente Dependiente', icon: '💬', desc: 'FOMO y rachas de Snapchat/WhatsApp', color: 'from-teal-700 to-emerald-900', borderColor: 'border-teal-500/50', tips: ['No es necesario responder en segundos.', 'Las rachas de Snap no miden el valor de una amistad.', 'El FOMO es una mentira que vende la app.', 'Pon límites digitales claros con tus amigos.'] }
+                ].map(coach => {
+                  const isSelected = selectedCoach?.id === coach.id;
+                  return (
+                    <motion.div key={coach.id} onClick={() => setSelectedCoach(coach)} whileTap={{ scale: 0.96 }}
+                      className={`bg-gradient-to-br ${coach.color} rounded-[24px] p-4 border-2 cursor-pointer transition-all ${isSelected ? coach.borderColor + ' shadow-[0_0_20px_rgba(255,255,255,0.15)]' : 'border-transparent'}`}>
+                      <div className="text-3xl mb-2">{coach.icon}</div>
+                      <h5 className="text-sm font-black uppercase tracking-tight text-white leading-tight">{coach.name}</h5>
+                      <p className="text-[9px] text-white/60 font-bold uppercase tracking-wide mt-1">{coach.type}</p>
+                      <p className="text-[8px] text-white/40 font-medium mt-1">{coach.desc}</p>
+                      {isSelected && <div className="mt-2 bg-white/20 rounded-full px-2 py-0.5 w-max text-[8px] font-black text-white uppercase tracking-widest">✓ Seleccionado</div>}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Selected Coach chat button */}
+            {selectedCoach && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white/5 border border-white/10 rounded-[24px] p-5 mb-8">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[9px] font-black tracking-widest text-white/40 uppercase mb-1">Tu coach activo</p>
+                    <h4 className="text-lg font-black uppercase">{selectedCoach.icon} {selectedCoach.name}</h4>
+                    <p className="text-[10px] text-white/50 font-medium mt-1">{selectedCoach.type}</p>
+                  </div>
+                  <button onClick={() => setCoachChatOpen(true)} className="bg-white text-black rounded-full px-4 py-2 text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-transform shadow-lg">
+                    Chat
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Study Methods */}
+            <h4 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md mb-5">Métodos de Estudio</h4>
+            <div className="space-y-4">
+              {[
+                { id: 'pomodoro', icon: '⏰', name: 'Técnica Pomodoro', desc: 'Estudia 25 min, descansa 5. Las redes sociales rompen este ciclo porque cada notificación te saca del estado de flujo y tardas 23 minutos en recuperarlo.', tag: 'Gestión del Tiempo' },
+                { id: 'feynman', icon: '🗣️', name: 'Técnica Feynman', desc: 'Explica el concepto en voz alta como si se lo enseñaras a un niño de 10 años. Si no puedes, no lo entendiste. TikTok te entrena para consumir, no para explicar.', tag: 'Comprensión Profunda' },
+                { id: 'recall', icon: '🧠', name: 'Repaso Activo (Active Recall)', desc: 'En lugar de releer, cierra el libro y escribe todo lo que recuerdas. Las redes crean una ilusión de saber porque ves información, pero no la procesas activamente.', tag: 'Memoria' },
+                { id: 'spaced', icon: '📅', name: 'Repetición Espaciada', desc: 'Revisa la información en intervalos crecientes (1 día, 3 días, 1 semana). El scroll infinito compite directamente con este proceso al fragmentar tu atención.', tag: 'Memorias a Largo Plazo' },
+                { id: 'timeblock', icon: '📌', name: 'Bloqueo de Tiempo', desc: 'Asigna bloques específicos en tu calendario para cada tarea. Sin bloques fijos, las notificaciones y los chats grupales secuestran todo tu tiempo libre de estudio.', tag: 'Planificación' }
+              ].map(method => (
+                <div key={method.id} className="bg-white/5 border border-white/10 rounded-[24px] p-5">
+                  <div className="flex items-start gap-4">
+                    <span className="text-2xl shrink-0">{method.icon}</span>
+                    <div>
+                      <span className="text-[8px] font-black bg-blue-500/20 text-[#8ab4f8] border border-blue-500/30 px-2 py-0.5 rounded-full tracking-widest uppercase mb-2 inline-block">{method.tag}</span>
+                      <h5 className="text-sm font-black uppercase tracking-tight text-white mb-2">{method.name}</h5>
+                      <p className="text-[10px] text-white/60 font-medium leading-relaxed">{method.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </motion.div>
         )}
+
       </div>
+
+      {/* Coach Chat Modal */}
+      <AnimatePresence>
+        {coachChatOpen && selectedCoach && (
+          <motion.div initial={{ opacity: 0, y: '100%' }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="absolute inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col">
+            <div className="px-6 pt-14 pb-4 border-b border-white/10 flex items-center gap-4">
+              <button onClick={() => setCoachChatOpen(false)} className="p-2 -ml-2 hover:bg-white/10 rounded-full transition-colors"><ChevronLeft size={24} className="text-white" /></button>
+              <div className="text-3xl">{selectedCoach.icon}</div>
+              <div>
+                <h2 className="text-sm font-black uppercase tracking-tight text-white">{selectedCoach.name}</h2>
+                <span className="text-[9px] font-black text-green-400 uppercase tracking-widest">• Listo para guiarte</span>
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4 custom-scroll">
+              {(coachMessages.length === 0 ? [{ id: 0, text: `Hola. Soy ${selectedCoach.name}. Entiendo que eres del tipo "${selectedCoach.type}" y las redes te afectan especialmente con ${selectedCoach.desc}. ¿Qué quieres trabajar hoy?`, sender: 'coach' }] : coachMessages).map(msg => (
+                <div key={msg.id} className={`p-4 rounded-[24px] max-w-[85%] shadow-md ${msg.sender === 'user' ? 'bg-white text-black self-end rounded-tr-sm' : 'bg-white/10 self-start rounded-tl-sm border border-white/10 text-white'}`}>
+                  <p className="text-xs font-bold leading-relaxed">{msg.text}</p>
+                </div>
+              ))}
+            </div>
+            <div className="p-5 bg-black/60 border-t border-white/10 pb-8">
+              <div className="flex gap-3">
+                <input value={coachInput} onChange={e => setCoachInput(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key !== 'Enter' || !coachInput.trim()) return;
+                    const userMsg = { id: Date.now(), text: coachInput, sender: 'user' };
+                    const tip = selectedCoach.tips[Math.floor(Math.random() * selectedCoach.tips.length)];
+                    const coachReply = { id: Date.now() + 1, text: tip, sender: 'coach' };
+                    setCoachMessages(prev => [...(prev.length === 0 ? [{ id: 0, text: `Hola. Soy ${selectedCoach.name}. Entiendo que eres del tipo "${selectedCoach.type}" y las redes te afectan especialmente con ${selectedCoach.desc}. ¿Qué quieres trabajar hoy?`, sender: 'coach' }] : prev), userMsg, coachReply]);
+                    setCoachInput('');
+                  }}
+                  placeholder="Escribe algo..." className="flex-1 bg-white/5 border border-white/10 rounded-full px-5 py-3 text-[11px] font-bold text-white placeholder:text-white/30 outline-none" />
+                <button onClick={() => {
+                  if (!coachInput.trim()) return;
+                  const userMsg = { id: Date.now(), text: coachInput, sender: 'user' };
+                  const tip = selectedCoach.tips[Math.floor(Math.random() * selectedCoach.tips.length)];
+                  const coachReply = { id: Date.now() + 1, text: tip, sender: 'coach' };
+                  setCoachMessages(prev => [...(prev.length === 0 ? [{ id: 0, text: `Hola. Soy ${selectedCoach.name}. Entiendo que eres del tipo "${selectedCoach.type}" y las redes te afectan especialmente con ${selectedCoach.desc}. ¿Qué quieres trabajar hoy?`, sender: 'coach' }] : prev), userMsg, coachReply]);
+                  setCoachInput('');
+                }} className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shrink-0"><Send size={16} className="ml-0.5" /></button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {selectedVideo && (
@@ -2480,14 +3024,17 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
             </div>
 
             <div className="relative w-full aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black mb-6">
-              <video 
-                src={selectedVideo.videoUrl} 
-                controls 
-                autoPlay 
-                loop 
-                playsInline
-                className="w-full h-full object-cover"
-              />
+              {selectedVideo.youtubeId ? (
+                <iframe
+                  src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
+                  title={selectedVideo.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full"
+                />
+              ) : (
+                <video src={selectedVideo.videoUrl} controls autoPlay loop playsInline className="w-full h-full object-cover" />
+              )}
             </div>
 
             <div className="flex-1 space-y-6 pb-6">
@@ -2498,7 +3045,7 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
 
               <div className="bg-white/5 border border-white/5 rounded-3xl p-5 shadow-lg">
                 <h4 className="text-[10px] font-black tracking-widest text-[#8ab4f8] uppercase mb-4 flex items-center gap-2">
-                  <Sparkles size={14} /> 3 HACKS DE ENFOQUE CLAVE
+                  <Sparkles size={14} /> IDEAS CLAVE
                 </h4>
                 <ul className="space-y-4">
                   {selectedVideo.points.map((point, index) => (
@@ -2509,6 +3056,35 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
                   ))}
                 </ul>
               </div>
+
+              {selectedVideo.activityText && (
+                <div className="bg-gradient-to-br from-emerald-900/60 to-teal-900/60 border border-emerald-500/30 rounded-3xl p-5 shadow-lg">
+                  <h4 className="text-[10px] font-black tracking-widest text-emerald-400 uppercase mb-3 flex items-center gap-2">
+                    <Check size={14} /> ACTIVIDAD PRÁCTICA
+                  </h4>
+                  <p className="text-[11px] text-white/80 font-semibold leading-relaxed mb-4">{selectedVideo.activityText}</p>
+                  {completedActivities?.includes(selectedVideo.id) ? (
+                    <div className="flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-4 py-2 w-max">
+                      <Check size={14} className="text-emerald-400" />
+                      <span className="text-[9px] font-black uppercase tracking-widest text-emerald-400">¡Actividad Completada!</span>
+                    </div>
+                  ) : (
+                    <motion.button whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        if (!completedActivities?.includes(selectedVideo.id)) {
+                          setCompletedActivities(prev => [...prev, selectedVideo.id]);
+                          if (setUserXP) setUserXP(prev => prev + 20);
+                          if (setUserDiamonds) setUserDiamonds(prev => prev + 5);
+                          setActivityDone(selectedVideo.id);
+                          setTimeout(() => setActivityDone(null), 2500);
+                        }
+                      }}
+                      className="bg-emerald-500 text-black rounded-full px-5 py-3 text-[9px] font-black uppercase tracking-widest hover:bg-emerald-400 transition-colors shadow-lg">
+                      ✓ Completar Actividad (+20 XP, +5 💎)
+                    </motion.button>
+                  )}
+                </div>
+              )}
               
               <button onClick={() => setSelectedVideo(null)} className="w-full bg-white text-black py-4 rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-lg mt-4">
                 Cerrar y Aplicar Consejo
@@ -2576,6 +3152,87 @@ const AllChallengesView = ({ selectedApps, onClose, onSelectChallenge, userGende
             </motion.div>
           )
         })}
+      </div>
+    </motion.div>
+  );
+};
+
+const AICalendarModal = ({ onClose, calendarTasks, setCalendarTasks }) => {
+  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState([
+    { id: 1, sender: 'ai', text: '¡Hola! Soy tu asistente de organización. Dime qué tareas tienes pendientes, por ejemplo: "Tengo examen de matemáticas el viernes" o "Recordarme leer el capítulo 4 mañana".' }
+  ]);
+
+  const handleSend = () => {
+    if (!input.trim()) return;
+    const userMsg = { id: Date.now(), sender: 'user', text: input };
+    setMessages(prev => [...prev, userMsg]);
+    setInput('');
+
+    setTimeout(() => {
+      let responseText = 'No entendí muy bien la tarea. Intenta mencionar la acción (examen, tarea) y cuándo (hoy, mañana, el viernes).';
+      const textLower = userMsg.text.toLowerCase();
+      
+      let dateStr = new Date().toISOString().split('T')[0];
+      let type = 'tarea';
+      let title = userMsg.text;
+
+      if (textLower.includes('examen')) type = 'examen';
+      if (textLower.includes('proyecto')) type = 'proyecto';
+
+      if (textLower.includes('mañana')) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        dateStr = tomorrow.toISOString().split('T')[0];
+      } else if (textLower.includes('viernes')) {
+        const d = new Date();
+        d.setDate(d.getDate() + ((5 + 7 - d.getDay()) % 7 || 7));
+        dateStr = d.toISOString().split('T')[0];
+      }
+
+      const match = textLower.match(/(examen de|tarea de|estudiar|leer) (.*?)( el| la| hoy| mañana|)/);
+      if (match && match[2]) {
+        title = match[2].trim();
+        title = title.charAt(0).toUpperCase() + title.slice(1);
+        if (type === 'examen') title = `Examen de ${title}`;
+      }
+
+      if (textLower.includes('examen') || textLower.includes('tarea') || textLower.includes('estudiar') || textLower.includes('leer') || textLower.includes('recordarme')) {
+        const newTask = { id: `t_${Date.now()}`, title: title, date: dateStr, type: type };
+        setCalendarTasks(prev => [...prev, newTask]);
+        responseText = `¡Listo! He añadido "${title}" a tu calendario para el ${dateStr}. ¿Algo más en lo que pueda ayudarte?`;
+      }
+
+      setMessages(prev => [...prev, { id: Date.now() + 1, sender: 'ai', text: responseText }]);
+    }, 1000);
+  };
+
+  return (
+    <motion.div initial={{ opacity: 0, y: '100%' }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="absolute inset-0 z-[100] bg-black/95 backdrop-blur-xl flex flex-col">
+      <div className="px-6 pt-14 pb-4 border-b border-white/10 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 bg-indigo-500/20 rounded-full flex items-center justify-center border border-indigo-500/30">
+            <Brain size={20} className="text-indigo-400" />
+          </div>
+          <div>
+            <h2 className="text-sm font-black uppercase tracking-tight text-white">IA Organizer</h2>
+            <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">• En línea</span>
+          </div>
+        </div>
+        <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors"><X size={20} className="text-white" /></button>
+      </div>
+      <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4 custom-scroll">
+        {messages.map(msg => (
+          <div key={msg.id} className={`p-4 rounded-[24px] max-w-[85%] shadow-md ${msg.sender === 'user' ? 'bg-indigo-600 text-white self-end rounded-tr-sm' : 'bg-white/5 border border-white/10 text-white self-start rounded-tl-sm'}`}>
+            <p className="text-xs font-bold leading-relaxed">{msg.text}</p>
+          </div>
+        ))}
+      </div>
+      <div className="p-5 bg-black/60 border-t border-white/10 pb-8">
+        <div className="flex gap-3">
+          <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSend()} placeholder="Escribe tu tarea o evento..." className="flex-1 bg-white/5 border border-white/10 rounded-full px-5 py-3 text-[11px] font-bold text-white placeholder:text-white/30 outline-none" />
+          <button onClick={handleSend} className="w-12 h-12 rounded-full bg-indigo-500 text-white flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(99,102,241,0.5)]"><Send size={16} className="ml-0.5" /></button>
+        </div>
       </div>
     </motion.div>
   );
@@ -3455,9 +4112,14 @@ const BottomNav = ({ activeTab, onChange, currentThemeBg }) => {
   );
 };
 
+
 // --- APP COMPONENT ---
 export default function App() {
   const [step, setStep] = useState('splash');
+
+  // --- Supabase auth ---
+  const [supabaseUserId, setSupabaseUserId] = useState(null);
+  const [dbLoaded, setDbLoaded] = useState(false);
 
   const [username, setUsername] = useState('');
   const [userGender, setUserGender] = useState('any');
@@ -3499,12 +4161,138 @@ export default function App() {
 
   const [rewardAlert, setRewardAlert] = useState(null);
 
+  const [selectedCoach, setSelectedCoach] = useState(null);
+  const [completedActivities, setCompletedActivities] = useState([]);
+  const [calendarTasks, setCalendarTasks] = useState([]);
+  const [blockedAppsConfig, setBlockedAppsConfig] = useState({});
+  const [showAICalendar, setShowAICalendar] = useState(false);
+
+  const [activeChatsHistory, setActiveChatsHistory] = useState(() => {
+    return MESSAGES_DATA.reduce((acc, person) => {
+      acc[person.id] = [
+        { id: 1, text: `¡Hola! Soy ${person.name}, ¿cómo vas con los bloqueos de apps hoy?`, sender: 'other', time: person.time }
+      ];
+      return acc;
+    }, {});
+  });
+
+  // --- Supabase: helper para guardar perfil ---
+  const saveProfile = useCallback(async (uid, data) => {
+    if (!uid) return;
+    await supabase.from('profiles').upsert({ id: uid, ...data, updated_at: new Date().toISOString() });
+  }, []);
+
+  // --- Supabase: inicializar sesión anónima y cargar perfil ---
+  useEffect(() => {
+    const initSupabase = async () => {
+      // Intentar obtener sesión existente
+      const { data: { session } } = await supabase.auth.getSession();
+      let uid = session?.user?.id;
+
+      // Si no hay sesión, crear una anónima
+      if (!uid) {
+        const { data, error } = await supabase.auth.signInAnonymously();
+        if (!error) uid = data.user?.id;
+      }
+
+      if (!uid) {
+        setDbLoaded(true);
+        return;
+      }
+
+      setSupabaseUserId(uid);
+
+      // Cargar perfil del usuario
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', uid)
+        .single();
+
+      if (profile && profile.onboarding_done) {
+        // Usuario existente: restaurar todo su progreso
+        setUsername(profile.username || 'Jugador_Nuevo');
+        setUserGender(profile.user_gender || 'any');
+        setSelectedApps(profile.selected_apps || []);
+        setSelectedLevel(profile.selected_level || null);
+        setUserXP(profile.user_xp || 0);
+        setUserDiamonds(profile.user_diamonds || 0);
+        setInventory(profile.inventory || {
+          avatars: ['a_base'], backgrounds: ['bg_default'], skins: [],
+          equippedAvatar: 'a_base', equippedBg: 'bg_default', equippedSkins: {}
+        });
+        setActiveChallenge(profile.active_challenge || null);
+        setCompletedActivities(profile.completed_activities || []);
+        setCalendarTasks(profile.calendar_tasks || []);
+        setBlockedAppsConfig(profile.blocked_apps_config || {});
+        // Saltar onboarding directamente al main
+        setStep('main');
+      } else {
+        // Usuario nuevo: mostrar onboarding normal
+        setCalendarTasks([
+          { id: 't1', title: 'Examen de Matemáticas', date: new Date().toISOString().split('T')[0], type: 'examen' },
+          { id: 't2', title: 'Leer capítulo 4', date: new Date().toISOString().split('T')[0], type: 'tarea' }
+        ]);
+      }
+
+      setDbLoaded(true);
+    };
+
+    initSupabase();
+  }, []);
+
+  // --- Supabase: splash timer ---
   useEffect(() => {
     if (step === 'splash') {
       const timer = setTimeout(() => setStep('onboarding'), 3000);
       return () => clearTimeout(timer);
     }
   }, [step]);
+
+  // --- Supabase: sincronizar XP, Diamantes e Inventario automáticamente ---
+  useEffect(() => {
+    if (!supabaseUserId || !dbLoaded || step !== 'main') return;
+    const timeout = setTimeout(() => {
+      saveProfile(supabaseUserId, {
+        user_xp: userXP,
+        user_diamonds: userDiamonds,
+        inventory,
+        active_challenge: activeChallenge,
+        completed_activities: completedActivities,
+        calendar_tasks: calendarTasks,
+        blocked_apps_config: blockedAppsConfig,
+      });
+    }, 1500); // debounce de 1.5s para no saturar la DB
+    return () => clearTimeout(timeout);
+  }, [userXP, userDiamonds, inventory, activeChallenge, completedActivities, calendarTasks, blockedAppsConfig, supabaseUserId, dbLoaded, step, saveProfile]);
+
+  // --- Handler: cuando el onboarding termina, guardar perfil completo ---
+  const handleOnboardingComplete = useCallback(async (name, gender) => {
+    const finalName = name || 'Jugador_Nuevo';
+    const finalGender = gender || 'any';
+    setUsername(finalName);
+    setUserGender(finalGender);
+    if (supabaseUserId) {
+      await saveProfile(supabaseUserId, {
+        username: finalName,
+        user_gender: finalGender,
+        onboarding_done: false, // se pondrá true cuando elija nivel
+      });
+    }
+    setStep('apps');
+  }, [supabaseUserId, saveProfile]);
+
+  const handleLevelConfirm = useCallback(async () => {
+    if (supabaseUserId) {
+      await saveProfile(supabaseUserId, {
+        selected_apps: selectedApps,
+        selected_level: selectedLevel,
+        onboarding_done: true,
+      });
+    }
+    setStep('main');
+  }, [supabaseUserId, selectedApps, selectedLevel, saveProfile]);
+
 
   const handleStartChallenge = (challenge) => {
     setActiveChallenge({ ...challenge, currentDay: 0 });
@@ -3603,7 +4391,7 @@ export default function App() {
           {step === 'splash' && <Splash key="splash" />}
           {step === 'onboarding' && <motion.div key="onboarding" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }} transition={{ duration: 0.8 }} className="absolute inset-0 z-40"><Onboarding onFinish={() => setStep('logoReveal')} /></motion.div>}
           {step === 'logoReveal' && <LogoReveal key="logoReveal" onContinue={() => setStep('auth')} onBack={() => setStep('onboarding')} />}
-          {step === 'auth' && <AuthScreen key="auth" onBack={() => setStep('logoReveal')} onContinue={(name, gender) => { setUsername(name || 'Jugador_Nuevo'); setUserGender(gender || 'any'); setStep('apps'); }} />}
+          {step === 'auth' && <AuthScreen key="auth" onBack={() => setStep('logoReveal')} onContinue={handleOnboardingComplete} />}
 
           {step === 'apps' && (
             <motion.div key="apps" initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }} animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }} exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }} transition={{ duration: 0.6 }} className="absolute inset-0 bg-black z-40 text-white flex flex-col">
@@ -3657,14 +4445,14 @@ export default function App() {
                   })}
                 </div>
               </div>
-              <div className="absolute bottom-8 left-8 right-8 z-50"><button onClick={() => setStep('main')} disabled={!selectedLevel} className={`w-full py-5 rounded-2xl font-black text-[12px] uppercase tracking-widest transition-all ${selectedLevel ? 'bg-white text-black shadow-[0_10px_30px_rgba(255,255,255,0.2)] active:scale-95' : 'bg-white/10 text-white/30 cursor-not-allowed'}`}>Confirmar Reto</button></div>
+              <div className="absolute bottom-8 left-8 right-8 z-50"><button onClick={handleLevelConfirm} disabled={!selectedLevel} className={`w-full py-5 rounded-2xl font-black text-[12px] uppercase tracking-widest transition-all ${selectedLevel ? 'bg-white text-black shadow-[0_10px_30px_rgba(255,255,255,0.2)] active:scale-95' : 'bg-white/10 text-white/30 cursor-not-allowed'}`}>Confirmar Reto</button></div>
             </motion.div>
           )}
 
           {step === 'main' && (
             <motion.div key="main" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-40">
               <AnimatePresence mode="wait">
-                {mainNav === 'home' && <motion.div key="h" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><HomeDashboard selectedApps={selectedApps} activeChallenge={activeChallenge} onSelectChallenge={setShowChallengeDetail} onOpenActive={() => setShowActiveInteractive(true)} onOpenAll={() => setShowAllChallenges(true)} onCompleteChallenge={handleCompleteChallenge} onPlayMinigame={setActiveMinigame} userGender={userGender} /></motion.div>}
+                {mainNav === 'home' && <motion.div key="h" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><HomeDashboard selectedApps={selectedApps} activeChallenge={activeChallenge} onSelectChallenge={setShowChallengeDetail} onOpenActive={() => setShowActiveInteractive(true)} onOpenAll={() => setShowAllChallenges(true)} onCompleteChallenge={handleCompleteChallenge} onPlayMinigame={setActiveMinigame} userGender={userGender} selectedCoach={selectedCoach} setSelectedCoach={setSelectedCoach} completedActivities={completedActivities} setCompletedActivities={setCompletedActivities} userXP={userXP} setUserXP={setUserXP} userDiamonds={userDiamonds} setUserDiamonds={setUserDiamonds} calendarTasks={calendarTasks} setCalendarTasks={setCalendarTasks} blockedAppsConfig={blockedAppsConfig} setBlockedAppsConfig={setBlockedAppsConfig} onOpenAICalendar={() => setShowAICalendar(true)} /></motion.div>}
                 {mainNav === 'forum' && <motion.div key="f" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><Forum onSelectChat={(p) => { setChatPerson(p); setStep('chat'); }} unreadFilter={unreadFilter} setUnreadFilter={setUnreadFilter} activeTab={activeForumTab} setActiveTab={setActiveForumTab} forumPosts={forumPosts} setForumPosts={setForumPosts} userAvatarItem={SHOP_ITEMS.find(i => i.id === inventory.equippedAvatar)} username={username} /></motion.div>}
                 {mainNav === 'rankings' && <motion.div key="r" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><Rankings userXP={userXP} inventory={inventory} username={username} /></motion.div>}
                 {mainNav === 'shop' && <motion.div key="s" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><ShopView userDiamonds={userDiamonds} onSelectItem={openShopItem} inventory={inventory} /></motion.div>}
@@ -3698,12 +4486,13 @@ export default function App() {
                     <button onClick={() => setRewardAlert(null)} className="p-2 bg-black/40 rounded-full hover:bg-black/60"><X size={16} /></button>
                   </motion.div>
                 )}
+                {showAICalendar && <AICalendarModal key="modal-ai-calendar" onClose={() => setShowAICalendar(false)} calendarTasks={calendarTasks} setCalendarTasks={setCalendarTasks} />}
               </AnimatePresence>
             </motion.div>
           )}
 
           {step === 'chat' && chatPerson && (
-            <ChatView key="chat" person={chatPerson} onBack={() => setStep('main')} />
+            <ChatView key="chat" person={chatPerson} onBack={() => setStep('main')} activeChatsHistory={activeChatsHistory} setActiveChatsHistory={setActiveChatsHistory} />
           )}
         </AnimatePresence>
       </div>
