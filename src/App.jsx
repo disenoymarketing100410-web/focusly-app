@@ -10,6 +10,81 @@ import {
   Image as ImageIcon, Edit2, LayoutGrid, Activity, Sparkles, Star, ChevronRight, Info, Palette, ChevronDown
 } from 'lucide-react';
 
+const UI_TEXT = {
+  es: {
+    authTitle: 'Forja tu Destino',
+    authSub: 'La disciplina empieza aquí.',
+    loginTitle: 'Acceso',
+    loginSub: 'Retoma tu enfoque.',
+    btnStart: 'Comenzar Viaje',
+    btnLogin: 'Iniciar Sesión',
+    btnSwitchToLogin: '¿Ya tienes una cuenta? Inicia sesión',
+    btnSwitchToReg: '¿No tienes cuenta? Regístrate',
+    loading: 'Cargando...',
+    forum: 'Foro',
+    rankings: 'Ranking',
+    home: 'Inicio',
+    shop: 'Tienda',
+    profile: 'Perfil',
+    challenge: 'Desafíate',
+    organize: 'Organízate',
+    grow: 'Crece',
+    aiRec: 'IA te recomienda',
+    weeklyGoal: 'Meta Semanal',
+    activeChallenge: 'Desafío Activo',
+    noChallengeYet: 'Sin desafío activo',
+    startChallenge: 'Empezar Desafío',
+    completeDay: 'Completar Día',
+    days: 'días',
+    myTasks: 'Mis Tareas',
+    addTask: 'Añadir tarea...',
+    aiAssistant: 'Asistente IA',
+    syncSchedules: 'Sincroniza tus horarios',
+    thisWeek: 'Esta Semana',
+    blocker: 'Bloqueador',
+    focusTips: 'Consejos de Enfoque',
+    chooseCoach: 'Elige tu Coach',
+    studyMethods: 'Métodos de Estudio',
+    language: 'Idioma'
+  },
+  en: {
+    authTitle: 'Forge your Destiny',
+    authSub: 'Discipline starts here.',
+    loginTitle: 'Access',
+    loginSub: 'Regain your focus.',
+    btnStart: 'Start Journey',
+    btnLogin: 'Sign In',
+    btnSwitchToLogin: 'Already have an account? Sign in',
+    btnSwitchToReg: 'No account? Sign up',
+    loading: 'Loading...',
+    forum: 'Forum',
+    rankings: 'Rankings',
+    home: 'Home',
+    shop: 'Shop',
+    profile: 'Profile',
+    challenge: 'Challenge',
+    organize: 'Organize',
+    grow: 'Grow',
+    aiRec: 'AI recommends',
+    weeklyGoal: 'Weekly Goal',
+    activeChallenge: 'Active Challenge',
+    noChallengeYet: 'No active challenge',
+    startChallenge: 'Start Challenge',
+    completeDay: 'Complete Day',
+    days: 'days',
+    myTasks: 'My Tasks',
+    addTask: 'Add task...',
+    aiAssistant: 'AI Assistant',
+    syncSchedules: 'Sync your schedules',
+    thisWeek: 'This Week',
+    blocker: 'Blocker',
+    focusTips: 'Focus Tips',
+    chooseCoach: 'Choose your Coach',
+    studyMethods: 'Study Methods',
+    language: 'Language'
+  }
+};
+
 // --- DATA ---
 const SLIDES = [
   { title: "Focus", subtitle: "EL ARTE DE LA ATENCIÓN PLENA.", image: "https://images.unsplash.com/photo-1492539161849-b2b18e79c85f?q=80&w=1000&auto=format&fit=crop" },
@@ -146,7 +221,8 @@ const BACKGROUNDS = {
   bg_zen: { id: 'bg_zen', name: 'Jardín Zen', css: 'bg-gradient-to-b from-[#02120a] to-[#000000]', themeProps: { navBg: 'bg-[#051a0f]', navBorder: 'border-emerald-500/30', navGlow: 'shadow-[0_0_20px_rgba(16,185,129,0.15)]' }, img: 'animated', rarity: 'epic', price: 300, desc: 'Para aquellos que buscan la paz interior extrema. Incluye orbes de calma para sincronizar tu respiración.' },
   bg_ocean: { id: 'bg_ocean', name: 'Abismo Oceánico', css: 'bg-gradient-to-b from-[#000b18] to-[#000000]', themeProps: { navBg: 'bg-[#001429]', navBorder: 'border-cyan-500/30', navGlow: 'shadow-[0_0_25px_rgba(6,182,212,0.2)]' }, img: 'animated', rarity: 'epic', price: 450, desc: 'La presión de las profundidades forja diamantes. Ideal para concentración extrema.' },
   bg_nebula: { id: 'bg_nebula', name: 'Nebulosa Cósmica', css: 'bg-gradient-to-br from-[#120524] to-[#000000]', themeProps: { navBg: 'bg-[#1a0b2e]', navBorder: 'border-purple-500/40', navGlow: 'shadow-[0_0_25px_rgba(168,85,247,0.2)]' }, img: 'animated', rarity: 'legendary', price: 800, desc: 'Un viaje por las estrellas oscuras. Tu disciplina expande la galaxia. Activa el campo estelar.' },
-  bg_inferno: { id: 'bg_inferno', name: 'Foso Infernal', css: 'bg-gradient-to-t from-[#2a0000] to-[#000000]', themeProps: { navBg: 'bg-[#2a0000]', navBorder: 'border-red-500/50', navGlow: 'shadow-[0_0_30px_rgba(239,68,68,0.3)]', isAgresive: true }, img: 'animated', rarity: 'mythic', price: 1500, desc: 'Solo para voluntades forjadas en el fuego más intenso. El entorno reacciona con llamas a tu progreso.' }
+  bg_inferno: { id: 'bg_inferno', name: 'Foso Infernal', css: 'bg-gradient-to-t from-[#2a0000] to-[#000000]', themeProps: { navBg: 'bg-[#2a0000]', navBorder: 'border-red-500/50', navGlow: 'shadow-[0_0_30px_rgba(239,68,68,0.3)]', isAgresive: true }, img: 'animated', rarity: 'mythic', price: 1500, desc: 'Solo para voluntades forjadas en el fuego más intenso. El entorno reacciona con llamas a tu progreso.' },
+  bg_light: { id: 'bg_light', name: 'Luz Diurna', css: 'bg-gradient-to-b from-[#f8fafc] to-[#e2e8f0]', themeProps: { navBg: 'bg-[#000000]', navBorder: 'border-white/10', navGlow: 'shadow-[0_0_30px_rgba(0,0,0,0.2)]' }, img: 'animated', rarity: 'common', price: 0, desc: 'Claridad mental pura. Un entorno diurno manteniendo la oscuridad en tu centro de operaciones. ¡Gratis!' }
 };
 
 const LEVELS = [
@@ -809,6 +885,15 @@ const BgPreviewInferno = () => (
   </div>
 );
 
+const BgPreviewLight = () => (
+  <div className="w-full h-full bg-gradient-to-b from-[#f8fafc] to-[#e2e8f0] rounded-xl border border-slate-300 overflow-hidden relative">
+    <motion.div animate={{ y: [-10, 10, -10], opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-0 right-0 w-[150%] h-[150%] bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.8)_0%,transparent_60%)] pointer-events-none" />
+    {Array.from({ length: 5 }).map((_, i) => (
+      <motion.div key={i} animate={{ y: [110, -10], x: [0, Math.sin(i) * 10], opacity: [0, 0.5, 0] }} transition={{ duration: 4 + i, repeat: Infinity, ease: "easeOut", delay: i * 0.5 }} className="absolute w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_5px_rgba(0,0,0,0.1)]" style={{ bottom: -10, left: `${15 + i * 20}%` }} />
+    ))}
+  </div>
+);
+
 const MascotOrb = () => (
   <div className="relative w-full h-full flex flex-col items-center justify-center">
     <motion.div animate={{ scale: [1, 1.2, 1], rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="w-[60%] aspect-square rounded-full bg-gradient-to-tr from-blue-600 via-cyan-300 to-white flex items-center justify-center shadow-[0_0_30px_#67e8f9]">
@@ -1072,6 +1157,7 @@ const ANIMATED_AVATARS = {
   'bg_ocean': BgPreviewOcean,
   'bg_nebula': BgPreviewNebula,
   'bg_inferno': BgPreviewInferno,
+  'bg_light': BgPreviewLight,
 };
 
 const AvatarDisplay = ({ id, src, className, freeStanding = false, isLocked = false, skinFilters = null }) => {
@@ -1157,6 +1243,35 @@ const staggerItem = { hidden: { opacity: 0, y: 20, scale: 0.9 }, show: { opacity
 
 // --- ANIMACIONES DE TEMAS GLOBALES ---
 const GlobalThemeEffects = ({ themeId }) => {
+  if (themeId === 'bg_light') {
+    return (
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-gradient-to-b from-[#f8fafc] to-[#e2e8f0]">
+        <motion.div 
+          animate={{ y: [-20, 20, -20], opacity: [0.4, 0.7, 0.4] }} 
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }} 
+          className="absolute top-[-20%] right-[-10%] w-[150%] h-[150%] bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.9)_0%,transparent_70%)]" 
+        />
+        {Array.from({ length: 15 }).map((_, i) => (
+          <motion.div 
+            key={`light-${i}`} 
+            initial={{ y: '110vh', x: `${Math.random() * 100}vw`, opacity: 0 }} 
+            animate={{ 
+              y: '-10vh', 
+              opacity: [0, 0.6, 0]
+            }} 
+            transition={{ 
+              duration: Math.random() * 6 + 5, 
+              repeat: Infinity, 
+              ease: 'linear', 
+              delay: Math.random() * 5 
+            }} 
+            className="absolute w-2 h-2 bg-white rounded-full blur-[1px] shadow-[0_0_10px_white]" 
+          />
+        ))}
+      </div>
+    );
+  }
+
   if (themeId === 'bg_inferno') {
     return (
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-gradient-to-t from-[#100000] via-[#200000] to-[#000000]">
@@ -1614,15 +1729,67 @@ const LogoReveal = ({ onContinue, onBack }) => (
       <motion.h1 initial={{ scale: 0.8, filter: "blur(10px)" }} animate={{ scale: 1, filter: "blur(0px)" }} transition={{ duration: 1 }} className="text-6xl font-black uppercase tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">Focusly</motion.h1>
     </div>
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="w-full">
-      <button onClick={onContinue} className="w-full bg-white text-black py-5 rounded-2xl font-black text-[12px] uppercase tracking-widest active:scale-95 transition-all shadow-[0_10px_30px_rgba(255,255,255,0.2)]">Entrar al Vacío</button>
+      <button onClick={onContinue} className="w-full bg-white text-black py-5 rounded-2xl font-black text-[12px] uppercase tracking-widest active:scale-95 transition-all shadow-[0_10px_30px_rgba(255,255,255,0.2)]">Empieza el viaje</button>
     </motion.div>
   </motion.div>
 );
 
-const AuthScreen = ({ onBack, onContinue }) => {
-  const [isLogin, setIsLogin] = useState(false);
+const AuthScreen = ({ onBack, onContinue, lang = 'es', initialIsLogin = false, isLinking = false }) => {
+  const [isLogin, setIsLogin] = useState(initialIsLogin);
   const [localName, setLocalName] = useState('');
   const [localGender, setLocalGender] = useState(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const t = UI_TEXT[lang];
+
+  useEffect(() => {
+    setIsLogin(initialIsLogin);
+  }, [initialIsLogin]);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setErrorMsg('');
+    try {
+      if (isLogin) {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        window.location.reload(); // Recargar para que el useEffect principal cargue la sesión
+      } else {
+        if (!isLinking && !localGender) {
+          setErrorMsg('Selecciona un género para tu avatar.');
+          setLoading(false);
+          return;
+        }
+
+        // Obtener sesión actual
+        const { data: { session } } = await supabase.auth.getSession();
+        let authResult;
+
+        if (session?.user && (session.user.is_anonymous || !session.user.email)) {
+          // Si el usuario actual es anónimo, lo vinculamos (actualizamos) a cuenta permanente
+          authResult = await supabase.auth.updateUser({ email, password });
+        } else {
+          // Si no es anónimo, creamos un nuevo usuario normal
+          authResult = await supabase.auth.signUp({ email, password });
+        }
+
+        if (authResult.error) throw authResult.error;
+
+        if (isLinking) {
+          // Si se está vinculando desde el perfil, onContinue actualizará el estado y volverá a main
+          onContinue();
+        } else {
+          onContinue(localName || 'Jugador_Nuevo', localGender);
+        }
+      }
+    } catch (err) {
+      setErrorMsg(err.message === 'Invalid login credentials' ? 'Credenciales incorrectas' : err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#050505] z-40 overflow-hidden flex flex-col">
@@ -1630,19 +1797,19 @@ const AuthScreen = ({ onBack, onContinue }) => {
       <div className="relative z-10 flex flex-col h-full px-8 pt-20 pb-10">
         <button onClick={onBack} className="flex items-center gap-1 opacity-40 hover:opacity-100 transition-opacity mb-8 -ml-2 w-max text-white"><ChevronLeft size={24} /></button>
         <motion.div variants={staggerContainer} initial="hidden" animate="show" className="flex flex-col flex-1">
-          <motion.div variants={staggerItem} className="mb-10">
-            <h1 className="text-4xl font-extrabold tracking-tight uppercase mb-3 leading-[1.1] text-white">{isLogin ? 'Acceso' : 'Forja tu Destino'}</h1>
-            <p className="text-white/40 text-[10px] tracking-[0.3em] font-black uppercase italic">{isLogin ? 'Retoma tu enfoque.' : 'La disciplina empieza aquí.'}</p>
+          <motion.div variants={staggerItem} className="mb-6">
+            <h1 className="text-4xl font-extrabold tracking-tight uppercase mb-3 leading-[1.1] text-white">{isLogin ? t.loginTitle : (isLinking ? 'Registrar' : t.authTitle)}</h1>
+            <p className="text-white/40 text-[10px] tracking-[0.3em] font-black uppercase italic">{isLogin ? t.loginSub : (isLinking ? 'Vincula tu progreso' : t.authSub)}</p>
           </motion.div>
           <div className="flex-1 overflow-y-auto custom-scroll space-y-4 pb-4 px-1">
-            {!isLogin && (
+            {!isLogin && !isLinking && (
               <motion.div variants={staggerItem} className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-white/30 group-focus-within:text-white transition-colors"><User size={18} /></div>
                 <input value={localName} onChange={e => setLocalName(e.target.value)} placeholder="NOMBRE DE USUARIO" className="w-full bg-[#0c0c0c]/80 backdrop-blur-md border border-white/10 rounded-2xl py-5 pl-14 pr-6 text-[10px] font-black tracking-widest text-white outline-none focus:border-white/50 focus:bg-white/10 transition-all shadow-inner" />
               </motion.div>
             )}
 
-            {!isLogin && (
+            {!isLogin && !isLinking && (
               <motion.div variants={staggerItem} className="flex gap-3 mb-2">
                 <button onClick={() => setLocalGender('M')} className={`flex-1 py-4 rounded-2xl border flex flex-col items-center gap-2 transition-all ${localGender === 'M' ? 'bg-blue-600/20 border-blue-500 text-white shadow-lg' : 'bg-[#0c0c0c]/80 border-white/10 text-white/40 hover:text-white hover:border-white/30'}`}>
                   <User size={24} /> <span className="text-[10px] font-black uppercase">Hombre</span>
@@ -1653,16 +1820,31 @@ const AuthScreen = ({ onBack, onContinue }) => {
               </motion.div>
             )}
 
-            <motion.div variants={staggerItem} className="relative group"><div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-white/30 group-focus-within:text-white transition-colors"><Mail size={18} /></div><input type="email" placeholder="CORREO ELECTRÓNICO" className="w-full bg-[#0c0c0c]/80 backdrop-blur-md border border-white/10 rounded-2xl py-5 pl-14 pr-6 text-[10px] font-black tracking-widest text-white outline-none focus:border-white/50 focus:bg-white/10 transition-all shadow-inner" /></motion.div>
-            {!isLogin && <motion.div variants={staggerItem} className="relative group"><div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-white/30 group-focus-within:text-white transition-colors"><Calendar size={18} /></div><input type="date" className="w-full bg-[#0c0c0c]/80 backdrop-blur-md border border-white/10 rounded-2xl py-5 pl-14 pr-6 text-[10px] font-black tracking-widest text-white/50 outline-none focus:border-white/50 focus:bg-white/10 transition-all shadow-inner" /></motion.div>}
-            <motion.div variants={staggerItem} className="relative group"><div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-white/30 group-focus-within:text-white transition-colors"><Lock size={18} /></div><input type="password" placeholder="CONTRASEÑA" className="w-full bg-[#0c0c0c]/80 backdrop-blur-md border border-white/10 rounded-2xl py-5 pl-14 pr-6 text-[10px] font-black tracking-widest text-white outline-none focus:border-white/50 focus:bg-white/10 transition-all shadow-inner" /></motion.div>
-            {!isLogin && <motion.div variants={staggerItem} className="relative group"><div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-white/30 group-focus-within:text-white transition-colors"><Lock size={18} /></div><input type="password" placeholder="CONFIRMAR CONTRASEÑA" className="w-full bg-[#0c0c0c]/80 backdrop-blur-md border border-white/10 rounded-2xl py-5 pl-14 pr-6 text-[10px] font-black tracking-widest text-white outline-none focus:border-white/50 focus:bg-white/10 transition-all shadow-inner" /></motion.div>}
+            <motion.div variants={staggerItem} className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-white/30 group-focus-within:text-white transition-colors"><Mail size={18} /></div>
+              <input type="email" autoComplete={isLogin ? "email" : "off"} value={email} onChange={e => setEmail(e.target.value)} placeholder="CORREO ELECTRÓNICO" className="w-full bg-[#0c0c0c]/80 backdrop-blur-md border border-white/10 rounded-2xl py-5 pl-14 pr-6 text-[10px] font-black tracking-widest text-white outline-none focus:border-white/50 focus:bg-white/10 transition-all shadow-inner" />
+            </motion.div>
+            
+            <motion.div variants={staggerItem} className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-white/30 group-focus-within:text-white transition-colors"><Lock size={18} /></div>
+              <input type="password" autoComplete={isLogin ? "current-password" : "new-password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="CONTRASEÑA" className="w-full bg-[#0c0c0c]/80 backdrop-blur-md border border-white/10 rounded-2xl py-5 pl-14 pr-6 text-[10px] font-black tracking-widest text-white outline-none focus:border-white/50 focus:bg-white/10 transition-all shadow-inner" />
+            </motion.div>
+
+            {errorMsg && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-400 text-[10px] uppercase font-black tracking-widest text-center mt-2">
+                {errorMsg}
+              </motion.div>
+            )}
           </div>
           <motion.div variants={staggerItem} className="pt-4 mt-auto">
-            <button onClick={() => onContinue(localName, localGender)} disabled={!isLogin && !localGender} className={`group relative w-full py-5 rounded-2xl font-black text-[12px] uppercase tracking-widest shadow-[0_0_40px_rgba(255,255,255,0.15)] active:scale-95 transition-all overflow-hidden flex items-center justify-center gap-3 ${(!isLogin && !localGender) ? 'bg-white/20 text-white/40 cursor-not-allowed' : 'bg-white text-black'}`}>
-              <span className="relative z-10">{isLogin ? 'Iniciar Sesión' : 'Comenzar Viaje'}</span><ArrowRight size={16} className="relative z-10 group-hover:translate-x-1 transition-transform" />
+            <button onClick={handleSubmit} disabled={loading || (!isLogin && !isLinking && !localGender)} className={`group relative w-full py-5 rounded-2xl font-black text-[12px] uppercase tracking-widest shadow-[0_0_40px_rgba(255,255,255,0.15)] active:scale-95 transition-all overflow-hidden flex items-center justify-center gap-3 ${(!isLogin && !isLinking && !localGender) || loading ? 'bg-white/20 text-white/40 cursor-not-allowed' : 'bg-white text-black'}`}>
+              <span className="relative z-10">{loading ? t.loading : (isLogin ? t.btnLogin : (isLinking ? 'Registrar Cuenta' : t.btnStart))}</span><ArrowRight size={16} className="relative z-10 group-hover:translate-x-1 transition-transform" />
             </button>
-            <div className="text-center mt-8"><button onClick={() => setIsLogin(!isLogin)} className="text-white/40 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">{isLogin ? 'CREAR CUENTA' : 'INICIAR SESIÓN'}</button></div>
+            <div className="text-center mt-8">
+              <button onClick={() => { setIsLogin(!isLogin); setErrorMsg(''); }} className="px-6 py-3 border border-white/10 rounded-full text-white/60 text-[10px] font-black uppercase tracking-widest hover:bg-white/10 hover:text-white hover:border-white/30 transition-all shadow-sm active:scale-95">
+                {isLogin ? t.btnSwitchToReg : t.btnSwitchToLogin}
+              </button>
+            </div>
           </motion.div>
         </motion.div>
       </div>
@@ -2104,14 +2286,43 @@ const Forum = ({ onSelectChat, unreadFilter, setUnreadFilter, activeTab, setActi
   const [newPostText, setNewPostText] = useState('');
   const [newCommentText, setNewCommentText] = useState('');
 
-  const handleCreatePost = () => {
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const { data } = await supabase.from('forum_posts').select('*').order('created_at', { ascending: false }).limit(50);
+      if (data) {
+        const formatted = data.map(post => {
+          let content = { text: post.text, authorName: 'Usuario', avatarId: 'a_base', comments: [] };
+          try {
+            const parsed = JSON.parse(post.text);
+            if (parsed.text) content = { ...content, ...parsed };
+          } catch(e) {}
+          return {
+            id: post.id,
+            author: { name: content.authorName, avatarId: content.avatarId },
+            text: content.text,
+            likes: post.likes || 0,
+            time: new Date(post.created_at).toLocaleDateString(),
+            liked: false,
+            comments: content.comments || []
+          };
+        });
+        setForumPosts(formatted);
+      }
+    };
+    if (activeTab === 'comunidad') {
+      fetchPosts();
+    }
+  }, [activeTab, setForumPosts]);
+
+  const handleCreatePost = async () => {
     if (!newPostText.trim()) return;
+    const authorName = username || 'Tú';
+    const avatarId = userAvatarItem?.id || 'a_base';
+    
+    // Optimistic UI
     const newPost = {
       id: Date.now().toString(),
-      author: {
-        name: username || 'Tú',
-        avatarId: userAvatarItem?.id || 'a_base'
-      },
+      author: { name: authorName, avatarId },
       text: newPostText,
       likes: 0,
       time: 'Justo ahora',
@@ -2120,29 +2331,50 @@ const Forum = ({ onSelectChat, unreadFilter, setUnreadFilter, activeTab, setActi
     };
     setForumPosts([newPost, ...forumPosts]);
     setNewPostText('');
+
+    // Save to Supabase
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      const payload = { text: newPostText, authorName, avatarId, comments: [] };
+      await supabase.from('forum_posts').insert({
+        author_id: session.user.id,
+        text: JSON.stringify(payload)
+      });
+    }
   };
 
-  const toggleLike = (postId) => {
-    setForumPosts(posts => posts.map(p => {
-      if (p.id === postId) {
-        return { ...p, liked: !p.liked, likes: p.liked ? p.likes - 1 : p.likes + 1 };
-      }
-      return p;
-    }));
+  const toggleLike = async (postId) => {
+    const target = forumPosts.find(p => p.id === postId);
+    if(!target) return;
+    const newLikes = target.liked ? target.likes - 1 : target.likes + 1;
+    
+    setForumPosts(posts => posts.map(p => p.id === postId ? { ...p, liked: !p.liked, likes: newLikes } : p));
+    
+    // Si no es un ID local (empezando con timestamp), actualizar en DB
+    if (postId.length > 20) {
+      await supabase.from('forum_posts').update({ likes: newLikes }).eq('id', postId);
+    }
   };
 
-  const handleAddComment = (postId) => {
+  const handleAddComment = async (postId) => {
     if (!newCommentText.trim()) return;
+    
+    let updatedComments = [];
     setForumPosts(posts => posts.map(p => {
       if (p.id === postId) {
-        return {
-          ...p,
-          comments: [...p.comments, { id: Date.now().toString(), author: 'Tú', text: newCommentText }]
-        };
+        updatedComments = [...p.comments, { id: Date.now().toString(), author: username || 'Tú', text: newCommentText }];
+        return { ...p, comments: updatedComments };
       }
       return p;
     }));
     setNewCommentText('');
+
+    // Actualizar payload en Supabase
+    const target = forumPosts.find(p => p.id === postId);
+    if (target && postId.length > 20) {
+      const payload = { text: target.text, authorName: target.author.name, avatarId: target.author.avatarId, comments: updatedComments };
+      await supabase.from('forum_posts').update({ text: JSON.stringify(payload) }).eq('id', postId);
+    }
   };
 
   return (
@@ -2447,7 +2679,7 @@ const ShopView = ({ userDiamonds, onSelectItem, inventory }) => {
   );
 };
 
-const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, completedCount, activityLog, selectedApps, setSelectedApps }) => {
+const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, completedCount, activityLog, selectedApps, setSelectedApps, lang, setLang, userEmail, isAnonymous, onSignOut, onLinkAccount }) => {
   const [activeProfileTab, setActiveProfileTab] = useState('estado');
   const [activeTab, setActiveTab] = useState('avatars');
   const [showAppSelector, setShowAppSelector] = useState(false);
@@ -2544,13 +2776,19 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
             )}
 
             <div className="mt-8">
-              <button onClick={() => setShowAppSelector(!showAppSelector)} className="w-full bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm p-4 rounded-[20px] border border-white/10 shadow-lg flex items-center justify-between group">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"><LayoutGrid size={18} className="text-white" /></div>
-                  <h3 className="text-sm font-black uppercase tracking-tight drop-shadow-md">Selecciona otras apps</h3>
-                </div>
-                <ChevronDown size={20} className={`text-white/50 transition-transform duration-300 ${showAppSelector ? 'rotate-180' : ''}`} />
-              </button>
+              <div className="flex gap-4">
+                <button onClick={() => setShowAppSelector(!showAppSelector)} className="flex-1 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm p-4 rounded-[20px] border border-white/10 shadow-lg flex items-center justify-between group">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"><LayoutGrid size={18} className="text-white" /></div>
+                    <h3 className="text-sm font-black uppercase tracking-tight drop-shadow-md">Selecciona otras apps</h3>
+                  </div>
+                  <ChevronDown size={20} className={`text-white/50 transition-transform duration-300 ${showAppSelector ? 'rotate-180' : ''}`} />
+                </button>
+                <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="w-20 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm rounded-[20px] border border-white/10 shadow-lg flex flex-col items-center justify-center shrink-0">
+                  <span className="text-[10px] text-white/50 font-bold uppercase tracking-widest mb-1">Idioma</span>
+                  <span className="text-lg font-black uppercase text-white">{lang}</span>
+                </button>
+              </div>
               <AnimatePresence>
                 {showAppSelector && (
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
@@ -2574,6 +2812,52 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
                 )}
               </AnimatePresence>
             </div>
+
+            {/* Ajustes de Cuenta */}
+            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-[28px] border border-white/10 shadow-lg mt-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
+                  <Shield size={18} className="text-[#8ab4f8]" />
+                </div>
+                <h3 className="text-sm font-black uppercase tracking-tight text-white">Ajustes de Cuenta</h3>
+              </div>
+
+              {isAnonymous ? (
+                <div className="space-y-4">
+                  <p className="text-[11px] text-yellow-400 font-medium leading-relaxed bg-yellow-500/10 p-3.5 rounded-2xl border border-yellow-500/20">
+                    ⚠️ Usando cuenta temporal de invitado. Registra tu cuenta para guardar tu progreso en la nube y acceder como desarrollador.
+                  </p>
+                  <div className="flex gap-3">
+                    <button 
+                      onClick={() => onLinkAccount(false)} 
+                      className="flex-1 bg-white text-black py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-md text-center"
+                    >
+                      Registrarse
+                    </button>
+                    <button 
+                      onClick={() => onLinkAccount(true)} 
+                      className="flex-1 bg-white/10 hover:bg-white/20 text-white py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all border border-white/10 shadow-md text-center"
+                    >
+                      Iniciar Sesión
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="bg-green-500/10 p-3.5 rounded-2xl border border-green-500/20 flex flex-col gap-1">
+                    <span className="text-[10px] font-black tracking-widest text-green-400 uppercase">🟢 Cuenta Vinculada</span>
+                    <span className="text-[11px] font-bold text-white/80 select-all truncate">{userEmail}</span>
+                  </div>
+                  <button 
+                    onClick={onSignOut} 
+                    className="w-full bg-red-600/20 hover:bg-red-600/30 text-red-400 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all border border-red-500/20 shadow-md text-center"
+                  >
+                    Cerrar Sesión
+                  </button>
+                </div>
+              )}
+            </div>
+
           </motion.div>
         )}
 
@@ -2656,13 +2940,132 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
   );
 };
 
-const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpenActive, onOpenAll, onCompleteChallenge, onPlayMinigame, userGender, selectedCoach, setSelectedCoach, completedActivities, setCompletedActivities, userXP, setUserXP, userDiamonds, setUserDiamonds, calendarTasks, setCalendarTasks, blockedAppsConfig, setBlockedAppsConfig, onOpenAICalendar }) => {
+// --- BEHAVIORAL AI ENGINE ---
+const useBehavioralAI = (supabaseUserId, selectedApps, lang = 'es') => {
+  const [recommendations, setRecommendations] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!supabaseUserId) return;
+    const analyze = async () => {
+      setIsLoading(true);
+      try {
+        const { data: sessions } = await supabase
+          .from('focus_sessions')
+          .select('session_type, xp_earned, diamonds_earned, created_at')
+          .eq('user_id', supabaseUserId)
+          .order('created_at', { ascending: false })
+          .limit(20);
+
+        const recs = [];
+        if (!sessions || sessions.length === 0) {
+          recs.push({
+            id: 'first', icon: '🚀',
+            title: lang === 'en' ? 'Start your first challenge!' : '¡Comienza tu primer desafío!',
+            desc: lang === 'en' ? 'You have no activity yet. Start small — try a 7-day challenge.' : 'No tienes actividad aún. Empieza con algo pequeño: un desafío de 7 días.',
+            color: 'from-blue-600/30 to-indigo-900/30', border: 'border-blue-500/30'
+          });
+        } else {
+          const totalSessions = sessions.length;
+          const totalXP = sessions.reduce((s, r) => s + (r.xp_earned || 0), 0);
+          const avgXP = totalXP / totalSessions;
+
+          // Rule 1: Si el usuario tiene muchas sesiones completadas → desafío largo
+          if (totalSessions >= 5) {
+            recs.push({
+              id: 'veteran', icon: '🏆',
+              title: lang === 'en' ? `Veteran detected: ${totalSessions} sessions` : `Veterano detectado: ${totalSessions} sesiones`,
+              desc: lang === 'en' ? `You average ${Math.round(avgXP)} XP/session. Try a 21-day Mythic challenge!` : `Promedias ${Math.round(avgXP)} XP por sesión. ¡Prueba un desafío mítico de 21 días!`,
+              color: 'from-yellow-600/30 to-orange-900/30', border: 'border-yellow-500/30'
+            });
+          }
+
+          // Rule 2: Si gana poca XP → desafíos más accesibles
+          if (avgXP < 100 && totalSessions >= 2) {
+            recs.push({
+              id: 'easy', icon: '🎯',
+              title: lang === 'en' ? 'Build momentum' : 'Construye impulso',
+              desc: lang === 'en' ? 'Your sessions show low XP gains. Start with shorter 3-day sprints to build the habit.' : 'Tus sesiones muestran ganancias bajas. Prueba sprints de 3 días para construir el hábito.',
+              color: 'from-green-600/30 to-teal-900/30', border: 'border-green-500/30'
+            });
+          }
+
+          // Rule 3: Basado en apps bloqueadas
+          if (selectedApps.includes('tt')) {
+            recs.push({
+              id: 'tiktok', icon: '🧠',
+              title: lang === 'en' ? 'TikTok detected in your list' : 'TikTok detectado en tu lista',
+              desc: lang === 'en' ? 'TikTok is the #1 dopamine trap. The "21-Day Abstinence" challenge will reset your neural reward system.' : 'TikTok es la trampa de dopamina #1. El desafío "Abstinencia Total" (21 días) reiniciará tu sistema de recompensa neural.',
+              color: 'from-pink-600/30 to-purple-900/30', border: 'border-pink-500/30'
+            });
+          }
+          if (selectedApps.includes('insta')) {
+            recs.push({
+              id: 'insta', icon: '📸',
+              title: lang === 'en' ? 'Instagram Stories drain focus' : 'Las Stories de Instagram drenan el foco',
+              desc: lang === 'en' ? 'The "Story Fast" challenge (7 days) shows a 40% improvement in daily concentration.' : 'El desafío "Ayuno de Stories" (7 días) muestra un 40% de mejora en concentración diaria.',
+              color: 'from-orange-600/30 to-pink-900/30', border: 'border-orange-500/30'
+            });
+          }
+        }
+        setRecommendations(recs.slice(0, 3));
+      } catch(e) { console.error('AI analyze error', e); }
+      setIsLoading(false);
+    };
+    analyze();
+  }, [supabaseUserId, selectedApps, lang]);
+
+  return { recommendations, isLoading };
+};
+
+const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpenActive, onOpenAll, onCompleteChallenge, onPlayMinigame, userGender, selectedCoach, setSelectedCoach, completedActivities, setCompletedActivities, userXP, setUserXP, userDiamonds, setUserDiamonds, calendarTasks, setCalendarTasks, blockedAppsConfig, setBlockedAppsConfig, onOpenAICalendar, lang, supabaseUserId, setCoachChatOpen }) => {
   const [homeTab, setHomeTab] = useState('desafiate');
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [coachChatOpen, setCoachChatOpen] = useState(false);
-  const [coachInput, setCoachInput] = useState('');
-  const [coachMessages, setCoachMessages] = useState([]);
   const [activityDone, setActivityDone] = useState(null);
+  const [newTaskText, setNewTaskText] = useState('');
+  const [emergencyTimers, setEmergencyTimers] = useState({});
+  const [focusRewardAlert, setFocusRewardAlert] = useState(null);
+  const t = UI_TEXT[lang] || UI_TEXT['es'];
+  const { recommendations, isLoading: aiLoading } = useBehavioralAI(supabaseUserId, selectedApps, lang);
+
+  // Tick down emergency timers every second
+  useEffect(() => {
+    const activeIds = Object.keys(emergencyTimers).filter(id => emergencyTimers[id] > 0);
+    if (activeIds.length === 0) return;
+    const interval = setInterval(() => {
+      setEmergencyTimers(prev => {
+        const copy = { ...prev };
+        for (const id of activeIds) {
+          if (copy[id] > 1) { copy[id] -= 1; } else { delete copy[id]; }
+        }
+        return copy;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [emergencyTimers]);
+
+  const claimFocusRewards = () => {
+    let totalSavedTime = 0;
+    const todayStr = new Date().toISOString().split('T')[0];
+    const newConfig = { ...blockedAppsConfig };
+    selectedApps.forEach(appId => {
+      const bd = newConfig[appId] || { limit: 15, usedToday: 0 };
+      const limit = bd.limit || 15;
+      const usedToday = bd.usedToday || 0;
+      if (bd.lastClaimedDate !== todayStr && usedToday < limit) {
+        totalSavedTime += (limit - usedToday);
+        newConfig[appId] = { ...bd, lastClaimedDate: todayStr };
+      }
+    });
+    if (totalSavedTime === 0) return;
+    const xpReward = totalSavedTime * 5;
+    const diamondReward = totalSavedTime * 1;
+    setUserXP(prev => prev + xpReward);
+    setUserDiamonds(prev => prev + diamondReward);
+    setBlockedAppsConfig(newConfig);
+    setFocusRewardAlert({ xp: xpReward, diamonds: diamondReward, minutes: totalSavedTime });
+    setTimeout(() => setFocusRewardAlert(null), 4000);
+  };
 
   const appFeatured = APP_CHALLENGES_BANK
     .filter(challenge => selectedApps.includes(challenge.appId) && (!challenge.gender || challenge.gender === 'any' || challenge.gender === userGender))
@@ -2681,9 +3084,9 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
     <div className="absolute inset-0 flex flex-col z-40 text-white overflow-hidden bg-black/10 backdrop-blur-sm">
       <div className="flex-1 overflow-y-auto px-6 pt-16 pb-36 custom-scroll">
         <div className="flex gap-1.5 bg-black/60 p-1.5 rounded-full border border-white/5 shadow-inner backdrop-blur-md mb-8 overflow-x-auto no-scrollbar">
-          <button onClick={() => setHomeTab('desafiate')} className={`flex-1 py-2.5 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${homeTab === 'desafiate' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Desafíate</button>
-          <button onClick={() => setHomeTab('organizate')} className={`flex-1 py-2.5 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${homeTab === 'organizate' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Organízate</button>
-          <button onClick={() => setHomeTab('crece')} className={`flex-1 py-2.5 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${homeTab === 'crece' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Crece</button>
+          <button onClick={() => setHomeTab('desafiate')} className={`flex-1 py-2.5 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${homeTab === 'desafiate' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>{t.challenge}</button>
+          <button onClick={() => setHomeTab('organizate')} className={`flex-1 py-2.5 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${homeTab === 'organizate' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>{t.organize}</button>
+          <button onClick={() => setHomeTab('crece')} className={`flex-1 py-2.5 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${homeTab === 'crece' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>{t.grow}</button>
         </div>
 
         {homeTab === 'desafiate' && (
@@ -2721,6 +3124,25 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
                 <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10"><Clock size={28} className="text-white/50" /></div>
                 <h3 className="text-xl font-black uppercase tracking-tight mb-2">Sin retos activos</h3>
                 <p className="text-[11px] text-white/60 font-medium leading-relaxed px-4">Selecciona un desafío de la lista inferior para comenzar a forjar tu voluntad hoy.</p>
+              </motion.div>
+            )}
+            {/* AI Behavioral Recommendations */}
+            {recommendations.length > 0 && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+                <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-white/40 mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />{t.aiRec}
+                </h3>
+                <div className="space-y-3">
+                  {recommendations.map(rec => (
+                    <motion.div key={rec.id} whileTap={{ scale: 0.98 }} className={`bg-gradient-to-r ${rec.color} backdrop-blur-md rounded-[20px] p-4 border ${rec.border} flex items-start gap-4 shadow-md`}>
+                      <span className="text-2xl shrink-0">{rec.icon}</span>
+                      <div>
+                        <h4 className="text-[11px] font-black uppercase tracking-tight text-white mb-1">{rec.title}</h4>
+                        <p className="text-[10px] text-white/70 font-medium leading-relaxed">{rec.desc}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
               </motion.div>
             )}
 
@@ -2801,46 +3223,235 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
             {/* Calendar View */}
             <div>
               <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md mb-6">Esta Semana</h3>
-              <div className="space-y-4">
-                {calendarTasks.map(task => (
-                  <div key={task.id} className="bg-white/5 backdrop-blur-md rounded-[24px] p-5 border border-white/10 flex items-center justify-between shadow-md">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
-                        <Calendar size={20} className="text-indigo-400" />
+              {calendarTasks.length === 0 ? (
+                <div className="bg-white/5 border border-white/10 rounded-[24px] p-8 text-center">
+                  <Calendar size={32} className="text-white/20 mx-auto mb-3" />
+                  <p className="text-[11px] text-white/40 font-bold uppercase tracking-wider">Sin tareas. Usa el Asistente IA para añadir.</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {calendarTasks.map(task => (
+                    <div key={task.id} className={`bg-white/5 backdrop-blur-md rounded-[24px] p-5 border shadow-md flex items-center justify-between ${
+                      task.isDeadline ? 'border-red-500/30 bg-red-500/5' : 'border-white/10'
+                    }`}>
+                      <div className="flex items-center gap-4">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
+                          task.isDeadline
+                            ? 'bg-red-500/20 border-red-500/30'
+                            : task.type === 'examen'
+                              ? 'bg-amber-500/20 border-amber-500/30'
+                              : task.type === 'proyecto'
+                                ? 'bg-purple-500/20 border-purple-500/30'
+                                : 'bg-indigo-500/20 border-indigo-500/30'
+                        }`}>
+                          {task.isDeadline
+                            ? <Clock size={20} className="text-red-400" />
+                            : task.type === 'examen'
+                              ? <Target size={20} className="text-amber-400" />
+                              : task.type === 'proyecto'
+                                ? <Zap size={20} className="text-purple-400" />
+                                : <Calendar size={20} className="text-indigo-400" />}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className={`text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full ${
+                              task.type === 'examen' ? 'text-amber-400 bg-amber-400/10' :
+                              task.type === 'proyecto' ? 'text-purple-400 bg-purple-400/10' :
+                              'text-indigo-400 bg-indigo-400/10'
+                            }`}>{task.type}</span>
+                            {task.isDeadline && (
+                              <span className="text-[8px] font-black tracking-widest uppercase text-red-400 bg-red-400/10 px-2 py-0.5 rounded-full">⏰ Vence</span>
+                            )}
+                          </div>
+                          <h4 className="text-sm font-black uppercase tracking-tight text-white">{task.title}</h4>
+                        </div>
                       </div>
-                      <div>
-                        <span className="text-[8px] font-black tracking-widest uppercase text-indigo-400 bg-indigo-400/10 px-2 py-0.5 rounded-full">{task.type}</span>
-                        <h4 className="text-sm font-black uppercase tracking-tight text-white mt-1">{task.title}</h4>
+                      <div className="text-right shrink-0">
+                        <span className={`text-[10px] font-black uppercase tracking-widest ${
+                          task.isDeadline ? 'text-red-400' : 'text-white/40'
+                        }`}>{task.date}</span>
                       </div>
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white/40">{task.date}</span>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* App Blocker config */}
-            <div>
+            <div className="relative">
+              {/* Focus reward toast */}
+              <AnimatePresence>
+                {focusRewardAlert && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -20, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -20, scale: 0.9 }}
+                    className="absolute -top-16 left-0 right-0 z-50 bg-gradient-to-r from-yellow-500/90 to-amber-500/90 backdrop-blur-md rounded-[20px] px-5 py-4 flex items-center gap-4 border border-yellow-400/30 shadow-xl shadow-yellow-500/20"
+                  >
+                    <div className="text-2xl">🏆</div>
+                    <div>
+                      <p className="text-[11px] font-black uppercase tracking-wide text-black">¡Recompensa cobrada!</p>
+                      <p className="text-[10px] font-bold text-black/70">+{focusRewardAlert.xp} XP · +{focusRewardAlert.diamonds} 💎 · {focusRewardAlert.minutes} min ahorrados</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md mb-6 flex items-center gap-2"><Lock size={20} /> Bloqueador</h3>
               <div className="space-y-4">
                 {selectedApps.map(appId => {
                   const appRef = APPS.find(a => a.id === appId);
-                  const blockedData = blockedAppsConfig[appId] || { limit: 15 };
+                  const bd = blockedAppsConfig[appId] || { limit: 15, usedToday: 0 };
+                  const limit = bd.limit || 15;
+                  const usedToday = bd.usedToday || 0;
+                  const pct = Math.min(100, (usedToday / limit) * 100);
+                  const isOverLimit = usedToday >= limit;
+                  const emergencySecs = emergencyTimers[appId] || 0;
+                  const todayStr = new Date().toISOString().split('T')[0];
+                  const claimedToday = bd.lastClaimedDate === todayStr;
+
+                  const barColor = pct >= 100 ? 'bg-red-500' : pct >= 70 ? 'bg-amber-500' : 'bg-emerald-500';
+                  const borderColor = isOverLimit ? 'border-red-500/40' : 'border-white/10';
+
                   return (
-                    <div key={appId} className="bg-white/5 backdrop-blur-md rounded-[24px] p-4 border border-white/10 flex items-center justify-between shadow-md">
-                      <div className="flex items-center gap-4">
-                        <img src={appRef.icon} className="w-8 h-8 object-contain filter invert opacity-80" alt={appRef.name} />
-                        <h4 className="text-sm font-black uppercase tracking-tight text-white">{appRef.name}</h4>
+                    <div key={appId} className={`bg-white/5 backdrop-blur-md rounded-[24px] p-5 border ${borderColor} shadow-md`}>
+                      {/* Row 1: App name + limit controls */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <img src={appRef.icon} className="w-8 h-8 object-contain filter invert opacity-80" alt={appRef.name} />
+                          <div>
+                            <h4 className="text-sm font-black uppercase tracking-tight text-white">{appRef.name}</h4>
+                            {isOverLimit && !emergencySecs && (
+                              <span className="text-[8px] font-black text-red-400 uppercase tracking-widest">● Bloqueada</span>
+                            )}
+                            {emergencySecs > 0 && (
+                              <span className="text-[8px] font-black text-amber-400 uppercase tracking-widest animate-pulse">⚡ Acceso temporal: {Math.floor(emergencySecs / 60)}:{String(emergencySecs % 60).padStart(2,'0')}</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-full border border-white/5">
+                          <button onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { ...bd, limit: Math.max(5, limit - 5) } }))} className="text-white/40 hover:text-white transition-colors"><Minus size={13} /></button>
+                          <span className="text-[10px] font-black tracking-widest w-10 text-center">{limit}m</span>
+                          <button onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { ...bd, limit: limit + 5 } }))} className="text-white/40 hover:text-white transition-colors"><Plus size={13} /></button>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3 bg-black/40 px-4 py-2 rounded-full border border-white/5">
-                        <button onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { limit: Math.max(0, blockedData.limit - 5) } }))} className="text-white/40 hover:text-white"><Minus size={14} /></button>
-                        <span className="text-[10px] font-black tracking-widest w-12 text-center">{blockedData.limit} m</span>
-                        <button onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { limit: blockedData.limit + 5 } }))} className="text-white/40 hover:text-white"><Plus size={14} /></button>
+
+                      {/* Row 2: Progress bar */}
+                      <div className="mb-3">
+                        <div className="flex justify-between items-center mb-1.5">
+                          <span className="text-[9px] font-black uppercase tracking-wider text-white/40">Usado hoy</span>
+                          <span className={`text-[9px] font-black uppercase tracking-wider ${isOverLimit ? 'text-red-400' : 'text-white/60'}`}>{usedToday}/{limit} min</span>
+                        </div>
+                        <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${pct}%` }}
+                            transition={{ duration: 0.5 }}
+                            className={`h-full rounded-full ${barColor} ${isOverLimit ? 'animate-pulse' : ''}`}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Row 3: Action buttons */}
+                      <div className="flex gap-2">
+                        {/* Simulate usage */}
+                        <button
+                          onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { ...bd, usedToday: Math.min(limit + 10, usedToday + 5) } }))}
+                          className="flex-1 py-2 rounded-full bg-white/5 border border-white/10 text-[9px] font-black uppercase tracking-wider text-white/50 hover:text-white hover:bg-white/10 transition-all"
+                        >
+                          Simular +5m
+                        </button>
+                        {/* Emergency bypass / reset */}
+                        {emergencySecs > 0 ? (
+                          <div className="flex-1 py-2 rounded-full bg-amber-500/20 border border-amber-500/30 text-[9px] font-black uppercase tracking-wider text-amber-400 text-center">
+                            ⚡ {Math.floor(emergencySecs/60)}:{String(emergencySecs % 60).padStart(2,'0')}
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setEmergencyTimers(p => ({ ...p, [appId]: 300 }))}
+                            className={`flex-1 py-2 rounded-full text-[9px] font-black uppercase tracking-wider transition-all ${
+                              isOverLimit
+                                ? 'bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30'
+                                : 'bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/10'
+                            }`}
+                          >
+                            ⚡ Urgencia 5m
+                          </button>
+                        )}
+                        {/* Reset usage */}
+                        <button
+                          onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { ...bd, usedToday: 0 } }))}
+                          className="w-10 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:bg-white/10 transition-all shrink-0"
+                          title="Resetear uso diario"
+                        >
+                          <RefreshCw size={12} />
+                        </button>
                       </div>
                     </div>
                   );
                 })}
               </div>
+
+              {/* Focus reward card */}
+              {(() => {
+                const todayStr = new Date().toISOString().split('T')[0];
+                let totalSaved = 0;
+                let allClaimed = true;
+                selectedApps.forEach(appId => {
+                  const bd = blockedAppsConfig[appId] || { limit: 15, usedToday: 0 };
+                  const limit = bd.limit || 15;
+                  const usedToday = bd.usedToday || 0;
+                  if (bd.lastClaimedDate !== todayStr && usedToday < limit) {
+                    totalSaved += (limit - usedToday);
+                    allClaimed = false;
+                  }
+                });
+
+                if (selectedApps.length === 0) return null;
+
+                if (allClaimed) {
+                  return (
+                    <div className="mt-6 bg-white/5 border border-white/10 rounded-[24px] p-5 flex items-center gap-4">
+                      <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center border border-emerald-500/30 shrink-0">
+                        <Check size={18} className="text-emerald-400" />
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-black uppercase tracking-wide text-white">Recompensas del día cobradas</p>
+                        <p className="text-[9px] text-white/40 font-semibold uppercase tracking-wider mt-0.5">¡Sigue así mañana! 🚀</p>
+                      </div>
+                    </div>
+                  );
+                }
+
+                const xpPreview = totalSaved * 5;
+                const diamPreview = totalSaved * 1;
+
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-6 bg-gradient-to-br from-yellow-500/15 to-amber-500/10 border border-yellow-500/30 rounded-[28px] p-6"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 bg-yellow-500/20 rounded-full flex items-center justify-center border border-yellow-500/30 text-xl shrink-0">🏆</div>
+                      <div>
+                        <h4 className="text-sm font-black uppercase tracking-tight text-yellow-400">Recompensa de Enfoque</h4>
+                        <p className="text-[9px] text-white/50 font-semibold uppercase tracking-wider">Por no usar todo tu tiempo de pantalla</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 mb-4">
+                      <span className="flex-1 text-center py-2 bg-white/10 rounded-full text-[10px] font-black text-yellow-400 uppercase tracking-widest">+{xpPreview} XP</span>
+                      <span className="flex-1 text-center py-2 bg-white/10 rounded-full text-[10px] font-black text-yellow-400 uppercase tracking-widest flex items-center justify-center gap-1"><Gem size={12} /> +{diamPreview}</span>
+                    </div>
+                    <button
+                      onClick={claimFocusRewards}
+                      className="w-full py-3 rounded-full bg-yellow-500 text-black font-black uppercase text-[10px] tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-lg shadow-yellow-500/30"
+                    >
+                      Cobrar {totalSaved} min ahorrados
+                    </button>
+                  </motion.div>
+                );
+              })()}
             </div>
           </motion.div>
         )}
@@ -2963,52 +3574,6 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
         )}
 
       </div>
-
-      {/* Coach Chat Modal */}
-      <AnimatePresence>
-        {coachChatOpen && selectedCoach && (
-          <motion.div initial={{ opacity: 0, y: '100%' }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="absolute inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col">
-            <div className="px-6 pt-14 pb-4 border-b border-white/10 flex items-center gap-4">
-              <button onClick={() => setCoachChatOpen(false)} className="p-2 -ml-2 hover:bg-white/10 rounded-full transition-colors"><ChevronLeft size={24} className="text-white" /></button>
-              <div className="text-3xl">{selectedCoach.icon}</div>
-              <div>
-                <h2 className="text-sm font-black uppercase tracking-tight text-white">{selectedCoach.name}</h2>
-                <span className="text-[9px] font-black text-green-400 uppercase tracking-widest">• Listo para guiarte</span>
-              </div>
-            </div>
-            <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4 custom-scroll">
-              {(coachMessages.length === 0 ? [{ id: 0, text: `Hola. Soy ${selectedCoach.name}. Entiendo que eres del tipo "${selectedCoach.type}" y las redes te afectan especialmente con ${selectedCoach.desc}. ¿Qué quieres trabajar hoy?`, sender: 'coach' }] : coachMessages).map(msg => (
-                <div key={msg.id} className={`p-4 rounded-[24px] max-w-[85%] shadow-md ${msg.sender === 'user' ? 'bg-white text-black self-end rounded-tr-sm' : 'bg-white/10 self-start rounded-tl-sm border border-white/10 text-white'}`}>
-                  <p className="text-xs font-bold leading-relaxed">{msg.text}</p>
-                </div>
-              ))}
-            </div>
-            <div className="p-5 bg-black/60 border-t border-white/10 pb-8">
-              <div className="flex gap-3">
-                <input value={coachInput} onChange={e => setCoachInput(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key !== 'Enter' || !coachInput.trim()) return;
-                    const userMsg = { id: Date.now(), text: coachInput, sender: 'user' };
-                    const tip = selectedCoach.tips[Math.floor(Math.random() * selectedCoach.tips.length)];
-                    const coachReply = { id: Date.now() + 1, text: tip, sender: 'coach' };
-                    setCoachMessages(prev => [...(prev.length === 0 ? [{ id: 0, text: `Hola. Soy ${selectedCoach.name}. Entiendo que eres del tipo "${selectedCoach.type}" y las redes te afectan especialmente con ${selectedCoach.desc}. ¿Qué quieres trabajar hoy?`, sender: 'coach' }] : prev), userMsg, coachReply]);
-                    setCoachInput('');
-                  }}
-                  placeholder="Escribe algo..." className="flex-1 bg-white/5 border border-white/10 rounded-full px-5 py-3 text-[11px] font-bold text-white placeholder:text-white/30 outline-none" />
-                <button onClick={() => {
-                  if (!coachInput.trim()) return;
-                  const userMsg = { id: Date.now(), text: coachInput, sender: 'user' };
-                  const tip = selectedCoach.tips[Math.floor(Math.random() * selectedCoach.tips.length)];
-                  const coachReply = { id: Date.now() + 1, text: tip, sender: 'coach' };
-                  setCoachMessages(prev => [...(prev.length === 0 ? [{ id: 0, text: `Hola. Soy ${selectedCoach.name}. Entiendo que eres del tipo "${selectedCoach.type}" y las redes te afectan especialmente con ${selectedCoach.desc}. ¿Qué quieres trabajar hoy?`, sender: 'coach' }] : prev), userMsg, coachReply]);
-                  setCoachInput('');
-                }} className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shrink-0"><Send size={16} className="ml-0.5" /></button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <AnimatePresence>
         {selectedVideo && (
@@ -3160,7 +3725,7 @@ const AllChallengesView = ({ selectedApps, onClose, onSelectChallenge, userGende
 const AICalendarModal = ({ onClose, calendarTasks, setCalendarTasks }) => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([
-    { id: 1, sender: 'ai', text: '¡Hola! Soy tu asistente de organización. Dime qué tareas tienes pendientes, por ejemplo: "Tengo examen de matemáticas el viernes" o "Recordarme leer el capítulo 4 mañana".' }
+    { id: 1, sender: 'ai', text: '¡Hola! Soy tu asistente de organización. Dime qué tareas tienes pendientes, indicando de qué tipo es (tarea, examen, proyecto) y cuándo es o cuándo se vence (ej. "examen de química el 15/06", "la entrega de arte se vence mañana", "tengo proyecto el viernes").' }
   ]);
 
   const handleSend = () => {
@@ -3170,38 +3735,120 @@ const AICalendarModal = ({ onClose, calendarTasks, setCalendarTasks }) => {
     setInput('');
 
     setTimeout(() => {
-      let responseText = 'No entendí muy bien la tarea. Intenta mencionar la acción (examen, tarea) y cuándo (hoy, mañana, el viernes).';
       const textLower = userMsg.text.toLowerCase();
       
-      let dateStr = new Date().toISOString().split('T')[0];
+      // 1. Detect task type
       let type = 'tarea';
-      let title = userMsg.text;
+      if (textLower.includes('examen') || textLower.includes('parcial') || textLower.includes('evaluacion') || textLower.includes('evaluación') || textLower.includes('prueba') || textLower.includes('quiz') || textLower.includes('test') || textLower.includes('lección') || textLower.includes('leccion')) {
+        type = 'examen';
+      } else if (textLower.includes('proyecto') || textLower.includes('presentación') || textLower.includes('presentacion') || textLower.includes('exposición') || textLower.includes('exposicion') || textLower.includes('trabajo') || textLower.includes('entrega') || textLower.includes('informe') || textLower.includes('exponer')) {
+        type = 'proyecto';
+      }
+      
+      // 2. Detect if it is a deadline/vencimiento vs event date
+      const isDeadline = textLower.includes('vence') || textLower.includes('límite') || textLower.includes('limite') || textLower.includes('entregar') || textLower.includes('plazo') || textLower.includes('vencimiento');
 
-      if (textLower.includes('examen')) type = 'examen';
-      if (textLower.includes('proyecto')) type = 'proyecto';
-
-      if (textLower.includes('mañana')) {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        dateStr = tomorrow.toISOString().split('T')[0];
-      } else if (textLower.includes('viernes')) {
+      // 3. Detect date
+      let dateStr = '';
+      const today = new Date();
+      
+      // DD/MM/YYYY or DD/MM or DD-MM-YYYY or DD-MM
+      const formatRegex = /\b(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?\b/;
+      const formatMatch = textLower.match(formatRegex);
+      
+      if (formatMatch) {
+        const day = parseInt(formatMatch[1], 10);
+        const month = parseInt(formatMatch[2], 10);
+        let year = formatMatch[3] ? parseInt(formatMatch[3], 10) : today.getFullYear();
+        if (year < 100) year += 2000;
+        
+        const mm = String(month).padStart(2, '0');
+        const dd = String(day).padStart(2, '0');
+        dateStr = `${year}-${mm}-${dd}`;
+      } else if (textLower.includes('hoy')) {
+        dateStr = today.toISOString().split('T')[0];
+      } else if (textLower.includes('pasado mañana') || textLower.includes('pasado manana')) {
         const d = new Date();
-        d.setDate(d.getDate() + ((5 + 7 - d.getDay()) % 7 || 7));
+        d.setDate(d.getDate() + 2);
         dateStr = d.toISOString().split('T')[0];
+      } else if (textLower.includes('mañana') || textLower.includes('manana')) {
+        const d = new Date();
+        d.setDate(d.getDate() + 1);
+        dateStr = d.toISOString().split('T')[0];
+      } else {
+        const weekdays = {
+          lunes: 1, martes: 2, miércoles: 3, miercoles: 3,
+          jueves: 4, viernes: 5, sábado: 6, sabado: 6, domingo: 0
+        };
+        let foundDayOffset = -1;
+        for (const [dayName, dayNum] of Object.entries(weekdays)) {
+          if (textLower.includes(dayName)) {
+            const currentDayNum = today.getDay();
+            let daysToAdd = dayNum - currentDayNum;
+            if (daysToAdd <= 0) daysToAdd += 7;
+            foundDayOffset = daysToAdd;
+            break;
+          }
+        }
+        
+        if (foundDayOffset !== -1) {
+          const d = new Date();
+          d.setDate(d.getDate() + foundDayOffset);
+          dateStr = d.toISOString().split('T')[0];
+        } else {
+          const months = {
+            enero: 0, febrero: 1, marzo: 2, abril: 3, mayo: 4, junio: 5,
+            julio: 6, agosto: 7, septiembre: 8, octubre: 9, noviembre: 10, diciembre: 11
+          };
+          let monthIndex = -1;
+          let dayNumber = -1;
+          for (const [monthName, idx] of Object.entries(months)) {
+            const regex = new RegExp(`(\\d{1,2})\\s+de\\s+${monthName}`);
+            const match = textLower.match(regex);
+            if (match) {
+              dayNumber = parseInt(match[1], 10);
+              monthIndex = idx;
+              break;
+            }
+          }
+          
+          if (monthIndex !== -1 && dayNumber !== -1) {
+            const d = new Date(today.getFullYear(), monthIndex, dayNumber);
+            if (d < today && (today.getTime() - d.getTime()) > 1000 * 60 * 60 * 24 * 30) {
+              d.setFullYear(today.getFullYear() + 1);
+            }
+            dateStr = d.toISOString().split('T')[0];
+          }
+        }
       }
 
-      const match = textLower.match(/(examen de|tarea de|estudiar|leer) (.*?)( el| la| hoy| mañana|)/);
-      if (match && match[2]) {
-        title = match[2].trim();
-        title = title.charAt(0).toUpperCase() + title.slice(1);
-        if (type === 'examen') title = `Examen de ${title}`;
+      if (!dateStr) {
+        dateStr = today.toISOString().split('T')[0];
       }
 
-      if (textLower.includes('examen') || textLower.includes('tarea') || textLower.includes('estudiar') || textLower.includes('leer') || textLower.includes('recordarme')) {
-        const newTask = { id: `t_${Date.now()}`, title: title, date: dateStr, type: type };
-        setCalendarTasks(prev => [...prev, newTask]);
-        responseText = `¡Listo! He añadido "${title}" a tu calendario para el ${dateStr}. ¿Algo más en lo que pueda ayudarte?`;
+      // Title formatting
+      let title = userMsg.text;
+      const cleanRegex = /(?:tengo\s+)?(?:examen\s+de|tarea\s+de|proyecto\s+de|estudiar\s+|repasar\s+|hacer\s+|entregar\s+|exponer\s+)?(.*?)(?:\s+(?:el|la|hoy|mañana|pasado|lunes|martes|miércoles|jueves|viernes|sábado|domingo|se\s+vence|es\s+el)\b|$)/i;
+      const titleMatch = userMsg.text.match(cleanRegex);
+      if (titleMatch && titleMatch[1] && titleMatch[1].trim()) {
+        title = titleMatch[1].trim();
       }
+      
+      title = title.charAt(0).toUpperCase() + title.slice(1);
+      if (type === 'examen' && !title.toLowerCase().includes('examen')) {
+        title = `Examen de ${title}`;
+      } else if (type === 'proyecto' && !title.toLowerCase().includes('proyecto') && !title.toLowerCase().includes('trabajo') && !title.toLowerCase().includes('entrega')) {
+        title = `Proyecto de ${title}`;
+      } else if (type === 'tarea' && !title.toLowerCase().includes('tarea') && !title.toLowerCase().includes('hacer') && !title.toLowerCase().includes('leer') && !title.toLowerCase().includes('estudiar')) {
+        title = `Tarea: ${title}`;
+      }
+
+      const newTask = { id: `t_${Date.now()}`, title, date: dateStr, type, isDeadline };
+      setCalendarTasks(prev => [...prev, newTask]);
+      
+      const typeWord = type === 'examen' ? 'el examen' : type === 'proyecto' ? 'el proyecto' : 'la tarea';
+      const deadlineWord = isDeadline ? 'con fecha límite para el' : 'programado/a para el';
+      const responseText = `¡Listo! He añadido ${typeWord} "${title}" ${deadlineWord} ${dateStr} a tu calendario. ¿Algo más en lo que pueda ayudarte?`;
 
       setMessages(prev => [...prev, { id: Date.now() + 1, sender: 'ai', text: responseText }]);
     }, 1000);
@@ -4078,13 +4725,14 @@ const MinigameSequence = ({ game, onClose, addXP, addDiamonds }) => {
   );
 };
 
-const BottomNav = ({ activeTab, onChange, currentThemeBg }) => {
+const BottomNav = ({ activeTab, onChange, currentThemeBg, lang = 'es' }) => {
+  const t = UI_TEXT[lang];
   const navItems = [
-    { id: 'forum', icon: Megaphone },
-    { id: 'rankings', icon: Trophy },
-    { id: 'home', icon: Home },
-    { id: 'shop', icon: ShoppingBag },
-    { id: 'profile', icon: User }
+    { id: 'forum', icon: Megaphone, label: t.forum },
+    { id: 'rankings', icon: Trophy, label: t.rankings },
+    { id: 'home', icon: Home, label: t.home },
+    { id: 'shop', icon: ShoppingBag, label: t.shop },
+    { id: 'profile', icon: User, label: t.profile }
   ];
 
   const themeProps = BACKGROUNDS[currentThemeBg]?.themeProps || BACKGROUNDS['bg_default'].themeProps;
@@ -4103,7 +4751,7 @@ const BottomNav = ({ activeTab, onChange, currentThemeBg }) => {
               {isActive && (
                 <motion.div layoutId="nav-selector" className={`absolute w-[76px] h-[76px] rounded-full shadow-lg ${isAgresive ? 'bg-red-600/90 shadow-[0_0_20px_red]' : 'bg-white'}`} transition={{ type: "spring", stiffness: 300, damping: 25 }} />
               )}
-              <Icon size={24} className={`relative z-20 transition-colors duration-300 ${isActive ? (isAgresive ? 'text-white' : 'text-black') : 'text-white/40 group-hover:text-white'}`} fill={isActive ? (isAgresive ? 'white' : 'black') : 'none'} />
+              <Icon size={24} className={`relative z-20 transition-colors duration-300 ${isActive ? (isAgresive ? 'text-white' : 'text-black') : 'text-white/40 group-hover:text-white'}`} strokeWidth={isActive ? 2.5 : 2} />
             </div>
           );
         })}
@@ -4116,9 +4764,14 @@ const BottomNav = ({ activeTab, onChange, currentThemeBg }) => {
 // --- APP COMPONENT ---
 export default function App() {
   const [step, setStep] = useState('splash');
+  const [lang, setLang] = useState('es');
 
   // --- Supabase auth ---
   const [supabaseUserId, setSupabaseUserId] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
+  const [isAnonymous, setIsAnonymous] = useState(true);
+  const [authReturnStep, setAuthReturnStep] = useState(null);
+  const [authInitialIsLogin, setAuthInitialIsLogin] = useState(false);
   const [dbLoaded, setDbLoaded] = useState(false);
 
   const [username, setUsername] = useState('');
@@ -4140,7 +4793,7 @@ export default function App() {
 
   const [inventory, setInventory] = useState({
     avatars: ['a_base'],
-    backgrounds: ['bg_default'],
+    backgrounds: ['bg_default', 'bg_light'],
     skins: [],
     equippedAvatar: 'a_base',
     equippedBg: 'bg_default',
@@ -4162,6 +4815,9 @@ export default function App() {
   const [rewardAlert, setRewardAlert] = useState(null);
 
   const [selectedCoach, setSelectedCoach] = useState(null);
+  const [coachChatOpen, setCoachChatOpen] = useState(false);
+  const [coachMessages, setCoachMessages] = useState([]);
+  const [coachInput, setCoachInput] = useState('');
   const [completedActivities, setCompletedActivities] = useState([]);
   const [calendarTasks, setCalendarTasks] = useState([]);
   const [blockedAppsConfig, setBlockedAppsConfig] = useState({});
@@ -4182,6 +4838,11 @@ export default function App() {
     await supabase.from('profiles').upsert({ id: uid, ...data, updated_at: new Date().toISOString() });
   }, []);
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    window.location.reload();
+  };
+
   // --- Supabase: inicializar sesión anónima y cargar perfil ---
   useEffect(() => {
     const initSupabase = async () => {
@@ -4189,10 +4850,27 @@ export default function App() {
       const { data: { session } } = await supabase.auth.getSession();
       let uid = session?.user?.id;
 
+      // Helper: detectar cuenta anónima leyendo el claim is_anonymous del JWT
+      const getIsAnonymousFromJWT = (sess) => {
+        try {
+          if (!sess?.access_token) return true;
+          const payload = JSON.parse(atob(sess.access_token.split('.')[1]));
+          return payload.is_anonymous === true;
+        } catch { return !sess?.user?.email; }
+      };
+
       // Si no hay sesión, crear una anónima
       if (!uid) {
         const { data, error } = await supabase.auth.signInAnonymously();
-        if (!error) uid = data.user?.id;
+        if (!error) {
+          uid = data.user?.id;
+          setUserEmail(null);
+          setIsAnonymous(true);
+        }
+      } else {
+        const anon = getIsAnonymousFromJWT(session);
+        setUserEmail(anon ? null : (session?.user?.email || null));
+        setIsAnonymous(anon);
       }
 
       if (!uid) {
@@ -4217,8 +4895,13 @@ export default function App() {
         setSelectedLevel(profile.selected_level || null);
         setUserXP(profile.user_xp || 0);
         setUserDiamonds(profile.user_diamonds || 0);
-        setInventory(profile.inventory || {
-          avatars: ['a_base'], backgrounds: ['bg_default'], skins: [],
+        const loadedInv = profile.inventory || {};
+        // Asegurar que bg_light (gratuito) siempre esté disponible
+        if (loadedInv.backgrounds && !loadedInv.backgrounds.includes('bg_light')) {
+          loadedInv.backgrounds = [...loadedInv.backgrounds, 'bg_light'];
+        }
+        setInventory(loadedInv.avatars ? loadedInv : {
+          avatars: ['a_base'], backgrounds: ['bg_default', 'bg_light'], skins: [],
           equippedAvatar: 'a_base', equippedBg: 'bg_default', equippedSkins: {}
         });
         setActiveChallenge(profile.active_challenge || null);
@@ -4228,18 +4911,50 @@ export default function App() {
         // Saltar onboarding directamente al main
         setStep('main');
       } else {
-        // Usuario nuevo: mostrar onboarding normal
-        setCalendarTasks([
-          { id: 't1', title: 'Examen de Matemáticas', date: new Date().toISOString().split('T')[0], type: 'examen' },
-          { id: 't2', title: 'Leer capítulo 4', date: new Date().toISOString().split('T')[0], type: 'tarea' }
-        ]);
+        // Si el usuario ya está logueado de forma permanente pero no tiene perfil en la DB (o onboarding_done es false),
+        // inicializamos un perfil por defecto para que no se quede atrapado en el onboarding slider.
+        const isAnonSession = (() => { try { if (!session?.access_token) return true; const p = JSON.parse(atob(session.access_token.split('.')[1])); return p.is_anonymous === true; } catch { return !session?.user?.email; } })();
+        if (session && !isAnonSession) {
+          const defaultProfile = {
+            username: profile?.username || session.user.email.split('@')[0],
+            user_gender: profile?.user_gender || 'any',
+            selected_apps: profile?.selected_apps || [],
+            selected_level: profile?.selected_level || 1,
+            user_xp: profile?.user_xp || 0,
+            user_diamonds: profile?.user_diamonds || 0,
+            inventory: profile?.inventory || {
+              avatars: ['a_base'],
+              backgrounds: ['bg_default', 'bg_light'],
+              skins: [],
+              equippedAvatar: 'a_base',
+              equippedBg: 'bg_default',
+              equippedSkins: { 'a_base': null }
+            },
+            onboarding_done: true
+          };
+          
+          await saveProfile(uid, defaultProfile);
+          
+          setUsername(defaultProfile.username);
+          setUserGender(defaultProfile.user_gender);
+          setSelectedApps(defaultProfile.selected_apps);
+          setSelectedLevel(defaultProfile.selected_level);
+          setInventory(defaultProfile.inventory);
+          setStep('main');
+        } else {
+          // Usuario nuevo anónimo: mostrar onboarding normal
+          setCalendarTasks([
+            { id: 't1', title: 'Examen de Matemáticas', date: new Date().toISOString().split('T')[0], type: 'examen' },
+            { id: 't2', title: 'Leer capítulo 4', date: new Date().toISOString().split('T')[0], type: 'tarea' }
+          ]);
+        }
       }
 
       setDbLoaded(true);
     };
 
     initSupabase();
-  }, []);
+  }, [saveProfile]);
 
   // --- Supabase: splash timer ---
   useEffect(() => {
@@ -4272,8 +4987,12 @@ export default function App() {
     const finalGender = gender || 'any';
     setUsername(finalName);
     setUserGender(finalGender);
-    if (supabaseUserId) {
-      await saveProfile(supabaseUserId, {
+    
+    const { data: { session } } = await supabase.auth.getSession();
+    const currentUid = session?.user?.id || supabaseUserId;
+
+    if (currentUid) {
+      await saveProfile(currentUid, {
         username: finalName,
         user_gender: finalGender,
         onboarding_done: false, // se pondrá true cuando elija nivel
@@ -4300,13 +5019,27 @@ export default function App() {
     setShowAllChallenges(false);
   };
 
-  const handleCompleteChallenge = () => {
+  const handleCompleteChallenge = async () => {
     if (!activeChallenge) return;
+    const xpEarned = activeChallenge.xp || 150;
+    const diamondsEarned = activeChallenge.diamonds || 50;
+
     setCompletedCount(prev => prev + 1);
     setActivityLog(prev => [{ id: Date.now().toString(), title: 'Sesión completada', subtitle: activeChallenge.title, time: 'Hace un momento', icon: Target }, ...prev]);
+    setUserXP(prev => prev + xpEarned);
+    setUserDiamonds(prev => prev + diamondsEarned);
 
-    setUserXP(prev => prev + (activeChallenge.xp || 150));
-    setUserDiamonds(prev => prev + (activeChallenge.diamonds || 50));
+    // Guardar sesión en Supabase para la IA
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user?.id) {
+      await supabase.from('focus_sessions').insert({
+        user_id: session.user.id,
+        session_type: activeChallenge.title,
+        duration_minutes: (activeChallenge.duration || 1) * 1440,
+        xp_earned: xpEarned,
+        diamonds_earned: diamondsEarned
+      });
+    }
 
     if (activeChallenge.reward) {
       const r = activeChallenge.reward;
@@ -4391,7 +5124,38 @@ export default function App() {
           {step === 'splash' && <Splash key="splash" />}
           {step === 'onboarding' && <motion.div key="onboarding" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }} transition={{ duration: 0.8 }} className="absolute inset-0 z-40"><Onboarding onFinish={() => setStep('logoReveal')} /></motion.div>}
           {step === 'logoReveal' && <LogoReveal key="logoReveal" onContinue={() => setStep('auth')} onBack={() => setStep('onboarding')} />}
-          {step === 'auth' && <AuthScreen key="auth" onBack={() => setStep('logoReveal')} onContinue={handleOnboardingComplete} />}
+          {step === 'auth' && (
+            <AuthScreen 
+              key="auth" 
+              lang={lang} 
+              initialIsLogin={authInitialIsLogin}
+              isLinking={authReturnStep === 'main'}
+              onBack={() => {
+                if (authReturnStep === 'main') {
+                  setStep('main');
+                  setMainNav('profile');
+                } else {
+                  setStep('logoReveal');
+                }
+              }} 
+              onContinue={async (name, gender) => {
+                if (authReturnStep === 'main') {
+                  // Actualizar estado de la sesión local
+                  const { data: { session } } = await supabase.auth.getSession();
+                  const isAnon = (() => { try { if (!session?.access_token) return true; const p = JSON.parse(atob(session.access_token.split('.')[1])); return p.is_anonymous === true; } catch { return !session?.user?.email; } })();
+                  setUserEmail(isAnon ? null : (session?.user?.email || null));
+                  setIsAnonymous(isAnon);
+                  if (session?.user?.id) {
+                    await saveProfile(session.user.id, { onboarding_done: true });
+                  }
+                  setStep('main');
+                  setMainNav('profile');
+                } else {
+                  await handleOnboardingComplete(name, gender);
+                }
+              }} 
+            />
+          )}
 
           {step === 'apps' && (
             <motion.div key="apps" initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }} animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }} exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }} transition={{ duration: 0.6 }} className="absolute inset-0 bg-black z-40 text-white flex flex-col">
@@ -4452,14 +5216,38 @@ export default function App() {
           {step === 'main' && (
             <motion.div key="main" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-40">
               <AnimatePresence mode="wait">
-                {mainNav === 'home' && <motion.div key="h" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><HomeDashboard selectedApps={selectedApps} activeChallenge={activeChallenge} onSelectChallenge={setShowChallengeDetail} onOpenActive={() => setShowActiveInteractive(true)} onOpenAll={() => setShowAllChallenges(true)} onCompleteChallenge={handleCompleteChallenge} onPlayMinigame={setActiveMinigame} userGender={userGender} selectedCoach={selectedCoach} setSelectedCoach={setSelectedCoach} completedActivities={completedActivities} setCompletedActivities={setCompletedActivities} userXP={userXP} setUserXP={setUserXP} userDiamonds={userDiamonds} setUserDiamonds={setUserDiamonds} calendarTasks={calendarTasks} setCalendarTasks={setCalendarTasks} blockedAppsConfig={blockedAppsConfig} setBlockedAppsConfig={setBlockedAppsConfig} onOpenAICalendar={() => setShowAICalendar(true)} /></motion.div>}
+                {mainNav === 'home' && <motion.div key="h" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><HomeDashboard selectedApps={selectedApps} activeChallenge={activeChallenge} onSelectChallenge={setShowChallengeDetail} onOpenActive={() => setShowActiveInteractive(true)} onOpenAll={() => setShowAllChallenges(true)} onCompleteChallenge={handleCompleteChallenge} onPlayMinigame={setActiveMinigame} userGender={userGender} selectedCoach={selectedCoach} setSelectedCoach={setSelectedCoach} completedActivities={completedActivities} setCompletedActivities={setCompletedActivities} userXP={userXP} setUserXP={setUserXP} userDiamonds={userDiamonds} setUserDiamonds={setUserDiamonds} calendarTasks={calendarTasks} setCalendarTasks={setCalendarTasks} blockedAppsConfig={blockedAppsConfig} setBlockedAppsConfig={setBlockedAppsConfig} onOpenAICalendar={() => setShowAICalendar(true)} lang={lang} supabaseUserId={supabaseUserId} setCoachChatOpen={setCoachChatOpen} /></motion.div>}
                 {mainNav === 'forum' && <motion.div key="f" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><Forum onSelectChat={(p) => { setChatPerson(p); setStep('chat'); }} unreadFilter={unreadFilter} setUnreadFilter={setUnreadFilter} activeTab={activeForumTab} setActiveTab={setActiveForumTab} forumPosts={forumPosts} setForumPosts={setForumPosts} userAvatarItem={SHOP_ITEMS.find(i => i.id === inventory.equippedAvatar)} username={username} /></motion.div>}
                 {mainNav === 'rankings' && <motion.div key="r" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><Rankings userXP={userXP} inventory={inventory} username={username} /></motion.div>}
                 {mainNav === 'shop' && <motion.div key="s" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><ShopView userDiamonds={userDiamonds} onSelectItem={openShopItem} inventory={inventory} /></motion.div>}
-                {mainNav === 'profile' && <motion.div key="p" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><ProfileView inventory={inventory} setInventory={setInventory} userXP={userXP} username={username} onOpenItem={openInventoryItem} completedCount={completedCount} activityLog={activityLog} selectedApps={selectedApps} setSelectedApps={setSelectedApps} /></motion.div>}
+                {mainNav === 'profile' && (
+                  <motion.div key="p" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10">
+                    <ProfileView 
+                      inventory={inventory} 
+                      setInventory={setInventory} 
+                      userXP={userXP} 
+                      username={username} 
+                      onOpenItem={openInventoryItem} 
+                      completedCount={completedCount} 
+                      activityLog={activityLog} 
+                      selectedApps={selectedApps} 
+                      setSelectedApps={setSelectedApps} 
+                      lang={lang} 
+                      setLang={setLang} 
+                      userEmail={userEmail}
+                      isAnonymous={isAnonymous}
+                      onSignOut={handleSignOut}
+                      onLinkAccount={(isLoginView) => {
+                        setAuthReturnStep('main');
+                        setAuthInitialIsLogin(isLoginView);
+                        setStep('auth');
+                      }}
+                    />
+                  </motion.div>
+                )}
               </AnimatePresence>
 
-              <BottomNav activeTab={mainNav} onChange={setMainNav} currentThemeBg={inventory.equippedBg} />
+              <BottomNav activeTab={mainNav} onChange={setMainNav} currentThemeBg={inventory.equippedBg} lang={lang} />
 
               <AnimatePresence>
                 {showChallengeDetail && <ChallengeDetail key="modal-challenge" challenge={showChallengeDetail} onClose={() => setShowChallengeDetail(null)} onStart={handleStartChallenge} />}
@@ -4486,7 +5274,165 @@ export default function App() {
                     <button onClick={() => setRewardAlert(null)} className="p-2 bg-black/40 rounded-full hover:bg-black/60"><X size={16} /></button>
                   </motion.div>
                 )}
-                {showAICalendar && <AICalendarModal key="modal-ai-calendar" onClose={() => setShowAICalendar(false)} calendarTasks={calendarTasks} setCalendarTasks={setCalendarTasks} />}
+                 {showAICalendar && <AICalendarModal key="modal-ai-calendar" onClose={() => setShowAICalendar(false)} calendarTasks={calendarTasks} setCalendarTasks={setCalendarTasks} />}
+                 {coachChatOpen && selectedCoach && (() => {
+                  // Banco de respuestas por coach con personalidad real
+                  const COACH_PERSONALITIES = {
+                    sophia: {
+                      greet: `Hola 🌙 Soy Sophia. Entiendo la presión que sentís con el colegio, las expectativas y esa sensación de que nunca es suficiente. Estoy aquí para acompañarte, sin juzgarte. ¿Qué te tiene agobiada/o hoy?`,
+                      keywords: {
+                        ansiedad: [`Respiremos. Esa sensación de agobio que sentís es real, no te estás inventando nada. 💙 Pero acordate: no podés controlarlo todo. ¿Qué es lo único que podés hacer hoy, por pequeño que sea?`, `La ansiedad miente. Te dice que todo es urgente, que todo puede salir mal. Preguntate: "¿Qué es lo peor que podría pasar realmente?" Casi nunca es tan grave como parece.`, `Cuando la ansiedad aparece, tu cerebro entra en modo supervivencia. Un truco: nómbra 5 cosas que ves, 4 que tocás, 3 que escuchás. Esto te regresa al presente.`],
+                        instagram: [`Esa comparación que sentís cuando ves Instagram es completamente normal. Pero recordá: estás viendo los mejores 3 segundos de la vida de alguien, no su realidad completa. 📸`, `¿Sabías que el 70% de lo que ves en Instagram es contenido diseñado específicamente para hacerte sentir menos? No es tu inseguridad, es el algoritmo haciendo su trabajo.`, `Un ejercicio: la próxima vez que abras Insta y sientas esa punzada de "ellos tienen más", cerrá la app y escribí una cosa en la que vos mejoraste esta semana.`],
+                        notas: [`Las notas son importantes, pero no son lo único importante. Son una foto de un momento, no una definición de quién sos. 📚`, `Si las notas te están aplastando, hagamos algo simple: dividí el material en partes del tamaño de un bocado. Una página. Un concepto. No la materia entera.`, `¿Estudiaste hoy aunque sea 15 minutos? Eso cuenta. La constancia pequeña gana a la intensidad esporádica. Siempre.`],
+                        default: [`Entiendo. La presión académica es real y te agota emocionalmente, no solo mentalmente. ¿Qué es lo que más te está costando en este momento?`, `Date permiso de no tenerlo todo resuelto. La perfección es una trampa que paraliza más de lo que ayuda. ¿Qué es lo que podría estar "suficientemente bien" hoy?`, `A veces la mejor estrategia es empezar por la tarea más pequeña de tu lista. No la más importante. La más pequeña. Y ver cómo eso te da impulso para seguir.`]
+                      }
+                    },
+                    icaro: {
+                      greet: `¡Buenas! 🔥 Soy Ícaro. Sé perfectamente lo que es el TikTok infinito, las ganas de hacer algo pero no arrancar nunca. No vengo a darte un sermón, vengo a darte el empujón. ¿Qué tenés que hacer y no estás haciendo?`,
+                      keywords: {
+                        tiktok: [`Eso que sentís cuando cerrás TikTok y no recordás qué viste es exactamente tu dopamina volviendo al piso. Tu cerebro fue secuestrado. Ahora vamos a recuperarlo. 5-4-3-2-1, ¡arrancá!`, `El algoritmo de TikTok fue diseñado por los mejores ingenieros del mundo para que no puedas parar. No es debilidad tuya. Pero podés hackear el sistema: borrá la app por 72 horas. Solo 72 horas.`, `Cada video corto que rechazás hoy es literalmente una sinapsis más fuerte mañana. Tu cerebro se puede reparar. Pero necesita que vos le des la oportunidad.`],
+                        procrastinar: [`Procrastinar no es pereza, es miedo disfrazado. Miedo a que no quede bien, a que sea difícil, a fallar. ¿De qué estás huyendo exactamente?`, `Regla de los 2 minutos: si algo tarda menos de 2 minutos, hacelo AHORA. Si tarda más, poné un temporizador de 5 minutos y empezá igual. Casi nunca parás a los 5 minutos.`, `Tu cerebro busca el camino de menor resistencia. Las apps le dan placer instantáneo. El estudio requiere esfuerzo. La solución: poné el cel en otra habitación. Literalmente en otra habitación.`],
+                        motivacion: [`La motivación es un mito. Los campeones no esperan estar motivados, actúan aunque no tengan ganas. La acción crea motivación, no al revés. Empezá aunque sea un minuto.`, `¿Por qué querés mejorar? No me digas "para sacar buenas notas". Decime el por qué de verdad. Esa razón profunda es tu combustible cuando la motivación falla.`, `Cada vez que hacés algo difícil cuando no tenés ganas, te estás demostrando a vos mismo que podés. Esa confianza se acumula. Arranqué ya, aunque sea mal.`],
+                        default: [`Pará. ¿Cuánto tiempo llevas "pensando en empezar"? Ese tiempo ya es tiempo perdido. La acción imperfecta siempre gana a la inacción perfecta. ¿Qué hacés en los próximos 5 minutos?`, `Dale, contame. ¿Cuál es la excusa de hoy? Porque yo ya escuché todas y tengo respuesta para cada una. 😤`, `No te pido que hagas todo. Te pido que hagas UNA cosa. ¿Cuál es la cosa más pequeña que podés hacer ahora mismo hacia tu objetivo?`]
+                      }
+                    },
+                    atlas: {
+                      greet: `¡Hola! 📚 Soy Atlas. Sé que sos competitivo y que YouTube y los juegos son más divertidos que estudiar. Pero hay una forma de usar esa mentalidad gamer para dominar cualquier materia. ¿Qué querés mejorar?`,
+                      keywords: {
+                        youtube: [`YouTube no es el problema si lo usás bien. El 90% lo usa para entretenimiento. El 10% lo usa para aprender habilidades reales. ¿En qué grupo querés estar?`, `Subscripción nueva: busca "Khan Academy" o "[materia que estudias] explained" en YouTube. Convertí tu tiempo de consumo en tiempo de aprendizaje. Mismo tiempo, diferente resultado.`, `Truco de gamer para YouTube: usá el modo de velocidad 1.5x para videos educativos. Aprendés más en menos tiempo. Tu cerebro se adapta en 10 minutos.`],
+                        videojuegos: [`Los mejores gamers del mundo también estudian sus errores, leen guías, practican mecánicas. Esa mentalidad de mejora constante que tenés para los juegos... llevala al colegio.`, `En los juegos, cada nivel desbloqueado es XP acumulada. El colegio funciona igual: cada concepto que dominás desbloquea el siguiente. ¿Cuál es el "boss level" que necesitás derrotar esta semana?`, `¿Cuántas horas pusiste en ese juego hasta dominarlo? Aplicá ese mismo principio de repetición deliberada a la materia que más te cuesta. Los resultados te van a sorprender.`],
+                        concentracion: [`El estado de flow que sentís cuando estás metido en un juego y el tiempo vuela existe también para el estudio. La clave: sin notificaciones, sin multitarea, tarea clara y desafiante pero alcanzable.`, `Para entrar en modo concentración: 1) Poné el cel en modo avión. 2) Cerrá todas las pestañas innecesarias. 3) Poné música instrumental. 4) Empezá con la tarea más difícil mientras tu energía está alta.`, `Las interrupciones son el enemigo número 1 del rendimiento cognitivo. Cada notificación te saca del estado de flujo y tardás 23 minutos en volver. ¿Cuántas notificaciones recibís por hora?`],
+                        default: [`Analicemos tu situación tácticamente. ¿Cuáles son tus materias más fuertes? ¿Cuáles son las más débiles? Con esa información podemos diseñar un plan de ataque real.`, `En todo juego hay estrategia. El estudio también la tiene. ¿Estás estudiando sin estrategia o con una? Porque la diferencia en resultados es enorme.`, `Los mejores en cualquier campo tienen rutinas. ¿Cuál es tu rutina de estudio actual? Dímela y te digo qué le falta o qué sobra.`]
+                      }
+                    },
+                    vento: {
+                      greet: `Hola 💬 Soy Vento. Entiendo que el FOMO es real, que las rachas de Snap te generan ansiedad y que sentís que si no estás conectado te perdés de todo. Pero hay una mejor forma de relacionarte. ¿Qué es lo que más te cuesta?`,
+                      keywords: {
+                        fomo: [`El FOMO es un producto diseñado por las redes sociales. Te venden la idea de que siempre hay algo mejor pasando en otro lado. La realidad: el 90% de las historias son de gente aburrida fingiendo que no lo está.`, `Experimento: La próxima vez que abras Instagram por FOMO, preguntate "¿Qué información concreta y útil voy a buscar?" Si no tenés respuesta, cerrá la app.`, `La gente con quien realmente vale la pena relacionarse no va a excluirte de nada importante por estar 2 horas sin mirar el cel. Si lo hacen, esa es una señal de la calidad de esa amistad.`],
+                        snapchat: [`Las rachas de Snapchat te tienen de rehén. Pero una relación basada en un número de días seguidos enviando algo no es una amistad real, es un número en una app.`, `¿Qué pasa si dejás morir una racha? En el peor caso, perdés un número. En el mejor caso, descubrís cuáles amigos realmente se preocupan por vos más allá del jueguito.`, `El diseño de las rachas es deliberado: generarte ansiedad de perderlas para que entres a la app todos los días. Es manipulación psicológica. Sabelo y actuá en consecuencia.`],
+                        amigos: [`Hay una diferencia entre amigos digitales y amigos reales. Los reales saben tu cumpleaños sin que Instagram se los recuerde. ¿Cuántos de esos tenés?`, `Una conexión real de 30 minutos cara a cara vale más que 200 mensajes de texto al día. Las redes sociales te dan la ilusión de conexión sin el nutritivo de verdad.`, `¿Cuándo fue la última vez que hiciste algo en persona con alguien que te importa, sin teléfonos? Ese es el tipo de conexión que te recarga de verdad.`],
+                        default: [`No tenés que estar disponible las 24 horas. Eso no te hace mal amigo/a, te hace una persona con límites saludables. Y eso es admirable, no egoísta.`, `Ponerte como prioridad no es ser egocéntrico. Es necesario. No podés dar lo mejor de vos a los demás si vos mismo estás agotado por estar siempre conectado.`, `¿Qué pasaría si avisaras a tus amigos que vas a estar desconectado estudiando por 2 horas? Los que te importan lo van a entender. Los que no lo entienden te están dando información valiosa.`]
+                      }
+                    }
+                  };
+
+                  const personality = COACH_PERSONALITIES[selectedCoach.id];
+                  const scrollRef = React.createRef();
+
+                  const getCoachResponse = (userText) => {
+                    const lower = userText.toLowerCase();
+                    const kws = personality.keywords;
+                    for (const [key, responses] of Object.entries(kws)) {
+                      if (key !== 'default' && lower.includes(key)) {
+                        return responses[Math.floor(Math.random() * responses.length)];
+                      }
+                    }
+                    const extraMatches = {
+                      sophia: { nota: 'notas', examen: 'notas', cole: 'notas', ansiosa: 'ansiedad', estresada: 'ansiedad', insta: 'instagram', foto: 'instagram' },
+                      icaro: { tikto: 'tiktok', procrastin: 'procrastinar', aburri: 'motivacion', cansa: 'motivacion', ganas: 'motivacion' },
+                      atlas: { youtu: 'youtube', jueg: 'videojuegos', game: 'videojuegos', concentr: 'concentracion', distra: 'concentracion' },
+                      vento: { racha: 'snapchat', snap: 'snapchat', fomo: 'fomo', perderm: 'fomo', amig: 'amigos', grup: 'amigos' }
+                    };
+                    const extras = extraMatches[selectedCoach.id] || {};
+                    for (const [partial, key] of Object.entries(extras)) {
+                      if (lower.includes(partial) && kws[key]) {
+                        return kws[key][Math.floor(Math.random() * kws[key].length)];
+                      }
+                    }
+                    return kws.default[Math.floor(Math.random() * kws.default.length)];
+                  };
+
+                  const initMessages = coachMessages.length === 0
+                    ? [{ id: 0, text: personality.greet, sender: 'coach' }]
+                    : coachMessages;
+
+                  const handleSend = () => {
+                    if (!coachInput.trim()) return;
+                    const userMsg = { id: Date.now(), text: coachInput, sender: 'user' };
+                    const replyText = getCoachResponse(coachInput);
+                    const coachReply = { id: Date.now() + 1, text: replyText, sender: 'coach' };
+                    setCoachMessages(prev => [
+                      ...(prev.length === 0 ? [{ id: 0, text: personality.greet, sender: 'coach' }] : prev),
+                      userMsg, coachReply
+                    ]);
+                    setCoachInput('');
+                  };
+
+                  return (
+                    <motion.div
+                      key="coach-chat"
+                      initial={{ opacity: 0, y: '100%' }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: '100%' }}
+                      transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                      className="absolute inset-0 z-[200] flex flex-col"
+                      style={{ background: 'linear-gradient(to bottom, #050505, #0a0a0a)' }}
+                    >
+                      {/* Header */}
+                      <div className="px-5 pt-14 pb-4 border-b border-white/10 flex items-center gap-4 shrink-0 bg-black/60 backdrop-blur-md">
+                        <button
+                          onClick={() => setCoachChatOpen(false)}
+                          className="p-2.5 -ml-1 bg-white/5 hover:bg-white/10 rounded-full transition-colors border border-white/10"
+                        >
+                          <ChevronLeft size={20} className="text-white" />
+                        </button>
+                        <div className="text-3xl">{selectedCoach.icon}</div>
+                        <div className="flex-1 min-w-0">
+                          <h2 className="text-sm font-black uppercase tracking-tight text-white">{selectedCoach.name}</h2>
+                          <span className="text-[9px] font-black text-green-400 uppercase tracking-widest">● En línea · Coach IA</span>
+                        </div>
+                      </div>
+
+                      {/* Messages area */}
+                      <div
+                        ref={scrollRef}
+                        className="flex-1 overflow-y-auto p-5 flex flex-col gap-4 custom-scroll"
+                        style={{ scrollbarWidth: 'none' }}
+                      >
+                        {initMessages.map(msg => (
+                          <motion.div
+                            key={msg.id}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                          >
+                            {msg.sender === 'coach' && (
+                              <div className="w-8 h-8 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-lg mr-2 shrink-0 mt-1">
+                                {selectedCoach.icon}
+                              </div>
+                            )}
+                            <div className={`px-4 py-3 rounded-[20px] max-w-[78%] shadow-md ${
+                              msg.sender === 'user'
+                                ? 'bg-white text-black rounded-tr-sm'
+                                : 'bg-white/10 text-white rounded-tl-sm border border-white/10'
+                            }`}>
+                              <p className="text-[12px] font-medium leading-relaxed">{msg.text}</p>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+
+                      {/* Input area */}
+                      <div className="px-4 pt-3 pb-8 bg-black/80 border-t border-white/10 shrink-0 backdrop-blur-md">
+                        <div className="flex gap-3 items-center">
+                          <input
+                            value={coachInput}
+                            onChange={e => setCoachInput(e.target.value)}
+                            onKeyDown={e => { if (e.key === 'Enter') handleSend(); }}
+                            placeholder={`Habla con ${selectedCoach.name}...`}
+                            className="flex-1 bg-white/5 border border-white/10 rounded-full px-5 py-3.5 text-[12px] font-medium text-white placeholder:text-white/30 outline-none focus:border-white/30 transition-colors"
+                          />
+                          <button
+                            onClick={handleSend}
+                            className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shrink-0 hover:scale-105 active:scale-95 transition-all shadow-lg"
+                          >
+                            <Send size={16} className="ml-0.5" />
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })()}
               </AnimatePresence>
             </motion.div>
           )}
