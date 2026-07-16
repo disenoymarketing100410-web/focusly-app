@@ -5,6 +5,11 @@ body {
   color: white;
   font-family: 'Inter', sans-serif;
   overflow: hidden;
+  transition: background-color 1000ms ease;
+}
+
+body.theme-light-active {
+  background-color: #f1f5f9;
 }
 
 /* Scrollbar personalizada */
@@ -23,3 +28,156 @@ body {
   background: rgba(255, 255, 255, 0.3);
 }
 input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active { -webkit-box-shadow: 0 0 0 30px #0c0c0c inset !important; -webkit-text-fill-color: white !important; transition: background-color 5000s ease-in-out 0s; }
+
+/* ==========================================
+   LIGHT MODE CUSTOM OVERRIDES
+   ========================================== */
+
+.theme-light {
+  color: #1e293b !important;
+}
+
+/* Force standard dark text for text-white elements */
+.theme-light .text-white,
+.theme-light h1,
+.theme-light h2,
+.theme-light h3,
+.theme-light h4,
+.theme-light h5,
+.theme-light h6 {
+  color: #0f172a !important;
+}
+
+/* Semi-dark labels and muted text */
+.theme-light .text-white\/60,
+.theme-light .text-white\/70,
+.theme-light .text-white\/80,
+.theme-light .text-slate-400,
+.theme-light .text-gray-400,
+.theme-light .text-zinc-400,
+.theme-light .text-neutral-400 {
+  color: #475569 !important;
+}
+
+.theme-light .text-white\/40,
+.theme-light .text-white\/50,
+.theme-light .text-slate-500,
+.theme-light .text-gray-500,
+.theme-light .text-zinc-500 {
+  color: #64748b !important;
+}
+
+.theme-light .text-white\/20,
+.theme-light .text-white\/30,
+.theme-light .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+/* Card components, lists and containers */
+.theme-light .bg-white\/5,
+.theme-light .bg-white\/10,
+.theme-light .bg-neutral-900\/80,
+.theme-light .bg-black\/40,
+.theme-light .bg-black\/50,
+.theme-light .bg-black\/60,
+.theme-light .bg-black\/30,
+.theme-light .bg-neutral-900 {
+  background-color: rgba(255, 255, 255, 0.75) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Solid background containers/modals */
+.theme-light .bg-neutral-950,
+.theme-light .bg-slate-950,
+.theme-light .bg-slate-900,
+.theme-light .bg-neutral-900,
+.theme-light .bg-black,
+.theme-light .bg-\[\#050505\] {
+  background-color: #ffffff !important;
+}
+
+/* Border styles */
+.theme-light .border-white\/5,
+.theme-light .border-white\/10,
+.theme-light .border-white\/20,
+.theme-light .border-white\/30,
+.theme-light .border-neutral-800 {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Hover and interaction states */
+.theme-light .hover\:bg-white\/5:hover,
+.theme-light .hover\:bg-white\/10:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+.theme-light .hover\:bg-white\/20:hover {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Specific elements & inputs */
+.theme-light input,
+.theme-light textarea {
+  color: #0f172a !important;
+  background-color: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.theme-light input::placeholder,
+.theme-light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Customize SVG icons inside light mode when they are not customized otherwise */
+.theme-light svg:not(.text-yellow-400):not(.text-indigo-500):not(.text-yellow-500):not(.text-red-500):not(.text-emerald-500):not(.text-blue-500):not(.text-green-500):not(.text-purple-500):not(.text-pink-500):not(.text-cyan-500) {
+  color: #334155;
+}
+
+.theme-light .text-white svg {
+  color: #0f172a !important;
+}
+
+/* Scrollbar adjustment */
+.theme-light .custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12) !important;
+}
+
+.theme-light .custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Light mode: only remove colored glows on glow-specific elements */
+.theme-light .shadow-\[0_0_20px_red\],
+.theme-light .shadow-\[0_0_150px_rgba\(0\,0\,0\,1\)\] {
+  box-shadow: none !important;
+}
+
+/* Replace black gradients/overlays with soft/transparent ones in light mode */
+.theme-light .bg-gradient-to-b,
+.theme-light .bg-gradient-to-t,
+.theme-light .bg-gradient-to-r,
+.theme-light .bg-gradient-to-l {
+  --tw-gradient-from: transparent !important;
+  --tw-gradient-to: transparent !important;
+  --tw-gradient-stops: transparent, transparent !important;
+  background-image: none !important;
+}
+
+/* Specific overlay fixes for headers and cover images */
+.theme-light .bg-gradient-to-b.from-black\/80,
+.theme-light .bg-gradient-to-b.from-black\/90,
+.theme-light .bg-gradient-to-b.from-black {
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0)) !important;
+}
+
+.theme-light .bg-gradient-to-t.from-black,
+.theme-light .bg-gradient-to-t.from-black\/40 {
+  background-image: linear-gradient(to top, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)) !important;
+}
+
+/* Fix header borders */
+.theme-light .border-white\/10,
+.theme-light .border-white\/5 {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}

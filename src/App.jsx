@@ -7,8 +7,28 @@ import {
   Shield, Flame, Crown, Lock, Calendar, ArrowRight, Gem, MoreVertical,
   Send, Paperclip, Smile, Trophy, ArrowDown, Minus, Play, TrendingUp,
   Target, Zap, Award, Medal, Clock, Brain, BookOpen, Gamepad2, X, RefreshCw,
-  Image as ImageIcon, Edit2, LayoutGrid, Activity, Sparkles, Star, ChevronRight, Info, Palette, ChevronDown
+  Image as ImageIcon, Edit2, LayoutGrid, Activity, Sparkles, Star, ChevronRight, Info, Palette, ChevronDown, Trash2
 } from 'lucide-react';
+
+// Error Boundary: evita pantalla en blanco ante cualquier crash de React
+class ErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { hasError: false, error: null }; }
+  static getDerivedStateFromError(error) { return { hasError: true, error }; }
+  componentDidCatch(error, info) { console.error('[Focusly ErrorBoundary]', error, info); }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#050505', color: '#fff', fontFamily: 'sans-serif', padding: '2rem', textAlign: 'center', gap: '1rem' }}>
+          <span style={{ fontSize: '3rem' }}>⚠️</span>
+          <h2 style={{ fontWeight: 900, fontSize: '1.2rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Algo salió mal</h2>
+          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem', maxWidth: '300px' }}>{String(this.state.error?.message || 'Error desconocido')}</p>
+          <button onClick={() => window.location.reload()} style={{ marginTop: '1rem', padding: '0.75rem 2rem', borderRadius: '999px', background: 'white', color: 'black', fontWeight: 900, fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', border: 'none', cursor: 'pointer' }}>Recargar App</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const UI_TEXT = {
   es: {
@@ -222,7 +242,7 @@ const BACKGROUNDS = {
   bg_ocean: { id: 'bg_ocean', name: 'Abismo Oceánico', css: 'bg-gradient-to-b from-[#000b18] to-[#000000]', themeProps: { navBg: 'bg-[#001429]', navBorder: 'border-cyan-500/30', navGlow: 'shadow-[0_0_25px_rgba(6,182,212,0.2)]' }, img: 'animated', rarity: 'epic', price: 450, desc: 'La presión de las profundidades forja diamantes. Ideal para concentración extrema.' },
   bg_nebula: { id: 'bg_nebula', name: 'Nebulosa Cósmica', css: 'bg-gradient-to-br from-[#120524] to-[#000000]', themeProps: { navBg: 'bg-[#1a0b2e]', navBorder: 'border-purple-500/40', navGlow: 'shadow-[0_0_25px_rgba(168,85,247,0.2)]' }, img: 'animated', rarity: 'legendary', price: 800, desc: 'Un viaje por las estrellas oscuras. Tu disciplina expande la galaxia. Activa el campo estelar.' },
   bg_inferno: { id: 'bg_inferno', name: 'Foso Infernal', css: 'bg-gradient-to-t from-[#2a0000] to-[#000000]', themeProps: { navBg: 'bg-[#2a0000]', navBorder: 'border-red-500/50', navGlow: 'shadow-[0_0_30px_rgba(239,68,68,0.3)]', isAgresive: true }, img: 'animated', rarity: 'mythic', price: 1500, desc: 'Solo para voluntades forjadas en el fuego más intenso. El entorno reacciona con llamas a tu progreso.' },
-  bg_light: { id: 'bg_light', name: 'Luz Diurna', css: 'bg-gradient-to-b from-[#f8fafc] to-[#e2e8f0]', themeProps: { navBg: 'bg-[#000000]', navBorder: 'border-white/10', navGlow: 'shadow-[0_0_30px_rgba(0,0,0,0.2)]' }, img: 'animated', rarity: 'common', price: 0, desc: 'Claridad mental pura. Un entorno diurno manteniendo la oscuridad en tu centro de operaciones. ¡Gratis!' }
+  bg_light: { id: 'bg_light', name: 'Luz Diurna', css: 'bg-gradient-to-b from-[#f8fafc] to-[#e2e8f0]', themeProps: { navBg: 'bg-white/80', navBorder: 'border-black/5', navGlow: 'shadow-[0_10px_30px_rgba(0,0,0,0.05)]', isLight: true }, img: 'animated', rarity: 'common', price: 0, desc: 'Claridad mental pura. Un entorno diurno manteniendo la oscuridad en tu centro de operaciones. ¡Gratis!' }
 };
 
 const LEVELS = [
@@ -1893,7 +1913,7 @@ const ClashCardModal = ({ item, userDiamonds, onClose, onAction, inventory, isSh
   const rarity = RARITIES[item.rarity];
   const isOwned = inventory.avatars.includes(item.id);
   const isEquipped = inventory.equippedAvatar === item.id;
-  const activeSkinId = previewSkinId || inventory.equippedSkins[item.id] || null;
+  const activeSkinId = previewSkinId || inventory.equippedSkins?.[item.id] || null;
   const activeSkinData = activeSkinId ? ALL_SKINS.find(s => s.id === activeSkinId) : null;
   const canAfford = userDiamonds >= item.price;
 
@@ -1993,11 +2013,11 @@ const ClashCardModal = ({ item, userDiamonds, onClose, onAction, inventory, isSh
                 <div onClick={() => setPreviewSkin(null)} className={`min-w-[80px] bg-[#020c1b] border-2 rounded-xl p-2 cursor-pointer transition-colors ${previewSkinId === null ? 'border-blue-500 bg-blue-900/20' : 'border-white/5 hover:border-white/20'} flex flex-col items-center text-center`}>
                   <div className="w-10 h-10 mb-2"><AvatarDisplay id={item.id} src={item.img} className="w-full h-full" freeStanding={true} /></div>
                   <span className="text-[8px] font-black uppercase text-white/80">Original</span>
-                  {inventory.equippedSkins[item.id] === undefined || inventory.equippedSkins[item.id] === null ? <Check size={10} className="text-green-500 mt-1" /> : null}
+                  {inventory.equippedSkins?.[item.id] === undefined || inventory.equippedSkins?.[item.id] === null ? <Check size={10} className="text-green-500 mt-1" /> : null}
                 </div>
                 {availableSkins.map(skin => {
                   const sOwned = inventory.skins.includes(skin.id);
-                  const sEquipped = inventory.equippedSkins[item.id] === skin.id;
+                  const sEquipped = inventory.equippedSkins?.[item.id] === skin.id;
                   const sActive = previewSkinId === skin.id;
                   return (
                     <div key={skin.id} onClick={() => setPreviewSkin(skin.id)} className={`min-w-[90px] bg-[#020c1b] border-2 rounded-xl p-2 cursor-pointer transition-colors ${sActive ? `border-[${RARITIES[skin.rarity].hex}] bg-white/5` : 'border-white/5 hover:border-white/20'} flex flex-col items-center text-center`}>
@@ -2011,13 +2031,13 @@ const ClashCardModal = ({ item, userDiamonds, onClose, onAction, inventory, isSh
               </div>
               <div className="mt-4">
                 {previewSkinId === null ? (
-                  <button onClick={() => onAction('equip_skin', { baseId: item.id, skinId: null })} disabled={!isOwned || inventory.equippedSkins[item.id] == null} className="w-full bg-[#1e293b] text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest disabled:opacity-50">Equipar Original</button>
+                  <button onClick={() => onAction('equip_skin', { baseId: item.id, skinId: null })} disabled={!isOwned || inventory.equippedSkins?.[item.id] == null} className="w-full bg-[#1e293b] text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest disabled:opacity-50">Equipar Original</button>
                 ) : (
                   (() => {
                     const s = ALL_SKINS.find(x => x.id === previewSkinId);
                     const sOwned = inventory.skins.includes(s.id);
                     if (sOwned) {
-                      return <button onClick={() => onAction('equip_skin', { baseId: item.id, skinId: s.id })} disabled={inventory.equippedSkins[item.id] === s.id} className="w-full bg-blue-600 text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest disabled:bg-[#1e293b] disabled:text-green-500">Equipar Aspecto</button>
+                      return <button onClick={() => onAction('equip_skin', { baseId: item.id, skinId: s.id })} disabled={inventory.equippedSkins?.[item.id] === s.id} className="w-full bg-blue-600 text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest disabled:bg-[#1e293b] disabled:text-green-500">Equipar Aspecto</button>
                     } else {
                       return <button onClick={() => handleSkinAction(s)} disabled={!isOwned || userDiamonds < s.price} className="w-full bg-blue-600 text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 disabled:bg-[#1e293b] disabled:text-white/30">
                         {isOwned ? `Comprar por ${s.price}` : 'Requiere Personaje'} <Gem size={12} />
@@ -2679,13 +2699,285 @@ const ShopView = ({ userDiamonds, onSelectItem, inventory }) => {
   );
 };
 
-const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, completedCount, activityLog, selectedApps, setSelectedApps, lang, setLang, userEmail, isAnonymous, onSignOut, onLinkAccount }) => {
+
+// --- MODAL: ESTADÍSTICAS ---
+const StatsModal = ({ onClose, calendarTasks, completedCount, userXP }) => {
+  const habits = (calendarTasks || []).filter(t => t.isHabit);
+  const todayStr = new Date().toISOString().split('T')[0];
+  const completedToday = habits.filter(h => h.completedDates?.includes(todayStr));
+  const maxStreak = habits.reduce((max, h) => Math.max(max, h.streak || 0), 0);
+  const totalStreaks = habits.reduce((sum, h) => sum + (h.streak || 0), 0);
+  const compliance = habits.length > 0 ? Math.round((completedToday.length / habits.length) * 100) : 0;
+  const last7 = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(); d.setDate(d.getDate() - (6 - i));
+    const key = d.toISOString().split('T')[0];
+    return { label: ['D','L','M','X','J','V','S'][d.getDay()], count: habits.filter(h => h.completedDates?.includes(key)).length, max: habits.length || 1 };
+  });
+  const last30 = Array.from({ length: 30 }, (_, i) => {
+    const d = new Date(); d.setDate(d.getDate() - (29 - i));
+    const key = d.toISOString().split('T')[0];
+    return { key, count: habits.filter(h => h.completedDates?.includes(key)).length, max: habits.length || 1 };
+  });
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-[300] bg-black/95 backdrop-blur-xl flex flex-col overflow-hidden">
+      <div className="px-6 pt-14 pb-5 flex items-center justify-between border-b border-white/10 shrink-0">
+        <div>
+          <p className="text-[9px] font-black tracking-[0.2em] text-white/30 uppercase mb-1">Tu Progreso</p>
+          <h2 className="text-2xl font-black uppercase tracking-tight text-white">Estadísticas</h2>
+        </div>
+        <button onClick={onClose} className="w-10 h-10 bg-white/5 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"><X size={18} className="text-white" /></button>
+      </div>
+      <div className="flex-1 overflow-y-auto px-6 py-6 custom-scroll space-y-5">
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { label: 'Hábitos Creados', value: habits.length, icon: '📋', color: 'from-blue-900/60 to-indigo-900/60', border: 'border-blue-500/20' },
+            { label: 'Completados Hoy', value: completedToday.length, icon: '✅', color: 'from-emerald-900/60 to-teal-900/60', border: 'border-emerald-500/20' },
+            { label: 'Cumplimiento', value: `${compliance}%`, icon: '🎯', color: 'from-purple-900/60 to-violet-900/60', border: 'border-purple-500/20' },
+            { label: 'Racha Máxima', value: `${maxStreak}d`, icon: '🔥', color: 'from-orange-900/60 to-red-900/60', border: 'border-orange-500/20' },
+            { label: 'Rachas Totales', value: totalStreaks, icon: '⚡', color: 'from-yellow-900/60 to-amber-900/60', border: 'border-yellow-500/20' },
+            { label: 'Desafíos', value: completedCount || 0, icon: '🏆', color: 'from-pink-900/60 to-rose-900/60', border: 'border-pink-500/20' },
+          ].map((m, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className={`bg-gradient-to-br ${m.color} border ${m.border} rounded-[20px] p-4`}>
+              <div className="text-xl mb-2">{m.icon}</div>
+              <div className="text-2xl font-black text-white">{m.value}</div>
+              <div className="text-[8px] font-black uppercase tracking-widest text-white/40 mt-1">{m.label}</div>
+            </motion.div>
+          ))}
+        </div>
+        <div className="bg-white/5 border border-white/10 rounded-[24px] p-5">
+          <h4 className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-4">Actividad Últimos 7 Días</h4>
+          <div className="flex items-end gap-2 h-20">
+            {last7.map((d, i) => (
+              <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                <div className="w-full rounded-t-md relative" style={{ height: '60px', background: 'rgba(255,255,255,0.05)' }}>
+                  <motion.div initial={{ height: 0 }} animate={{ height: `${d.max > 0 ? Math.max(4, Math.round((d.count / d.max) * 100)) : 4}%` }} transition={{ delay: i * 0.06, duration: 0.5 }} className="absolute bottom-0 left-0 right-0 rounded-t-md bg-gradient-to-t from-[#8ab4f8] to-[#a78bfa]" />
+                </div>
+                <span className="text-[7px] font-black text-white/30 uppercase">{d.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="bg-white/5 border border-white/10 rounded-[24px] p-5">
+          <h4 className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-4">Actividad Últimos 30 Días</h4>
+          <div className="flex flex-wrap gap-1.5">
+            {last30.map((d, i) => {
+              const opacity = d.max > 0 && d.count > 0 ? Math.min(1, 0.25 + (d.count / d.max) * 0.75) : 0.05;
+              return <motion.div key={i} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: i * 0.01 }} className="w-7 h-7 rounded-md" style={{ background: `rgba(138,180,248,${opacity})` }} title={`${d.count} hábitos`} />;
+            })}
+          </div>
+        </div>
+        <div className="bg-gradient-to-br from-indigo-900/60 to-purple-900/60 border border-indigo-500/20 rounded-[24px] p-5">
+          <h4 className="text-[10px] font-black uppercase tracking-widest text-[#8ab4f8] mb-4">Resumen General</h4>
+          <div className="space-y-3 mb-4">
+            <div className="flex justify-between items-center"><span className="text-[11px] font-semibold text-white/60">Días activos (último mes)</span><span className="text-[11px] font-black text-white">{last30.filter(d => d.count > 0).length} / 30</span></div>
+            <div className="flex justify-between items-center"><span className="text-[11px] font-semibold text-white/60">XP Total</span><span className="text-[11px] font-black text-[#8ab4f8]">{userXP}</span></div>
+            <div className="flex justify-between items-center"><span className="text-[11px] font-semibold text-white/60">Objetivos alcanzados</span><span className="text-[11px] font-black text-emerald-400">{completedCount || 0}</span></div>
+          </div>
+          <div className="h-2 bg-black/30 rounded-full overflow-hidden mb-1">
+            <motion.div initial={{ width: 0 }} animate={{ width: `${compliance}%` }} transition={{ duration: 1, ease: 'easeOut' }} className="h-full bg-gradient-to-r from-[#8ab4f8] to-[#a78bfa] rounded-full" />
+          </div>
+          <div className="flex justify-between">
+            <span className="text-[8px] text-white/30 font-bold">0%</span>
+            <span className="text-[8px] text-white/40 font-black">Cumplimiento: {compliance}%</span>
+            <span className="text-[8px] text-white/30 font-bold">100%</span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// --- MODAL: CREAR HÁBITO ---
+const CreateHabitModal = ({ onClose, onAdd }) => {
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
+  const [category, setCategory] = useState('salud');
+  const [frequency, setFrequency] = useState('diario');
+  const [difficulty, setDifficulty] = useState('medio');
+  const categories = [
+    { id: 'salud', label: 'Salud', icon: '💪' }, { id: 'mente', label: 'Mente', icon: '🧠' },
+    { id: 'social', label: 'Social', icon: '💬' }, { id: 'estudio', label: 'Estudio', icon: '📚' },
+    { id: 'deporte', label: 'Deporte', icon: '🏃' }, { id: 'creatividad', label: 'Creatividad', icon: '🎨' },
+  ];
+  const difficulties = [
+    { id: 'facil', label: 'Fácil', xp: 10 }, { id: 'medio', label: 'Medio', xp: 25 }, { id: 'dificil', label: 'Difícil', xp: 50 },
+  ];
+  const handleAdd = () => {
+    if (!title.trim()) return;
+    const cat = categories.find(c => c.id === category);
+    const diff = difficulties.find(d => d.id === difficulty);
+    onAdd({ id: `habit_${Date.now()}`, title: title.trim(), desc: desc.trim(), category, categoryIcon: cat?.icon || '📋', frequency, difficulty, xpReward: diff?.xp || 25, streak: 0, completedDates: [], isHabit: true });
+    onClose();
+  };
+  return (
+    <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 60 }} className="absolute inset-0 z-[300] bg-black/95 backdrop-blur-xl flex flex-col overflow-hidden">
+      <div className="px-6 pt-14 pb-5 flex items-center justify-between border-b border-white/10 shrink-0">
+        <div><p className="text-[9px] font-black tracking-[0.2em] text-white/30 uppercase mb-1">Nuevo</p><h2 className="text-2xl font-black uppercase tracking-tight text-white">Crear Hábito</h2></div>
+        <button onClick={onClose} className="w-10 h-10 bg-white/5 rounded-full border border-white/10 flex items-center justify-center"><X size={18} className="text-white" /></button>
+      </div>
+      <div className="flex-1 overflow-y-auto px-6 py-6 custom-scroll space-y-5">
+        <div>
+          <label className="text-[9px] font-black uppercase tracking-widest text-white/40 block mb-2">Nombre del Hábito</label>
+          <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Ej: Leer 30 minutos..." className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3.5 text-[13px] font-medium text-white placeholder:text-white/20 outline-none focus:border-white/30 transition-colors" />
+        </div>
+        <div>
+          <label className="text-[9px] font-black uppercase tracking-widest text-white/40 block mb-2">Descripción (opcional)</label>
+          <textarea value={desc} onChange={e => setDesc(e.target.value)} placeholder="¿Por qué quieres este hábito?" rows={2} className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3.5 text-[13px] font-medium text-white placeholder:text-white/20 outline-none focus:border-white/30 transition-colors resize-none" />
+        </div>
+        <div>
+          <label className="text-[9px] font-black uppercase tracking-widest text-white/40 block mb-2">Categoría</label>
+          <div className="grid grid-cols-3 gap-2">
+            {categories.map(cat => (
+              <button key={cat.id} onClick={() => setCategory(cat.id)} className={`py-3 rounded-2xl text-[8px] font-black uppercase tracking-wider border flex flex-col items-center gap-1 transition-all ${category === cat.id ? 'bg-white/20 border-white/40 text-white' : 'bg-white/5 border-white/10 text-white/40 hover:text-white'}`}>
+                <span className="text-lg">{cat.icon}</span>{cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label className="text-[9px] font-black uppercase tracking-widest text-white/40 block mb-2">Frecuencia</label>
+          <div className="flex gap-2">
+            {[{ id: 'diario', label: 'Diario' }, { id: 'semanal', label: 'Semanal' }, { id: 'personalizado', label: 'Custom' }].map(f => (
+              <button key={f.id} onClick={() => setFrequency(f.id)} className={`flex-1 py-3 rounded-2xl text-[8px] font-black uppercase tracking-wider border transition-all ${frequency === f.id ? 'bg-white text-black border-white' : 'bg-white/5 border-white/10 text-white/40 hover:text-white'}`}>{f.label}</button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label className="text-[9px] font-black uppercase tracking-widest text-white/40 block mb-2">Dificultad</label>
+          <div className="flex gap-2">
+            {difficulties.map(d => (
+              <button key={d.id} onClick={() => setDifficulty(d.id)} className={`flex-1 py-3 rounded-2xl text-[8px] font-black uppercase tracking-wider border transition-all flex flex-col items-center gap-0.5 ${difficulty === d.id ? 'bg-white text-black border-white' : 'bg-white/5 border-white/10 text-white/40 hover:text-white'}`}>
+                {d.label}<span className="text-[7px] font-black">+{d.xp} XP</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="px-6 pb-10 pt-4 shrink-0 border-t border-white/10">
+        <button onClick={handleAdd} disabled={!title.trim()} className={`w-full py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all ${title.trim() ? 'bg-white text-black hover:scale-[1.02] active:scale-[0.98] shadow-lg' : 'bg-white/10 text-white/30 cursor-not-allowed'}`}>Crear Hábito</button>
+      </div>
+    </motion.div>
+  );
+};
+
+// --- MODAL: PLAN IA DE HÁBITOS ---
+const AIHabitPlanModal = ({ onClose, onAddHabits }) => {
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedPlan, setGeneratedPlan] = useState(null);
+  const PLANS = [
+    { id: 'detox', name: 'Detox Digital', icon: '📵', desc: 'Reduce tu dependencia del teléfono.', color: 'from-purple-900/80 to-indigo-900/80', border: 'border-purple-500/30', habits: [
+      { title: 'Teléfono boca abajo 1h', category: 'mente', categoryIcon: '🧠', difficulty: 'facil', xpReward: 10, frequency: 'diario', desc: 'Sin mirar el teléfono durante una hora.' },
+      { title: 'Sin redes antes de las 9AM', category: 'mente', categoryIcon: '🧠', difficulty: 'medio', xpReward: 25, frequency: 'diario', desc: 'Empieza el día sin distracciones.' },
+      { title: '30 min sin pantallas antes de dormir', category: 'salud', categoryIcon: '💪', difficulty: 'medio', xpReward: 25, frequency: 'diario', desc: 'Mejora tu calidad de sueño.' },
+      { title: 'Un día sin TikTok/Instagram', category: 'mente', categoryIcon: '🧠', difficulty: 'dificil', xpReward: 50, frequency: 'semanal', desc: 'Un día completo sin redes de entretenimiento.' },
+    ]},
+    { id: 'academic', name: 'Enfoque Académico', icon: '📚', desc: 'Maximiza tu productividad estudiantil.', color: 'from-blue-900/80 to-cyan-900/80', border: 'border-blue-500/30', habits: [
+      { title: 'Pomodoro 25 min', category: 'estudio', categoryIcon: '📚', difficulty: 'facil', xpReward: 10, frequency: 'diario', desc: 'Estudia 25 minutos con concentración total.' },
+      { title: 'Repasar apuntes del día', category: 'estudio', categoryIcon: '📚', difficulty: 'facil', xpReward: 10, frequency: 'diario', desc: 'Consolida lo aprendido antes de dormir.' },
+      { title: 'Planificar tareas del día', category: 'estudio', categoryIcon: '📚', difficulty: 'facil', xpReward: 10, frequency: 'diario', desc: 'Organiza tu lista cada mañana.' },
+      { title: 'Leer 20 páginas', category: 'mente', categoryIcon: '🧠', difficulty: 'medio', xpReward: 25, frequency: 'diario', desc: 'Lee un libro de crecimiento personal.' },
+    ]},
+    { id: 'health', name: 'Salud y Energía', icon: '⚡', desc: 'Construye hábitos para rendir mejor.', color: 'from-emerald-900/80 to-teal-900/80', border: 'border-emerald-500/30', habits: [
+      { title: 'Beber 8 vasos de agua', category: 'salud', categoryIcon: '💪', difficulty: 'facil', xpReward: 10, frequency: 'diario', desc: 'Hidratación óptima para el cerebro.' },
+      { title: '30 min de ejercicio', category: 'deporte', categoryIcon: '🏃', difficulty: 'medio', xpReward: 25, frequency: 'diario', desc: 'Actividad física que mejora la concentración.' },
+      { title: 'Dormir 8 horas', category: 'salud', categoryIcon: '💪', difficulty: 'medio', xpReward: 25, frequency: 'diario', desc: 'El sueño es crucial para la memoria.' },
+      { title: 'Meditar 10 minutos', category: 'mente', categoryIcon: '🧠', difficulty: 'facil', xpReward: 10, frequency: 'diario', desc: 'Reduce el estrés y mejora el enfoque.' },
+    ]},
+  ];
+  const handleGenerate = (plan) => {
+    setIsGenerating(true);
+    setTimeout(() => { setIsGenerating(false); setGeneratedPlan(plan); }, 1800);
+  };
+  const handleAddAll = () => {
+    if (!generatedPlan) return;
+    onAddHabits(generatedPlan.habits.map(h => ({ ...h, id: `habit_${Date.now()}_${Math.random().toString(36).substr(2,5)}`, streak: 0, completedDates: [], isHabit: true })));
+    onClose();
+  };
+  return (
+    <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 60 }} className="absolute inset-0 z-[300] bg-black/95 backdrop-blur-xl flex flex-col overflow-hidden">
+      <div className="px-6 pt-14 pb-5 flex items-center justify-between border-b border-white/10 shrink-0">
+        <div><p className="text-[9px] font-black tracking-[0.2em] text-white/30 uppercase mb-1">Asistente IA</p><h2 className="text-2xl font-black uppercase tracking-tight text-white">Plan de Hábitos</h2></div>
+        <button onClick={onClose} className="w-10 h-10 bg-white/5 rounded-full border border-white/10 flex items-center justify-center"><X size={18} className="text-white" /></button>
+      </div>
+      <div className="flex-1 overflow-y-auto px-6 py-6 custom-scroll">
+        {!generatedPlan && !isGenerating && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+            <p className="text-[11px] text-white/50 font-medium leading-relaxed mb-2">Elige un objetivo y la IA generará un plan personalizado para ti.</p>
+            {PLANS.map(plan => (
+              <motion.button key={plan.id} whileTap={{ scale: 0.98 }} onClick={() => handleGenerate(plan)} className={`w-full bg-gradient-to-r ${plan.color} border ${plan.border} rounded-[24px] p-5 text-left`}>
+                <div className="flex items-center gap-4">
+                  <div className="text-4xl">{plan.icon}</div>
+                  <div>
+                    <h3 className="text-base font-black uppercase tracking-tight text-white">{plan.name}</h3>
+                    <p className="text-[10px] text-white/50 font-medium mt-1">{plan.desc}</p>
+                    <p className="text-[9px] text-white/30 font-black uppercase tracking-widest mt-1.5">{plan.habits.length} hábitos incluidos →</p>
+                  </div>
+                </div>
+              </motion.button>
+            ))}
+          </motion.div>
+        )}
+        {isGenerating && (
+          <div className="flex flex-col items-center justify-center h-64 gap-6">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}><Sparkles size={28} className="text-white" /></motion.div>
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-black uppercase tracking-tight text-white">Generando plan...</p>
+              <p className="text-[10px] text-white/40 font-medium mt-2">La IA está analizando tu perfil</p>
+            </div>
+          </div>
+        )}
+        {generatedPlan && !isGenerating && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="text-3xl">{generatedPlan.icon}</div>
+              <div><p className="text-[9px] font-black text-white/30 uppercase tracking-widest">Plan Generado ✓</p><h3 className="text-lg font-black uppercase text-white">{generatedPlan.name}</h3></div>
+            </div>
+            {generatedPlan.habits.map((h, i) => (
+              <motion.div key={i} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} className="bg-white/5 border border-white/10 rounded-[20px] p-4">
+                <div className="flex items-start gap-3">
+                  <span className="text-xl">{h.categoryIcon}</span>
+                  <div className="flex-1">
+                    <h4 className="text-sm font-black uppercase tracking-tight text-white">{h.title}</h4>
+                    <p className="text-[9px] text-white/40 font-medium mt-1">{h.desc}</p>
+                    <div className="flex gap-2 mt-2">
+                      <span className="text-[7px] font-black uppercase tracking-widest bg-white/10 px-2 py-0.5 rounded-full text-white/50">{h.frequency}</span>
+                      <span className="text-[7px] font-black uppercase tracking-widest bg-emerald-500/20 px-2 py-0.5 rounded-full text-emerald-400">+{h.xpReward} XP</span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </div>
+      {generatedPlan && !isGenerating && (
+        <div className="px-6 pb-10 pt-4 shrink-0 border-t border-white/10">
+          <button onClick={handleAddAll} className="w-full py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest bg-white text-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg">
+            Añadir {generatedPlan.habits.length} hábitos al plan
+          </button>
+        </div>
+      )}
+    </motion.div>
+  );
+};
+
+const LOG_ICONS = {
+  Activity: Activity,
+  Target: Target,
+  Calendar: Calendar,
+  Trophy: Trophy,
+  Shield: Shield
+};
+
+const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, completedCount, activityLog, selectedApps, setSelectedApps, lang, setLang, userEmail, isAnonymous, onSignOut, onLinkAccount, onOpenStats, loginStreak }) => {
   const [activeProfileTab, setActiveProfileTab] = useState('estado');
   const [activeTab, setActiveTab] = useState('avatars');
   const [showAppSelector, setShowAppSelector] = useState(false);
 
   const equippedAvatarItem = SHOP_ITEMS.find(i => i.id === inventory.equippedAvatar);
-  const activeSkinId = inventory.equippedSkins[equippedAvatarItem?.id];
+  const activeSkinId = inventory.equippedSkins?.[equippedAvatarItem?.id];
   const activeSkinData = activeSkinId ? ALL_SKINS.find(s => s.id === activeSkinId) : null;
 
   const currentLeagueObj = LEAGUES.find((l, i) => {
@@ -2723,13 +3015,19 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
         {activeProfileTab === 'estado' && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-8 px-6 pb-6">
             <div>
-              <div className="flex justify-between items-end mb-4">
+              <div className="flex justify-between items-center mb-4">
                 <h3 className="text-2xl font-black uppercase tracking-tight drop-shadow-md">Métricas</h3>
+                <button 
+                  onClick={onOpenStats}
+                  className="px-4 py-2 bg-gradient-to-r from-[#8ab4f8] to-[#a78bfa] hover:from-[#a78bfa] hover:to-[#8ab4f8] text-black text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg active:scale-95 transition-all"
+                >
+                  Estadísticas
+                </button>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white/5 backdrop-blur-sm p-5 rounded-[24px] border border-white/10 flex flex-col justify-between shadow-lg">
                   <Calendar size={18} className="text-white/50 mb-3" />
-                  <span className="text-3xl font-black text-white">0</span>
+                  <span className="text-3xl font-black text-white">{loginStreak || 0}</span>
                   <span className="text-[9px] font-black uppercase tracking-widest text-white/40 mt-1">Días de Racha</span>
                 </div>
                 <div className="bg-white/5 backdrop-blur-sm p-5 rounded-[24px] border border-white/10 flex flex-col justify-between shadow-lg">
@@ -2755,7 +3053,15 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
                 <h3 className="text-xl font-black uppercase tracking-tight mb-4 drop-shadow-md">Actividad Reciente</h3>
                 <div className="space-y-3">
                   {activityLog.map((act, idx) => {
-                    const Icon = act.icon;
+                    let IconComponent = Activity;
+                    if (act.icon) {
+                      if (typeof act.icon === 'string') {
+                        IconComponent = LOG_ICONS[act.icon] || Activity;
+                      } else if (typeof act.icon === 'function') {
+                        IconComponent = act.icon;
+                      }
+                    }
+                    const Icon = IconComponent;
                     return (
                       <div key={idx} className="bg-white/5 backdrop-blur-sm rounded-[20px] p-4 flex items-center justify-between border border-white/10 shadow-md hover:border-white/20 transition-colors cursor-pointer">
                         <div className="flex items-center gap-4">
@@ -2776,17 +3082,27 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
             )}
 
             <div className="mt-8">
-              <div className="flex gap-4">
-                <button onClick={() => setShowAppSelector(!showAppSelector)} className="flex-1 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm p-4 rounded-[20px] border border-white/10 shadow-lg flex items-center justify-between group">
+              <div className="flex gap-3">
+                <button onClick={() => setShowAppSelector(!showAppSelector)} className="flex-grow bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm p-4 rounded-[20px] border border-white/10 shadow-lg flex items-center justify-between group">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"><LayoutGrid size={18} className="text-white" /></div>
-                    <h3 className="text-sm font-black uppercase tracking-tight drop-shadow-md">Selecciona otras apps</h3>
+                    <h3 className="text-sm font-black uppercase tracking-tight drop-shadow-md">Apps</h3>
                   </div>
                   <ChevronDown size={20} className={`text-white/50 transition-transform duration-300 ${showAppSelector ? 'rotate-180' : ''}`} />
                 </button>
-                <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="w-20 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm rounded-[20px] border border-white/10 shadow-lg flex flex-col items-center justify-center shrink-0">
-                  <span className="text-[10px] text-white/50 font-bold uppercase tracking-widest mb-1">Idioma</span>
-                  <span className="text-lg font-black uppercase text-white">{lang}</span>
+                <button 
+                  onClick={() => {
+                    const nextBg = inventory.equippedBg === 'bg_light' ? 'bg_default' : 'bg_light';
+                    setInventory(prev => ({ ...prev, equippedBg: nextBg }));
+                  }} 
+                  className="w-16 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm rounded-[20px] border border-white/10 shadow-lg flex flex-col items-center justify-center shrink-0"
+                >
+                  <Palette size={18} className="text-white/50 mb-1" />
+                  <span className="text-[8px] font-black uppercase text-white tracking-widest">{inventory.equippedBg === 'bg_light' ? 'Claro' : 'Oscuro'}</span>
+                </button>
+                <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="w-16 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm rounded-[20px] border border-white/10 shadow-lg flex flex-col items-center justify-center shrink-0">
+                  <span className="text-[8px] text-white/50 font-bold uppercase tracking-widest mb-1">Idioma</span>
+                  <span className="text-sm font-black uppercase text-white">{lang}</span>
                 </button>
               </div>
               <AnimatePresence>
@@ -2879,7 +3195,7 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
                     {group.items.map(item => {
                       const isOwned = inventory.avatars.includes(item.id);
                       const isEquipped = inventory.equippedAvatar === item.id;
-                      const skinForAvatar = inventory.equippedSkins[item.id];
+                      const skinForAvatar = inventory.equippedSkins?.[item.id];
                       const skinFilters = skinForAvatar ? ALL_SKINS.find(s => s.id === skinForAvatar) : null;
 
                       return (
@@ -3018,8 +3334,9 @@ const useBehavioralAI = (supabaseUserId, selectedApps, lang = 'es') => {
   return { recommendations, isLoading };
 };
 
-const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpenActive, onOpenAll, onCompleteChallenge, onPlayMinigame, userGender, selectedCoach, setSelectedCoach, completedActivities, setCompletedActivities, userXP, setUserXP, userDiamonds, setUserDiamonds, calendarTasks, setCalendarTasks, blockedAppsConfig, setBlockedAppsConfig, onOpenAICalendar, lang, supabaseUserId, setCoachChatOpen }) => {
+const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpenActive, onOpenAll, onCompleteChallenge, onPlayMinigame, userGender, selectedCoach, setSelectedCoach, completedActivities, setCompletedActivities, userXP, setUserXP, userDiamonds, setUserDiamonds, calendarTasks, setCalendarTasks, blockedAppsConfig, setBlockedAppsConfig, onOpenAICalendar, onOpenAIHabit, onOpenCreateHabit, lang, supabaseUserId, setCoachChatOpen }) => {
   const [homeTab, setHomeTab] = useState('desafiate');
+  const [organizeSubTab, setOrganizeSubTab] = useState('habitos');
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [activityDone, setActivityDone] = useState(null);
   const [newTaskText, setNewTaskText] = useState('');
@@ -3209,250 +3526,356 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
 
         {homeTab === 'organizate' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col gap-8">
-            {/* AI Assistant Button */}
-            <div className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80 rounded-[32px] p-6 border border-indigo-500/30 shadow-[0_0_30px_rgba(99,102,241,0.2)] flex items-center justify-between group cursor-pointer" onClick={onOpenAICalendar}>
-              <div>
-                <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md">Asistente IA</h3>
-                <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest mt-1">Sincroniza tus horarios</p>
-              </div>
-              <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner">
-                <Brain size={24} className="text-indigo-400" />
-              </div>
+            {/* Sub-navigation tabs */}
+            <div className="flex gap-1 bg-black/60 p-1 rounded-full border border-white/5 shadow-inner backdrop-blur-md shrink-0">
+              <button onClick={() => setOrganizeSubTab('habitos')} className={`flex-1 py-2 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${organizeSubTab === 'habitos' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Hábitos</button>
+              <button onClick={() => setOrganizeSubTab('calendario')} className={`flex-1 py-2 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${organizeSubTab === 'calendario' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Calendario</button>
+              <button onClick={() => setOrganizeSubTab('bloqueador')} className={`flex-1 py-2 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${organizeSubTab === 'bloqueador' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>Bloqueador</button>
             </div>
 
-            {/* Calendar View */}
-            <div>
-              <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md mb-6">Esta Semana</h3>
-              {calendarTasks.length === 0 ? (
-                <div className="bg-white/5 border border-white/10 rounded-[24px] p-8 text-center">
-                  <Calendar size={32} className="text-white/20 mx-auto mb-3" />
-                  <p className="text-[11px] text-white/40 font-bold uppercase tracking-wider">Sin tareas. Usa el Asistente IA para añadir.</p>
+            {organizeSubTab === 'habitos' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-6">
+                {/* AI Assistant Button for Habits */}
+                <div className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80 rounded-[32px] p-6 border border-indigo-500/30 shadow-[0_0_30px_rgba(99,102,241,0.2)] flex items-center justify-between group cursor-pointer" onClick={onOpenAIHabit}>
+                  <div>
+                    <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md">Asistente IA de Hábitos</h3>
+                    <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest mt-1">Genera planes de hábitos personalizados</p>
+                  </div>
+                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner">
+                    <Sparkles size={24} className="text-indigo-400" />
+                  </div>
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  {calendarTasks.map(task => (
-                    <div key={task.id} className={`bg-white/5 backdrop-blur-md rounded-[24px] p-5 border shadow-md flex items-center justify-between ${
-                      task.isDeadline ? 'border-red-500/30 bg-red-500/5' : 'border-white/10'
-                    }`}>
-                      <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
-                          task.isDeadline
-                            ? 'bg-red-500/20 border-red-500/30'
-                            : task.type === 'examen'
-                              ? 'bg-amber-500/20 border-amber-500/30'
-                              : task.type === 'proyecto'
-                                ? 'bg-purple-500/20 border-purple-500/30'
-                                : 'bg-indigo-500/20 border-indigo-500/30'
-                        }`}>
-                          {task.isDeadline
-                            ? <Clock size={20} className="text-red-400" />
-                            : task.type === 'examen'
-                              ? <Target size={20} className="text-amber-400" />
-                              : task.type === 'proyecto'
-                                ? <Zap size={20} className="text-purple-400" />
-                                : <Calendar size={20} className="text-indigo-400" />}
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className={`text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full ${
-                              task.type === 'examen' ? 'text-amber-400 bg-amber-400/10' :
-                              task.type === 'proyecto' ? 'text-purple-400 bg-purple-400/10' :
-                              'text-indigo-400 bg-indigo-400/10'
-                            }`}>{task.type}</span>
-                            {task.isDeadline && (
-                              <span className="text-[8px] font-black tracking-widest uppercase text-red-400 bg-red-400/10 px-2 py-0.5 rounded-full">⏰ Vence</span>
-                            )}
-                          </div>
-                          <h4 className="text-sm font-black uppercase tracking-tight text-white">{task.title}</h4>
-                        </div>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <span className={`text-[10px] font-black uppercase tracking-widest ${
-                          task.isDeadline ? 'text-red-400' : 'text-white/40'
-                        }`}>{task.date}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
 
-            {/* App Blocker config */}
-            <div className="relative">
-              {/* Focus reward toast */}
-              <AnimatePresence>
-                {focusRewardAlert && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -20, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -20, scale: 0.9 }}
-                    className="absolute -top-16 left-0 right-0 z-50 bg-gradient-to-r from-yellow-500/90 to-amber-500/90 backdrop-blur-md rounded-[20px] px-5 py-4 flex items-center gap-4 border border-yellow-400/30 shadow-xl shadow-yellow-500/20"
-                  >
-                    <div className="text-2xl">🏆</div>
-                    <div>
-                      <p className="text-[11px] font-black uppercase tracking-wide text-black">¡Recompensa cobrada!</p>
-                      <p className="text-[10px] font-bold text-black/70">+{focusRewardAlert.xp} XP · +{focusRewardAlert.diamonds} 💎 · {focusRewardAlert.minutes} min ahorrados</p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md mb-6 flex items-center gap-2"><Lock size={20} /> Bloqueador</h3>
-              <div className="space-y-4">
-                {selectedApps.map(appId => {
-                  const appRef = APPS.find(a => a.id === appId);
-                  const bd = blockedAppsConfig[appId] || { limit: 15, usedToday: 0 };
-                  const limit = bd.limit || 15;
-                  const usedToday = bd.usedToday || 0;
-                  const pct = Math.min(100, (usedToday / limit) * 100);
-                  const isOverLimit = usedToday >= limit;
-                  const emergencySecs = emergencyTimers[appId] || 0;
-                  const todayStr = new Date().toISOString().split('T')[0];
-                  const claimedToday = bd.lastClaimedDate === todayStr;
-
-                  const barColor = pct >= 100 ? 'bg-red-500' : pct >= 70 ? 'bg-amber-500' : 'bg-emerald-500';
-                  const borderColor = isOverLimit ? 'border-red-500/40' : 'border-white/10';
-
-                  return (
-                    <div key={appId} className={`bg-white/5 backdrop-blur-md rounded-[24px] p-5 border ${borderColor} shadow-md`}>
-                      {/* Row 1: App name + limit controls */}
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <img src={appRef.icon} className="w-8 h-8 object-contain filter invert opacity-80" alt={appRef.name} />
-                          <div>
-                            <h4 className="text-sm font-black uppercase tracking-tight text-white">{appRef.name}</h4>
-                            {isOverLimit && !emergencySecs && (
-                              <span className="text-[8px] font-black text-red-400 uppercase tracking-widest">● Bloqueada</span>
-                            )}
-                            {emergencySecs > 0 && (
-                              <span className="text-[8px] font-black text-amber-400 uppercase tracking-widest animate-pulse">⚡ Acceso temporal: {Math.floor(emergencySecs / 60)}:{String(emergencySecs % 60).padStart(2,'0')}</span>
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-full border border-white/5">
-                          <button onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { ...bd, limit: Math.max(5, limit - 5) } }))} className="text-white/40 hover:text-white transition-colors"><Minus size={13} /></button>
-                          <span className="text-[10px] font-black tracking-widest w-10 text-center">{limit}m</span>
-                          <button onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { ...bd, limit: limit + 5 } }))} className="text-white/40 hover:text-white transition-colors"><Plus size={13} /></button>
-                        </div>
-                      </div>
-
-                      {/* Row 2: Progress bar */}
-                      <div className="mb-3">
-                        <div className="flex justify-between items-center mb-1.5">
-                          <span className="text-[9px] font-black uppercase tracking-wider text-white/40">Usado hoy</span>
-                          <span className={`text-[9px] font-black uppercase tracking-wider ${isOverLimit ? 'text-red-400' : 'text-white/60'}`}>{usedToday}/{limit} min</span>
-                        </div>
-                        <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${pct}%` }}
-                            transition={{ duration: 0.5 }}
-                            className={`h-full rounded-full ${barColor} ${isOverLimit ? 'animate-pulse' : ''}`}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Row 3: Action buttons */}
-                      <div className="flex gap-2">
-                        {/* Simulate usage */}
-                        <button
-                          onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { ...bd, usedToday: Math.min(limit + 10, usedToday + 5) } }))}
-                          className="flex-1 py-2 rounded-full bg-white/5 border border-white/10 text-[9px] font-black uppercase tracking-wider text-white/50 hover:text-white hover:bg-white/10 transition-all"
-                        >
-                          Simular +5m
-                        </button>
-                        {/* Emergency bypass / reset */}
-                        {emergencySecs > 0 ? (
-                          <div className="flex-1 py-2 rounded-full bg-amber-500/20 border border-amber-500/30 text-[9px] font-black uppercase tracking-wider text-amber-400 text-center">
-                            ⚡ {Math.floor(emergencySecs/60)}:{String(emergencySecs % 60).padStart(2,'0')}
-                          </div>
-                        ) : (
-                          <button
-                            onClick={() => setEmergencyTimers(p => ({ ...p, [appId]: 300 }))}
-                            className={`flex-1 py-2 rounded-full text-[9px] font-black uppercase tracking-wider transition-all ${
-                              isOverLimit
-                                ? 'bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30'
-                                : 'bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/10'
-                            }`}
-                          >
-                            ⚡ Urgencia 5m
-                          </button>
-                        )}
-                        {/* Reset usage */}
-                        <button
-                          onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { ...bd, usedToday: 0 } }))}
-                          className="w-10 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:bg-white/10 transition-all shrink-0"
-                          title="Resetear uso diario"
-                        >
-                          <RefreshCw size={12} />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Focus reward card */}
-              {(() => {
-                const todayStr = new Date().toISOString().split('T')[0];
-                let totalSaved = 0;
-                let allClaimed = true;
-                selectedApps.forEach(appId => {
-                  const bd = blockedAppsConfig[appId] || { limit: 15, usedToday: 0 };
-                  const limit = bd.limit || 15;
-                  const usedToday = bd.usedToday || 0;
-                  if (bd.lastClaimedDate !== todayStr && usedToday < limit) {
-                    totalSaved += (limit - usedToday);
-                    allClaimed = false;
-                  }
-                });
-
-                if (selectedApps.length === 0) return null;
-
-                if (allClaimed) {
-                  return (
-                    <div className="mt-6 bg-white/5 border border-white/10 rounded-[24px] p-5 flex items-center gap-4">
-                      <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center border border-emerald-500/30 shrink-0">
-                        <Check size={18} className="text-emerald-400" />
-                      </div>
-                      <div>
-                        <p className="text-[11px] font-black uppercase tracking-wide text-white">Recompensas del día cobradas</p>
-                        <p className="text-[9px] text-white/40 font-semibold uppercase tracking-wider mt-0.5">¡Sigue así mañana! 🚀</p>
-                      </div>
-                    </div>
-                  );
-                }
-
-                const xpPreview = totalSaved * 5;
-                const diamPreview = totalSaved * 1;
-
-                return (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-6 bg-gradient-to-br from-yellow-500/15 to-amber-500/10 border border-yellow-500/30 rounded-[28px] p-6"
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 bg-yellow-500/20 rounded-full flex items-center justify-center border border-yellow-500/30 text-xl shrink-0">🏆</div>
-                      <div>
-                        <h4 className="text-sm font-black uppercase tracking-tight text-yellow-400">Recompensa de Enfoque</h4>
-                        <p className="text-[9px] text-white/50 font-semibold uppercase tracking-wider">Por no usar todo tu tiempo de pantalla</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-3 mb-4">
-                      <span className="flex-1 text-center py-2 bg-white/10 rounded-full text-[10px] font-black text-yellow-400 uppercase tracking-widest">+{xpPreview} XP</span>
-                      <span className="flex-1 text-center py-2 bg-white/10 rounded-full text-[10px] font-black text-yellow-400 uppercase tracking-widest flex items-center justify-center gap-1"><Gem size={12} /> +{diamPreview}</span>
-                    </div>
-                    <button
-                      onClick={claimFocusRewards}
-                      className="w-full py-3 rounded-full bg-yellow-500 text-black font-black uppercase text-[10px] tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-lg shadow-yellow-500/30"
-                    >
-                      Cobrar {totalSaved} min ahorrados
+                {/* Mis Hábitos Title + Add button */}
+                <div>
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md">Mis Hábitos</h3>
+                    <button onClick={onOpenCreateHabit} className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-[9px] font-black uppercase tracking-widest rounded-full transition-all flex items-center gap-1.5 shadow-md">
+                      <Plus size={12} /> Crear Hábito
                     </button>
-                  </motion.div>
-                );
-              })()}
-            </div>
+                  </div>
+
+                  {calendarTasks.filter(t => t.isHabit).length === 0 ? (
+                    <div className="bg-white/5 border border-white/10 rounded-[24px] p-8 text-center">
+                      <Target size={32} className="text-white/20 mx-auto mb-3" />
+                      <p className="text-[11px] text-white/40 font-bold uppercase tracking-wider">Sin hábitos aún. ¡Crea uno o usa el Asistente IA!</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {calendarTasks.filter(t => t.isHabit).map(habit => {
+                        const todayStr = new Date().toISOString().split('T')[0];
+                        const isCompletedToday = habit.completedDates?.includes(todayStr);
+                        const categoryColors = {
+                          salud: 'border-emerald-500/30 bg-emerald-500/5 text-emerald-400',
+                          mente: 'border-purple-500/30 bg-purple-500/5 text-purple-400',
+                          social: 'border-blue-500/30 bg-blue-500/5 text-blue-400',
+                          estudio: 'border-amber-500/30 bg-amber-500/5 text-amber-400',
+                          deporte: 'border-pink-500/30 bg-pink-500/5 text-pink-400',
+                          creatividad: 'border-cyan-500/30 bg-cyan-500/5 text-cyan-400',
+                        };
+                        const badgeClass = categoryColors[habit.category] || 'border-indigo-500/30 bg-indigo-500/5 text-indigo-400';
+
+                        const handleToggleComplete = () => {
+                          let updatedDates = [...(habit.completedDates || [])];
+                          let newStreak = habit.streak || 0;
+                          if (isCompletedToday) {
+                            updatedDates = updatedDates.filter(d => d !== todayStr);
+                            newStreak = Math.max(0, newStreak - 1);
+                          } else {
+                            updatedDates.push(todayStr);
+                            newStreak += 1;
+                            
+                            // Add rewards
+                            const xpReward = habit.xpReward || 25;
+                            const diamondReward = habit.category === 'salud' ? 3 : 2;
+                            setUserXP(prev => prev + xpReward);
+                            setUserDiamonds(prev => prev + diamondReward);
+                            setCompletedActivities(prev => [{ id: Date.now().toString(), title: 'Hábito completado', subtitle: habit.title, time: 'Hace un momento', icon: Check }, ...prev]);
+                          }
+                          setCalendarTasks(prev => prev.map(t => t.id === habit.id ? { ...t, completedDates: updatedDates, streak: newStreak } : t));
+                        };
+
+                        const handleDeleteHabit = () => {
+                          setCalendarTasks(prev => prev.filter(t => t.id !== habit.id));
+                        };
+
+                        return (
+                          <div key={habit.id} className="bg-white/5 backdrop-blur-md rounded-[24px] p-5 border border-white/10 shadow-md flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-4 min-w-0">
+                              <button onClick={handleToggleComplete} className={`w-10 h-10 rounded-full border flex items-center justify-center shrink-0 transition-all ${isCompletedToday ? 'bg-emerald-500 border-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.4)]' : 'border-white/20 text-white/40 hover:border-white/40 hover:text-white'}`}>
+                                <Check size={18} strokeWidth={3} />
+                              </button>
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                  <span className={`text-[7px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full ${badgeClass}`}>{habit.categoryIcon || '📋'} {habit.category || 'Hábito'}</span>
+                                  <span className="text-[7px] font-black tracking-widest uppercase text-white/40 bg-white/5 px-2 py-0.5 rounded-full">🔥 {habit.streak || 0}d</span>
+                                </div>
+                                <h4 className={`text-sm font-black uppercase tracking-tight truncate ${isCompletedToday ? 'text-white/40 line-through' : 'text-white'}`}>{habit.title}</h4>
+                                {habit.desc && <p className="text-[9px] text-white/40 font-medium truncate mt-0.5">{habit.desc}</p>}
+                              </div>
+                            </div>
+                            <button onClick={handleDeleteHabit} className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-all shrink-0">
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+
+            {organizeSubTab === 'calendario' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-6">
+                {/* AI Assistant Button */}
+                <div className="bg-gradient-to-r from-indigo-900/80 to-purple-900/80 rounded-[32px] p-6 border border-indigo-500/30 shadow-[0_0_30px_rgba(99,102,241,0.2)] flex items-center justify-between group cursor-pointer" onClick={onOpenAICalendar}>
+                  <div>
+                    <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md">Asistente IA</h3>
+                    <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest mt-1">Sincroniza tus horarios</p>
+                  </div>
+                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner">
+                    <Brain size={24} className="text-indigo-400" />
+                  </div>
+                </div>
+
+                {/* Calendar View */}
+                <div>
+                  <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md mb-6">Esta Semana</h3>
+                  {calendarTasks.filter(t => !t.isHabit).length === 0 ? (
+                    <div className="bg-white/5 border border-white/10 rounded-[24px] p-8 text-center">
+                      <Calendar size={32} className="text-white/20 mx-auto mb-3" />
+                      <p className="text-[11px] text-white/40 font-bold uppercase tracking-wider">Sin tareas. Usa el Asistente IA para añadir.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {calendarTasks.filter(t => !t.isHabit).map(task => (
+                        <div key={task.id} className={`bg-white/5 backdrop-blur-md rounded-[24px] p-5 border shadow-md flex items-center justify-between ${
+                          task.isDeadline ? 'border-red-500/30 bg-red-500/5' : 'border-white/10'
+                        }`}>
+                          <div className="flex items-center gap-4">
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${
+                              task.isDeadline
+                                ? 'bg-red-500/20 border-red-500/30'
+                                : task.type === 'examen'
+                                  ? 'bg-amber-500/20 border-amber-500/30'
+                                  : task.type === 'proyecto'
+                                    ? 'bg-purple-500/20 border-purple-500/30'
+                                    : 'bg-indigo-500/20 border-indigo-500/30'
+                            }`}>
+                              {task.isDeadline
+                                ? <Clock size={20} className="text-red-400" />
+                                : task.type === 'examen'
+                                  ? <Target size={20} className="text-amber-400" />
+                                  : task.type === 'proyecto'
+                                    ? <Zap size={20} className="text-purple-400" />
+                                    : <Calendar size={20} className="text-indigo-400" />}
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className={`text-[8px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full ${
+                                  task.type === 'examen' ? 'text-amber-400 bg-amber-400/10' :
+                                  task.type === 'proyecto' ? 'text-purple-400 bg-purple-400/10' :
+                                  'text-indigo-400 bg-indigo-400/10'
+                                }`}>{task.type}</span>
+                                {task.isDeadline && (
+                                  <span className="text-[8px] font-black tracking-widest uppercase text-red-400 bg-red-400/10 px-2 py-0.5 rounded-full">⏰ Vence</span>
+                                )}
+                              </div>
+                              <h4 className="text-sm font-black uppercase tracking-tight text-white">{task.title}</h4>
+                            </div>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <span className={`text-[10px] font-black uppercase tracking-widest ${
+                              task.isDeadline ? 'text-red-400' : 'text-white/40'
+                            }`}>{task.date}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+
+            {organizeSubTab === 'bloqueador' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col gap-6">
+                {/* App Blocker config */}
+                <div className="relative">
+                  {/* Focus reward toast */}
+                  <AnimatePresence>
+                    {focusRewardAlert && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -20, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -20, scale: 0.9 }}
+                        className="absolute -top-16 left-0 right-0 z-50 bg-gradient-to-r from-yellow-500/90 to-amber-500/90 backdrop-blur-md rounded-[20px] px-5 py-4 flex items-center gap-4 border border-yellow-400/30 shadow-xl shadow-yellow-500/20"
+                      >
+                        <div className="text-2xl">🏆</div>
+                        <div>
+                          <p className="text-[11px] font-black uppercase tracking-wide text-black">¡Recompensa cobrada!</p>
+                          <p className="text-[10px] font-bold text-black/70">+{focusRewardAlert.xp} XP · +{focusRewardAlert.diamonds} 💎 · {focusRewardAlert.minutes} min ahorrados</p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  <h3 className="text-xl font-black uppercase tracking-tight text-white drop-shadow-md mb-6 flex items-center gap-2"><Lock size={20} /> Bloqueador</h3>
+                  <div className="space-y-4">
+                    {selectedApps.map(appId => {
+                      const appRef = APPS.find(a => a.id === appId);
+                      const bd = blockedAppsConfig[appId] || { limit: 15, usedToday: 0 };
+                      const limit = bd.limit || 15;
+                      const usedToday = bd.usedToday || 0;
+                      const pct = Math.min(100, (usedToday / limit) * 100);
+                      const isOverLimit = usedToday >= limit;
+                      const emergencySecs = emergencyTimers[appId] || 0;
+
+                      const barColor = pct >= 100 ? 'bg-red-500' : pct >= 70 ? 'bg-amber-500' : 'bg-emerald-500';
+                      const borderColor = isOverLimit ? 'border-red-500/40' : 'border-white/10';
+
+                      return (
+                        <div key={appId} className={`bg-white/5 backdrop-blur-md rounded-[24px] p-5 border ${borderColor} shadow-md`}>
+                          {/* Row 1: App name + limit controls */}
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                              <img src={appRef.icon} className="w-8 h-8 object-contain filter invert opacity-80" alt={appRef.name} />
+                              <div>
+                                <h4 className="text-sm font-black uppercase tracking-tight text-white">{appRef.name}</h4>
+                                {isOverLimit && !emergencySecs && (
+                                  <span className="text-[8px] font-black text-red-400 uppercase tracking-widest">● Bloqueada</span>
+                                )}
+                                {emergencySecs > 0 && (
+                                  <span className="text-[8px] font-black text-amber-400 uppercase tracking-widest animate-pulse">⚡ Acceso temporal: {Math.floor(emergencySecs / 60)}:{String(emergencySecs % 60).padStart(2,'0')}</span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-full border border-white/5">
+                              <button onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { ...bd, limit: Math.max(5, limit - 5) } }))} className="text-white/40 hover:text-white transition-colors"><Minus size={13} /></button>
+                              <span className="text-[10px] font-black tracking-widest w-10 text-center">{limit}m</span>
+                              <button onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { ...bd, limit: limit + 5 } }))} className="text-white/40 hover:text-white transition-colors"><Plus size={13} /></button>
+                            </div>
+                          </div>
+
+                          {/* Row 2: Progress bar */}
+                          <div className="mb-3">
+                            <div className="flex justify-between items-center mb-1.5">
+                              <span className="text-[9px] font-black uppercase tracking-wider text-white/40">Usado hoy</span>
+                              <span className={`text-[9px] font-black uppercase tracking-wider ${isOverLimit ? 'text-red-400' : 'text-white/60'}`}>{usedToday}/{limit} min</span>
+                            </div>
+                            <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                              <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${pct}%` }}
+                                transition={{ duration: 0.5 }}
+                                className={`h-full rounded-full ${barColor} ${isOverLimit ? 'animate-pulse' : ''}`}
+                              />
+                            </div>
+                          </div>
+
+                          {/* Row 3: Action buttons */}
+                          <div className="flex gap-2">
+                            {/* Simulate usage */}
+                            <button
+                              onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { ...bd, usedToday: Math.min(limit + 10, usedToday + 5) } }))}
+                              className="flex-1 py-2 rounded-full bg-white/5 border border-white/10 text-[9px] font-black uppercase tracking-wider text-white/50 hover:text-white hover:bg-white/10 transition-all"
+                            >
+                              Simular +5m
+                            </button>
+                            {/* Emergency bypass / reset */}
+                            {emergencySecs > 0 ? (
+                              <div className="flex-1 py-2 rounded-full bg-amber-500/20 border border-amber-500/30 text-[9px] font-black uppercase tracking-wider text-amber-400 text-center">
+                                ⚡ {Math.floor(emergencySecs/60)}:{String(emergencySecs % 60).padStart(2,'0')}
+                              </div>
+                            ) : (
+                              <button
+                                onClick={() => setEmergencyTimers(p => ({ ...p, [appId]: 300 }))}
+                                className={`flex-1 py-2 rounded-full text-[9px] font-black uppercase tracking-wider transition-all ${
+                                  isOverLimit
+                                    ? 'bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30'
+                                    : 'bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/10'
+                                }`}
+                              >
+                                ⚡ Urgencia 5m
+                              </button>
+                            )}
+                            {/* Reset usage */}
+                            <button
+                              onClick={() => setBlockedAppsConfig(p => ({ ...p, [appId]: { ...bd, usedToday: 0 } }))}
+                              className="w-10 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:bg-white/10 transition-all shrink-0"
+                              title="Resetear uso diario"
+                            >
+                              <RefreshCw size={12} />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Focus reward card */}
+                  {(() => {
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    let totalSaved = 0;
+                    let allClaimed = true;
+                    selectedApps.forEach(appId => {
+                      const bd = blockedAppsConfig[appId] || { limit: 15, usedToday: 0 };
+                      const limit = bd.limit || 15;
+                      const usedToday = bd.usedToday || 0;
+                      if (bd.lastClaimedDate !== todayStr && usedToday < limit) {
+                        totalSaved += (limit - usedToday);
+                        allClaimed = false;
+                      }
+                    });
+
+                    if (selectedApps.length === 0) return null;
+
+                    if (allClaimed) {
+                      return (
+                        <div className="mt-6 bg-white/5 border border-white/10 rounded-[24px] p-5 flex items-center gap-4">
+                          <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center border border-emerald-500/30 shrink-0">
+                            <Check size={18} className="text-emerald-400" />
+                          </div>
+                          <div>
+                            <p className="text-[11px] font-black uppercase tracking-wide text-white">Recompensas del día cobradas</p>
+                            <p className="text-[9px] text-white/40 font-semibold uppercase tracking-wider mt-0.5">¡Sigue así mañana! 🚀</p>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    const xpPreview = totalSaved * 5;
+                    const diamPreview = totalSaved * 1;
+
+                    return (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-6 bg-gradient-to-br from-yellow-500/15 to-amber-500/10 border border-yellow-500/30 rounded-[28px] p-6"
+                      >
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-10 h-10 bg-yellow-500/20 rounded-full flex items-center justify-center border border-yellow-500/30 text-xl shrink-0">🏆</div>
+                          <div>
+                            <h4 className="text-sm font-black uppercase tracking-tight text-yellow-400">Recompensa de Enfoque</h4>
+                            <p className="text-[9px] text-white/50 font-semibold uppercase tracking-wider">Por no usar todo tu tiempo de pantalla</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-3 mb-4">
+                          <span className="flex-1 text-center py-2 bg-white/10 rounded-full text-[10px] font-black text-yellow-400 uppercase tracking-widest">+{xpPreview} XP</span>
+                          <span className="flex-1 text-center py-2 bg-white/10 rounded-full text-[10px] font-black text-yellow-400 uppercase tracking-widest flex items-center justify-center gap-1"><Gem size={12} /> +{diamPreview}</span>
+                        </div>
+                        <button
+                          onClick={claimFocusRewards}
+                          className="w-full py-3 rounded-full bg-yellow-500 text-black font-black uppercase text-[10px] tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-lg shadow-yellow-500/30"
+                        >
+                          Cobrar {totalSaved} min ahorrados
+                        </button>
+                      </motion.div>
+                    );
+                  })()}
+                </div>
+              </motion.div>
+            )}
           </motion.div>
         )}
 
@@ -4738,6 +5161,8 @@ const BottomNav = ({ activeTab, onChange, currentThemeBg, lang = 'es' }) => {
   const themeProps = BACKGROUNDS[currentThemeBg]?.themeProps || BACKGROUNDS['bg_default'].themeProps;
   const isAgresive = themeProps.isAgresive;
 
+  const isLight = themeProps.isLight;
+
   return (
     <div className="absolute bottom-8 left-6 right-6 h-[76px] z-[80]">
       <div className={`absolute top-[6px] left-0 right-0 h-[64px] rounded-[32px] border backdrop-blur-md ${themeProps.navBg} ${themeProps.navBorder} ${themeProps.navGlow || 'shadow-[0_20px_40px_rgba(0,0,0,0.5)]'} transition-all duration-700`} />
@@ -4749,9 +5174,9 @@ const BottomNav = ({ activeTab, onChange, currentThemeBg, lang = 'es' }) => {
           return (
             <div key={item.id} onClick={() => onChange(item.id)} className="relative w-[60px] h-[76px] flex items-center justify-center cursor-pointer z-10 group">
               {isActive && (
-                <motion.div layoutId="nav-selector" className={`absolute w-[76px] h-[76px] rounded-full shadow-lg ${isAgresive ? 'bg-red-600/90 shadow-[0_0_20px_red]' : 'bg-white'}`} transition={{ type: "spring", stiffness: 300, damping: 25 }} />
+                <motion.div layoutId="nav-selector" className={`absolute w-[76px] h-[76px] rounded-full ${isAgresive ? 'bg-red-600/90 shadow-[0_0_20px_red]' : (isLight ? 'bg-slate-200/80' : 'bg-white shadow-lg')}`} transition={{ type: "spring", stiffness: 300, damping: 25 }} />
               )}
-              <Icon size={24} className={`relative z-20 transition-colors duration-300 ${isActive ? (isAgresive ? 'text-white' : 'text-black') : 'text-white/40 group-hover:text-white'}`} strokeWidth={isActive ? 2.5 : 2} />
+              <Icon size={24} className={`relative z-20 transition-colors duration-300 ${isActive ? (isAgresive ? 'text-white' : 'text-black') : (isLight ? 'text-black/40 group-hover:text-black' : 'text-white/40 group-hover:text-white')}`} strokeWidth={isActive ? 2.5 : 2} />
             </div>
           );
         })}
@@ -4762,7 +5187,7 @@ const BottomNav = ({ activeTab, onChange, currentThemeBg, lang = 'es' }) => {
 
 
 // --- APP COMPONENT ---
-export default function App() {
+function App() {
   const [step, setStep] = useState('splash');
   const [lang, setLang] = useState('es');
 
@@ -4788,8 +5213,10 @@ export default function App() {
 
   const [completedCount, setCompletedCount] = useState(0);
   const [activityLog, setActivityLog] = useState([
-    { id: 'start_1', title: 'Viaje Iniciado', subtitle: 'Bienvenido a Focusly', time: 'Hoy', icon: Activity }
+    { id: 'start_1', title: 'Viaje Iniciado', subtitle: 'Bienvenido a Focusly', time: 'Hoy', icon: 'Activity' }
   ]);
+  const [loginStreak, setLoginStreak] = useState(0);
+  const [lastLoginDate, setLastLoginDate] = useState(null);
 
   const [inventory, setInventory] = useState({
     avatars: ['a_base'],
@@ -4799,6 +5226,16 @@ export default function App() {
     equippedBg: 'bg_default',
     equippedSkins: { 'a_base': null }
   });
+
+  const isLight = inventory.equippedBg === 'bg_light';
+
+  useEffect(() => {
+    if (isLight) {
+      document.body.classList.add('theme-light-active');
+    } else {
+      document.body.classList.remove('theme-light-active');
+    }
+  }, [isLight]);
 
   const [chatPerson, setChatPerson] = useState(null);
   const [unreadFilter, setUnreadFilter] = useState(false);
@@ -4822,6 +5259,9 @@ export default function App() {
   const [calendarTasks, setCalendarTasks] = useState([]);
   const [blockedAppsConfig, setBlockedAppsConfig] = useState({});
   const [showAICalendar, setShowAICalendar] = useState(false);
+  const [showStats, setShowStats] = useState(false);
+  const [showCreateHabit, setShowCreateHabit] = useState(false);
+  const [showAIHabit, setShowAIHabit] = useState(false);
 
   const [activeChatsHistory, setActiveChatsHistory] = useState(() => {
     return MESSAGES_DATA.reduce((acc, person) => {
@@ -4895,19 +5335,47 @@ export default function App() {
         setSelectedLevel(profile.selected_level || null);
         setUserXP(profile.user_xp || 0);
         setUserDiamonds(profile.user_diamonds || 0);
-        const loadedInv = profile.inventory || {};
+        // Sanitizar inventario completo — ningún campo puede ser undefined
+        const rawInv = profile.inventory || {};
+        const safeInv = {
+          avatars:       Array.isArray(rawInv.avatars)      ? rawInv.avatars      : ['a_base'],
+          backgrounds:   Array.isArray(rawInv.backgrounds)  ? rawInv.backgrounds  : ['bg_default', 'bg_light'],
+          skins:         Array.isArray(rawInv.skins)        ? rawInv.skins        : [],
+          equippedAvatar: rawInv.equippedAvatar || 'a_base',
+          equippedBg:     rawInv.equippedBg     || 'bg_default',
+          equippedSkins:  (rawInv.equippedSkins && typeof rawInv.equippedSkins === 'object') ? rawInv.equippedSkins : {},
+        };
         // Asegurar que bg_light (gratuito) siempre esté disponible
-        if (loadedInv.backgrounds && !loadedInv.backgrounds.includes('bg_light')) {
-          loadedInv.backgrounds = [...loadedInv.backgrounds, 'bg_light'];
+        if (!safeInv.backgrounds.includes('bg_light')) {
+          safeInv.backgrounds = [...safeInv.backgrounds, 'bg_light'];
         }
-        setInventory(loadedInv.avatars ? loadedInv : {
-          avatars: ['a_base'], backgrounds: ['bg_default', 'bg_light'], skins: [],
-          equippedAvatar: 'a_base', equippedBg: 'bg_default', equippedSkins: {}
-        });
+        setInventory(safeInv);
         setActiveChallenge(profile.active_challenge || null);
         setCompletedActivities(profile.completed_activities || []);
         setCalendarTasks(profile.calendar_tasks || []);
         setBlockedAppsConfig(profile.blocked_apps_config || {});
+        // Campos sincronizados
+        if (typeof profile.completed_count === 'number') setCompletedCount(profile.completed_count);
+        if (Array.isArray(profile.activity_log) && profile.activity_log.length > 0) setActivityLog(profile.activity_log);
+        if (profile.lang) setLang(profile.lang);
+        // Racha de días consecutivos (en un try-catch para que nunca bloquee el flujo)
+        try {
+          const today = new Date().toISOString().split('T')[0];
+          const savedLastLogin = profile.last_login_date || null;
+          let newStreak = typeof profile.login_streak === 'number' ? profile.login_streak : 0;
+          if (savedLastLogin) {
+            const diffMs = new Date(today) - new Date(savedLastLogin);
+            const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+            if (diffDays === 1) newStreak += 1;
+            else if (diffDays > 1) newStreak = 1;
+          } else {
+            newStreak = Math.max(newStreak, 1);
+          }
+          setLoginStreak(newStreak);
+          setLastLoginDate(today);
+          // Guardar racha en Supabase (silencia errores si columnas no existen aún)
+          supabase.from('profiles').update({ login_streak: newStreak, last_login_date: today }).eq('id', uid).then(() => {});
+        } catch (_) {}
         // Saltar onboarding directamente al main
         setStep('main');
       } else {
@@ -4964,7 +5432,7 @@ export default function App() {
     }
   }, [step]);
 
-  // --- Supabase: sincronizar XP, Diamantes e Inventario automáticamente ---
+  // --- Supabase: sincronizar estado completo automáticamente ---
   useEffect(() => {
     if (!supabaseUserId || !dbLoaded || step !== 'main') return;
     const timeout = setTimeout(() => {
@@ -4976,10 +5444,14 @@ export default function App() {
         completed_activities: completedActivities,
         calendar_tasks: calendarTasks,
         blocked_apps_config: blockedAppsConfig,
+        // Nuevos campos
+        completed_count: completedCount,
+        activity_log: activityLog.slice(0, 30),
+        lang,
       });
     }, 1500); // debounce de 1.5s para no saturar la DB
     return () => clearTimeout(timeout);
-  }, [userXP, userDiamonds, inventory, activeChallenge, completedActivities, calendarTasks, blockedAppsConfig, supabaseUserId, dbLoaded, step, saveProfile]);
+  }, [userXP, userDiamonds, inventory, activeChallenge, completedActivities, calendarTasks, blockedAppsConfig, completedCount, activityLog, lang, supabaseUserId, dbLoaded, step, saveProfile]);
 
   // --- Handler: cuando el onboarding termina, guardar perfil completo ---
   const handleOnboardingComplete = useCallback(async (name, gender) => {
@@ -5025,7 +5497,7 @@ export default function App() {
     const diamondsEarned = activeChallenge.diamonds || 50;
 
     setCompletedCount(prev => prev + 1);
-    setActivityLog(prev => [{ id: Date.now().toString(), title: 'Sesión completada', subtitle: activeChallenge.title, time: 'Hace un momento', icon: Target }, ...prev]);
+    setActivityLog(prev => [{ id: Date.now().toString(), title: 'Sesión completada', subtitle: activeChallenge.title, time: 'Hace un momento', icon: 'Target' }, ...prev]);
     setUserXP(prev => prev + xpEarned);
     setUserDiamonds(prev => prev + diamondsEarned);
 
@@ -5106,7 +5578,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#000] selection:bg-red-500 selection:text-white">
+    <div className={`flex items-center justify-center min-h-screen selection:bg-red-500 selection:text-white transition-colors duration-1000 ${isLight ? 'bg-slate-100' : 'bg-[#000]'}`}>
       <style dangerouslySetInnerHTML={{
         __html: `
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
@@ -5115,7 +5587,7 @@ export default function App() {
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.5; cursor: pointer; }
       `}} />
 
-      <div className={`w-full h-screen sm:w-[390px] sm:h-[844px] sm:rounded-[60px] sm:border-[10px] sm:border-[#1a1a1a] relative overflow-hidden shadow-[0_0_150px_rgba(0,0,0,1)] transition-colors duration-1000 ${BACKGROUNDS[inventory.equippedBg].css}`}>
+      <div className={`w-full h-screen sm:w-[390px] sm:h-[844px] sm:rounded-[60px] sm:border-[10px] sm:border-[#1a1a1a] relative overflow-hidden shadow-[0_0_150px_rgba(0,0,0,1)] transition-all duration-1000 ${(BACKGROUNDS[inventory.equippedBg] || BACKGROUNDS['bg_default']).css} ${isLight ? 'theme-light' : ''}`}>
         <GlobalThemeEffects themeId={inventory.equippedBg} />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none z-0"></div>
         <div className="hidden sm:block absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-[#1a1a1a] rounded-b-[2rem] z-[110]" />
@@ -5216,33 +5688,37 @@ export default function App() {
           {step === 'main' && (
             <motion.div key="main" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-40">
               <AnimatePresence mode="wait">
-                {mainNav === 'home' && <motion.div key="h" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><HomeDashboard selectedApps={selectedApps} activeChallenge={activeChallenge} onSelectChallenge={setShowChallengeDetail} onOpenActive={() => setShowActiveInteractive(true)} onOpenAll={() => setShowAllChallenges(true)} onCompleteChallenge={handleCompleteChallenge} onPlayMinigame={setActiveMinigame} userGender={userGender} selectedCoach={selectedCoach} setSelectedCoach={setSelectedCoach} completedActivities={completedActivities} setCompletedActivities={setCompletedActivities} userXP={userXP} setUserXP={setUserXP} userDiamonds={userDiamonds} setUserDiamonds={setUserDiamonds} calendarTasks={calendarTasks} setCalendarTasks={setCalendarTasks} blockedAppsConfig={blockedAppsConfig} setBlockedAppsConfig={setBlockedAppsConfig} onOpenAICalendar={() => setShowAICalendar(true)} lang={lang} supabaseUserId={supabaseUserId} setCoachChatOpen={setCoachChatOpen} /></motion.div>}
+                {mainNav === 'home' && <motion.div key="h" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><HomeDashboard selectedApps={selectedApps} activeChallenge={activeChallenge} onSelectChallenge={setShowChallengeDetail} onOpenActive={() => setShowActiveInteractive(true)} onOpenAll={() => setShowAllChallenges(true)} onCompleteChallenge={handleCompleteChallenge} onPlayMinigame={setActiveMinigame} userGender={userGender} selectedCoach={selectedCoach} setSelectedCoach={setSelectedCoach} completedActivities={completedActivities} setCompletedActivities={setCompletedActivities} userXP={userXP} setUserXP={setUserXP} userDiamonds={userDiamonds} setUserDiamonds={setUserDiamonds} calendarTasks={calendarTasks} setCalendarTasks={setCalendarTasks} blockedAppsConfig={blockedAppsConfig} setBlockedAppsConfig={setBlockedAppsConfig} onOpenAICalendar={() => setShowAICalendar(true)} onOpenAIHabit={() => setShowAIHabit(true)} onOpenCreateHabit={() => setShowCreateHabit(true)} lang={lang} supabaseUserId={supabaseUserId} setCoachChatOpen={setCoachChatOpen} /></motion.div>}
                 {mainNav === 'forum' && <motion.div key="f" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><Forum onSelectChat={(p) => { setChatPerson(p); setStep('chat'); }} unreadFilter={unreadFilter} setUnreadFilter={setUnreadFilter} activeTab={activeForumTab} setActiveTab={setActiveForumTab} forumPosts={forumPosts} setForumPosts={setForumPosts} userAvatarItem={SHOP_ITEMS.find(i => i.id === inventory.equippedAvatar)} username={username} /></motion.div>}
                 {mainNav === 'rankings' && <motion.div key="r" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><Rankings userXP={userXP} inventory={inventory} username={username} /></motion.div>}
                 {mainNav === 'shop' && <motion.div key="s" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><ShopView userDiamonds={userDiamonds} onSelectItem={openShopItem} inventory={inventory} /></motion.div>}
                 {mainNav === 'profile' && (
                   <motion.div key="p" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10">
-                    <ProfileView 
-                      inventory={inventory} 
-                      setInventory={setInventory} 
-                      userXP={userXP} 
-                      username={username} 
-                      onOpenItem={openInventoryItem} 
-                      completedCount={completedCount} 
-                      activityLog={activityLog} 
-                      selectedApps={selectedApps} 
-                      setSelectedApps={setSelectedApps} 
-                      lang={lang} 
-                      setLang={setLang} 
-                      userEmail={userEmail}
-                      isAnonymous={isAnonymous}
-                      onSignOut={handleSignOut}
-                      onLinkAccount={(isLoginView) => {
-                        setAuthReturnStep('main');
-                        setAuthInitialIsLogin(isLoginView);
-                        setStep('auth');
-                      }}
-                    />
+                    <ErrorBoundary>
+                      <ProfileView 
+                        inventory={inventory} 
+                        setInventory={setInventory} 
+                        userXP={userXP} 
+                        username={username} 
+                        onOpenItem={openInventoryItem} 
+                        completedCount={completedCount} 
+                        activityLog={activityLog} 
+                        selectedApps={selectedApps} 
+                        setSelectedApps={setSelectedApps} 
+                        lang={lang} 
+                        setLang={setLang} 
+                        userEmail={userEmail}
+                        isAnonymous={isAnonymous}
+                        onSignOut={handleSignOut}
+                        onLinkAccount={(isLoginView) => {
+                          setAuthReturnStep('main');
+                          setAuthInitialIsLogin(isLoginView);
+                          setStep('auth');
+                        }}
+                        onOpenStats={() => setShowStats(true)}
+                        loginStreak={loginStreak}
+                      />
+                    </ErrorBoundary>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -5264,6 +5740,11 @@ export default function App() {
 
                 {selectedInventoryItem && <UniversalDetailModal key="modal-item" item={selectedInventoryItem} userDiamonds={userDiamonds} onClose={() => setSelectedInventoryItem(null)} onAction={handleItemAction} inventory={inventory} isShopMode={isShopMode} />}
 
+                {showAICalendar && <AICalendarModal key="modal-ai-calendar" onClose={() => setShowAICalendar(false)} calendarTasks={calendarTasks} setCalendarTasks={setCalendarTasks} />}
+                {showStats && <StatsModal key="modal-stats" onClose={() => setShowStats(false)} calendarTasks={calendarTasks} completedCount={completedCount} userXP={userXP} />}
+                {showCreateHabit && <CreateHabitModal key="modal-create-habit" onClose={() => setShowCreateHabit(false)} onAdd={(newHabit) => setCalendarTasks(prev => [...prev, newHabit])} />}
+                {showAIHabit && <AIHabitPlanModal key="modal-ai-habit" onClose={() => setShowAIHabit(false)} onAddHabits={(newHabits) => setCalendarTasks(prev => [...prev, ...newHabits])} />}
+
                 {/* Alerta de Recompensas Especiales */}
                 {rewardAlert && (
                   <motion.div initial={{ y: -50, opacity: 0 }} animate={{ y: 50, opacity: 1 }} exit={{ opacity: 0 }} className="absolute top-0 left-0 right-0 z-[200] mx-4 bg-yellow-500/20 backdrop-blur-xl border-2 border-yellow-400 p-4 rounded-3xl flex items-center justify-between shadow-[0_0_40px_rgba(234,179,8,0.4)]">
@@ -5274,7 +5755,6 @@ export default function App() {
                     <button onClick={() => setRewardAlert(null)} className="p-2 bg-black/40 rounded-full hover:bg-black/60"><X size={16} /></button>
                   </motion.div>
                 )}
-                 {showAICalendar && <AICalendarModal key="modal-ai-calendar" onClose={() => setShowAICalendar(false)} calendarTasks={calendarTasks} setCalendarTasks={setCalendarTasks} />}
                  {coachChatOpen && selectedCoach && (() => {
                   // Banco de respuestas por coach con personalidad real
                   const COACH_PERSONALITIES = {
@@ -5443,5 +5923,13 @@ export default function App() {
         </AnimatePresence>
       </div>
     </div>
+  );
+}
+
+export default function SafeApp() {
+  return (
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   );
 }
