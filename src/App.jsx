@@ -1,13 +1,19 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from './supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
+import focusImg from './assets/focus.png';
+import driveImg from './assets/drive.png';
+import './styles/light.css';
+import strengthImg from './assets/strength.png';
+import silenceImg from './assets/silence.png';
 import {
   Bell, Users, Mail, ChevronLeft, Plus, Heart, MessageCircle, Megaphone,
   Home, ShoppingBag, User, Check, Search, Settings, ArrowLeft, Sprout,
   Shield, Flame, Crown, Lock, Calendar, ArrowRight, Gem, MoreVertical,
   Send, Paperclip, Smile, Trophy, ArrowDown, Minus, Play, TrendingUp,
   Target, Zap, Award, Medal, Clock, Brain, BookOpen, Gamepad2, X, RefreshCw,
-  Image as ImageIcon, Edit2, LayoutGrid, Activity, Sparkles, Star, ChevronRight, Info, Palette, ChevronDown, Trash2
+  Image as ImageIcon, Edit2, LayoutGrid, Activity, Sparkles, Star, ChevronRight, Info, Palette, ChevronDown, Trash2,
+  Sun, Moon, Smartphone, CheckCircle2, BarChart3, Layers, Globe, ExternalLink, ShieldCheck
 } from 'lucide-react';
 
 // Error Boundary: evita pantalla en blanco ante cualquier crash de React
@@ -107,10 +113,10 @@ const UI_TEXT = {
 
 // --- DATA ---
 const SLIDES = [
-  { title: "Focus", subtitle: "EL ARTE DE LA ATENCIÓN PLENA.", image: "https://images.unsplash.com/photo-1492539161849-b2b18e79c85f?q=80&w=1000&auto=format&fit=crop" },
-  { title: "Drive", subtitle: "LA DISCIPLINA ES EL ÚNICO CAMINO.", image: "https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=1000&auto=format&fit=crop" },
-  { title: "Strength", subtitle: "CONSTRUYE TU VOLUNTAD DE ACERO.", image: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=1000&auto=format&fit=crop" },
-  { title: "Silence", subtitle: "ENCUENTRA PODER EN LA QUIETUD.", image: "https://images.unsplash.com/photo-1486915309851-b0cc1f8a0084?q=80&w=1000&auto=format&fit=crop" }
+  { title: "Focus", subtitle: "EL ARTE DE LA ATENCIÓN PLENA.", image: focusImg },
+  { title: "Drive", subtitle: "LA DISCIPLINA ES EL ÚNICO CAMINO.", image: driveImg },
+  { title: "Strength", subtitle: "CONSTRUYE TU VOLUNTAD DE ACERO.", image: strengthImg },
+  { title: "Silence", subtitle: "ENCUENTRA PODER EN LA QUIETUD.", image: silenceImg }
 ];
 
 const APPS = [
@@ -1253,7 +1259,7 @@ const SHOP_ITEMS = [
   { id: 'a_atlas', category: 'avatar', name: 'ATLAS', price: 2000, rarity: 'mythic', img: 'animated', desc: 'Guardián del Saber. Soporta el inmenso peso de la disciplina total.' },
 
   // Fondos
-  ...Object.values(BACKGROUNDS).map(bg => ({
+  ...Object.values(BACKGROUNDS).filter(bg => bg.id !== 'bg_light').map(bg => ({
     id: bg.id, category: 'background', name: bg.name, price: bg.price, rarity: bg.rarity, img: bg.img, desc: bg.desc
   }))
 ];
@@ -1687,52 +1693,136 @@ const GlobalThemeEffects = ({ themeId }) => {
 };
 
 // --- COMPONENTES BASE ---
-const Splash = () => (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#050505] z-50 flex items-center justify-center">
-    <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="w-20 h-20 border-4 border-white rounded-2xl shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center justify-center bg-white/5 backdrop-blur-md">
-      <motion.span animate={{ rotate: [0, -90, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="text-4xl font-black text-white drop-shadow-lg">F</motion.span>
-    </motion.div>
-  </motion.div>
-);
-
-const Onboarding = ({ onFinish }) => {
-  const [slide, setSlide] = useState(0);
-
-  const handleTap = () => {
-    if (slide < SLIDES.length - 1) {
-      setSlide(s => s + 1);
-    } else {
-      onFinish();
-    }
-  };
+const Splash = ({ onComplete }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (onComplete) onComplete();
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, [onComplete]);
 
   return (
-    <div className="absolute inset-0 bg-black z-50 text-white cursor-pointer overflow-hidden" onClick={handleTap}>
-      <AnimatePresence mode="wait">
-        <motion.img
-          key={slide}
-          initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 0.5, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
-          src={SLIDES[slide].image}
-          className="absolute inset-0 w-full h-full object-cover"
-          alt="slide"
-        />
-      </AnimatePresence>
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none" />
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-[#050505] z-[300] flex flex-col items-center justify-center">
+      <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="w-20 h-20 border-4 border-white rounded-2xl shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center justify-center bg-white/5 backdrop-blur-md">
+        <motion.span animate={{ rotate: [0, -90, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="text-4xl font-black text-white drop-shadow-lg">F</motion.span>
+      </motion.div>
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-8 text-center">
+        <span className="text-xs font-black uppercase tracking-[0.3em] text-white/50 block">Focusly</span>
+        <span className="text-[9px] font-bold uppercase tracking-widest text-indigo-400 mt-1 block">Iniciando aplicación...</span>
+      </motion.div>
+    </motion.div>
+  );
+};
 
-      <div className="absolute bottom-12 left-8 right-8 pointer-events-none z-10">
+// --- SLIDES DEL CAROUSEL ---
+const LANDING_CAROUSEL_SLIDES = [
+  { id: 'focus', title: 'FOCUS', subtitle: 'Domina tu atención y elimina las distracciones', image: focusImg, tag: 'Concentración Máxima' },
+  { id: 'silence', title: 'SILENCIO', subtitle: 'Elimina el ruido digital y recupera la calma', image: silenceImg, tag: 'Detox Digital' },
+  { id: 'drive', title: 'IMPULSO', subtitle: 'Alcanza tu máximo rendimiento académico y personal', image: driveImg, tag: 'Progreso Diario' },
+  { id: 'strength', title: 'DISCIPLINA', subtitle: 'Construye fortaleza mental y hábitos duraderos', image: strengthImg, tag: 'Hábitos Militares' },
+];
+
+const LandingImageSlider = ({ onFinish }) => {
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSlideIndex(prev => (prev + 1) % LANDING_CAROUSEL_SLIDES.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, []);
+
+  const current = LANDING_CAROUSEL_SLIDES[slideIndex];
+
+  return (
+    <div id="galeria-slider" className="space-y-6 pt-6">
+      <div className="text-center space-y-3 max-w-2xl mx-auto">
+        <span className="text-xs font-black uppercase tracking-[0.25em] text-indigo-400">Galería de Impacto</span>
+        <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight">Los 4 Pilares de Focusly</h2>
+        <p className="text-sm text-white/60 font-medium">Explora la experiencia visual y los fundamentos de nuestra metodología de concentración.</p>
+      </div>
+
+      <div className="relative w-full max-w-4xl mx-auto aspect-[16/9] sm:aspect-[21/9] rounded-[32px] overflow-hidden border border-white/15 shadow-[0_20px_80px_rgba(0,0,0,0.8)] group bg-[#090d16]">
         <AnimatePresence mode="wait">
-          <motion.div key={slide} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.5 }}>
-            <h2 className="text-5xl font-black uppercase mb-3 drop-shadow-2xl tracking-tighter">{SLIDES[slide].title}</h2>
-            <p className="text-xs font-bold tracking-[0.2em] text-white/70 uppercase">{SLIDES[slide].subtitle}</p>
+          <motion.div
+            key={slideIndex}
+            initial={{ opacity: 0, scale: 1.08 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="absolute inset-0"
+          >
+            <img 
+              src={current.image} 
+              alt={current.title} 
+              className="w-full h-full object-cover object-center brightness-[1.1] contrast-[1.05]"
+            />
+            {/* Gradient Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-[#030712]/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#030712]/80 via-transparent to-transparent" />
           </motion.div>
         </AnimatePresence>
 
-        <div className="flex gap-2 mt-10">
-          {SLIDES.map((_, i) => (
-            <div key={i} className={`h-1.5 rounded-full transition-all duration-500 ${i === slide ? 'w-8 bg-white shadow-[0_0_10px_white]' : 'w-2 bg-white/30'}`} />
+        {/* Slide Content Overlay */}
+        <div className="absolute bottom-8 left-8 right-8 z-20 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+          <div className="space-y-2 max-w-lg">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={slideIndex}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.4 }}
+                className="space-y-2"
+              >
+                <span className="inline-block px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[10px] font-black uppercase tracking-widest text-indigo-300">
+                  {current.tag}
+                </span>
+                <h3 className="text-4xl sm:text-5xl font-black uppercase tracking-tighter text-white drop-shadow-2xl">
+                  {current.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-white/80 font-medium leading-relaxed drop-shadow-md">
+                  {current.subtitle}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <button 
+            onClick={onFinish}
+            className="self-start sm:self-auto bg-white text-black font-black text-xs uppercase tracking-widest px-6 py-3.5 rounded-full shadow-[0_0_25px_rgba(255,255,255,0.4)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer shrink-0 flex items-center gap-2"
+          >
+            Comenzar <ArrowRight size={14} />
+          </button>
+        </div>
+
+        {/* Navigation Arrows */}
+        <button 
+          onClick={() => setSlideIndex(prev => (prev - 1 + LANDING_CAROUSEL_SLIDES.length) % LANDING_CAROUSEL_SLIDES.length)}
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all opacity-0 group-hover:opacity-100 z-30 cursor-pointer"
+        >
+          <ChevronLeft size={20} />
+        </button>
+
+        <button 
+          onClick={() => setSlideIndex(prev => (prev + 1) % LANDING_CAROUSEL_SLIDES.length)}
+          className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all opacity-0 group-hover:opacity-100 z-30 cursor-pointer"
+        >
+          <ChevronRight size={20} />
+        </button>
+
+        {/* Indicator Progress Bars */}
+        <div className="absolute top-6 left-8 right-8 z-30 flex gap-2">
+          {LANDING_CAROUSEL_SLIDES.map((s, idx) => (
+            <button
+              key={s.id}
+              onClick={() => setSlideIndex(idx)}
+              className="flex-1 h-1.5 rounded-full overflow-hidden bg-white/20 backdrop-blur-md cursor-pointer transition-all"
+            >
+              <div 
+                className={`h-full transition-all duration-500 ${idx === slideIndex ? 'w-full bg-white shadow-[0_0_12px_white]' : 'w-0'}`} 
+              />
+            </button>
           ))}
         </div>
       </div>
@@ -1740,9 +1830,599 @@ const Onboarding = ({ onFinish }) => {
   );
 };
 
+// --- LANDING PAGE COMPONENT (NUEVO REDISEÑO 2026) ---
+const LandingPage = ({ onFinish }) => {
+  const [activeTab, setActiveTab] = useState('principiante');
+  const [showDemoModal, setShowDemoModal] = useState(false);
+
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <div className="fixed inset-0 z-[200] bg-[#030712] text-white overflow-y-auto custom-scroll font-['Inter',sans-serif] selection:bg-indigo-500 selection:text-white">
+      {/* Dynamic Background Gradients & Ambient Lights */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-indigo-600/15 rounded-full blur-[140px]" />
+        <div className="absolute top-[20%] right-[-10%] w-[45vw] h-[45vw] bg-purple-600/15 rounded-full blur-[140px]" />
+        <div className="absolute bottom-[10%] left-[20%] w-[40vw] h-[40vw] bg-blue-600/10 rounded-full blur-[140px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+      </div>
+
+      {/* TOP NAVIGATION BAR */}
+      <header className="sticky top-4 z-50 max-w-6xl mx-auto px-4 sm:px-6">
+        <nav className="flex items-center justify-between px-6 py-3.5 rounded-full bg-[#0b0f19]/80 backdrop-blur-xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+          {/* Logo */}
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-[0_0_20px_rgba(99,102,241,0.5)]">
+              <div className="w-full h-full bg-[#090d16] rounded-[10px] flex items-center justify-center">
+                <Zap size={18} className="text-indigo-400" fill="currentColor" />
+              </div>
+            </div>
+            <span className="text-lg font-black tracking-tight text-white uppercase">Focus<span className="text-indigo-400">ly</span></span>
+          </div>
+
+          {/* Nav Links */}
+          <div className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-widest text-white/60">
+            <button onClick={() => scrollToSection('beneficios')} className="hover:text-white transition-colors cursor-pointer">Beneficios</button>
+            <button onClick={() => scrollToSection('como-funciona')} className="hover:text-white transition-colors cursor-pointer">Cómo Funciona</button>
+            <button onClick={() => scrollToSection('progreso')} className="hover:text-white transition-colors cursor-pointer">Progreso</button>
+            <button onClick={() => scrollToSection('mockups')} className="hover:text-white transition-colors cursor-pointer">Demostración</button>
+            <button onClick={() => scrollToSection('testimonios')} className="hover:text-white transition-colors cursor-pointer">Testimonios</button>
+          </div>
+
+          {/* Action Button */}
+          <button 
+            onClick={onFinish}
+            className="bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-500 bg-[size:200%_auto] hover:bg-right text-white font-black text-xs uppercase tracking-widest px-6 py-2.5 rounded-full shadow-[0_0_25px_rgba(99,102,241,0.4)] hover:shadow-[0_0_35px_rgba(168,85,247,0.6)] transition-all duration-300 active:scale-95 cursor-pointer flex items-center gap-2"
+          >
+            Comenzar <ArrowRight size={14} />
+          </button>
+        </nav>
+      </header>
+
+      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-10 sm:pt-16 pb-24 space-y-28 sm:space-y-36">
+        {/* HERO SECTION */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pt-4">
+          {/* Left Column: Text Content */}
+          <div className="lg:col-span-7 space-y-8 text-center lg:text-left">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.6 }} 
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-black uppercase tracking-widest backdrop-blur-md"
+            >
+              <Sparkles size={14} className="text-indigo-400" />
+              <span>Plataforma de Gamificación 2026</span>
+            </motion.div>
+
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-4xl sm:text-6xl font-black uppercase tracking-tight leading-[1.05] text-white"
+            >
+              Controla tu tiempo. <br />
+              <span className="bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_10px_30px_rgba(168,85,247,0.3)]">Mejora tu vida.</span>
+            </motion.h1>
+
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-base sm:text-lg text-white/60 font-medium leading-relaxed max-w-xl mx-auto lg:mx-0"
+            >
+              Convierte cada minuto lejos de las redes sociales en progreso real mediante retos, recompensas y gamificación.
+            </motion.p>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2"
+            >
+              <button 
+                onClick={onFinish}
+                className="w-full sm:w-auto bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-500 text-white font-black text-xs uppercase tracking-widest px-8 py-4 rounded-2xl shadow-[0_0_40px_rgba(99,102,241,0.5)] hover:shadow-[0_0_60px_rgba(168,85,247,0.7)] hover:scale-[1.03] active:scale-95 transition-all duration-300 cursor-pointer flex items-center justify-center gap-3"
+              >
+                Comenzar <ArrowRight size={16} />
+              </button>
+
+              <button 
+                onClick={() => scrollToSection('mockups')}
+                className="w-full sm:w-auto bg-white/5 hover:bg-white/10 border border-white/10 text-white font-black text-xs uppercase tracking-widest px-8 py-4 rounded-2xl backdrop-blur-md hover:border-white/20 transition-all cursor-pointer flex items-center justify-center gap-3"
+              >
+                <Play size={16} className="text-indigo-400" fill="currentColor" /> Ver demostración
+              </button>
+            </motion.div>
+
+            {/* Micro Social Proof Badges */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="flex items-center justify-center lg:justify-start gap-6 pt-4 text-xs font-bold text-white/40 uppercase tracking-widest">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={16} className="text-emerald-400" />
+                <span>Supabase Cloud DB</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={16} className="text-indigo-400" />
+                <span>Gamificación AAA</span>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right Column: Floating Phone Mockup */}
+          <div className="lg:col-span-5 flex justify-center">
+            <motion.div 
+              animate={{ y: [-12, 12, -12] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="relative w-full max-w-[340px] aspect-[9/18.5] bg-gradient-to-b from-[#1e293b] via-[#0f172a] to-[#020617] rounded-[50px] p-3 border-[6px] border-[#334155] shadow-[0_30px_100px_rgba(99,102,241,0.35)] overflow-hidden"
+            >
+              {/* Dynamic Island Notch */}
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-5 bg-[#020617] rounded-full z-40 flex items-center justify-end px-3">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#1e293b] border border-white/10" />
+              </div>
+
+              {/* Phone Screen Live App Preview */}
+              <div className="w-full h-full bg-[#050814] rounded-[38px] overflow-hidden flex flex-col pt-10 px-4 pb-6 text-white relative">
+                {/* Header inside phone */}
+                <div className="flex justify-between items-center mb-6">
+                  <div>
+                    <span className="text-[8px] font-black uppercase text-indigo-400 tracking-widest block">Focusly App</span>
+                    <h4 className="text-sm font-black uppercase tracking-tight">Panel de Control</h4>
+                  </div>
+                  <div className="px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[9px] font-black uppercase flex items-center gap-1">
+                    <Flame size={10} fill="currentColor" /> Racha: 7 días
+                  </div>
+                </div>
+
+                {/* Main Interactive Active Challenge Box inside Mockup */}
+                <div className="bg-gradient-to-br from-indigo-900/60 to-purple-900/60 border border-indigo-500/30 rounded-2xl p-4 mb-4 relative overflow-hidden">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <span className="text-[7px] font-black uppercase tracking-widest text-indigo-300">Desafío Activo</span>
+                      <h5 className="text-xs font-black uppercase">Ayuno de TikTok</h5>
+                    </div>
+                    <div className="w-6 h-6 rounded-full bg-indigo-500/30 border border-indigo-400 flex items-center justify-center text-[10px]">📵</div>
+                  </div>
+                  {/* Timer display */}
+                  <div className="text-center py-2">
+                    <div className="text-2xl font-black tracking-widest text-white">42 : 18</div>
+                    <span className="text-[7px] font-black uppercase text-white/40 tracking-widest">Tiempo restante de concentración</span>
+                  </div>
+                  {/* XP Reward badge */}
+                  <div className="mt-2 flex justify-between items-center bg-black/40 px-3 py-1.5 rounded-xl border border-white/5">
+                    <span className="text-[8px] font-bold text-white/60">Recompensa:</span>
+                    <span className="text-[9px] font-black text-amber-400 flex items-center gap-1"><Zap size={10} fill="currentColor" /> +250 XP</span>
+                  </div>
+                </div>
+
+                {/* Blocked Apps Progress List */}
+                <div className="space-y-2 flex-1 overflow-hidden">
+                  <span className="text-[8px] font-black uppercase text-white/40 tracking-widest">Límites de Aplicaciones</span>
+                  {[
+                    { name: 'Instagram', time: '15m / 30m', color: 'bg-gradient-to-r from-pink-500 to-purple-500', width: '50%' },
+                    { name: 'TikTok', time: '0m / 20m (Bloqueado)', color: 'bg-emerald-500', width: '0%' },
+                    { name: 'YouTube', time: '40m / 60m', color: 'bg-amber-500', width: '66%' },
+                  ].map((app, idx) => (
+                    <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-2.5">
+                      <div className="flex justify-between text-[8px] font-black uppercase mb-1">
+                        <span>{app.name}</span>
+                        <span className="text-white/50">{app.time}</span>
+                      </div>
+                      <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden">
+                        <div className={`h-full ${app.color}`} style={{ width: app.width }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Bottom Nav inside mockup */}
+                <div className="pt-3 border-t border-white/10 flex justify-around text-white/40">
+                  <Home size={14} className="text-indigo-400" />
+                  <Trophy size={14} />
+                  <ShoppingBag size={14} />
+                  <User size={14} />
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* SLIDER CAROUSEL DE IMÁGENES */}
+        <LandingImageSlider onFinish={onFinish} />
+
+        {/* SECCIÓN DE BENEFICIOS */}
+        <section id="beneficios" className="space-y-12">
+          <div className="text-center space-y-4 max-w-2xl mx-auto">
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-indigo-400">Beneficios Principales</span>
+            <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight">Redefine tu relación con la tecnología</h2>
+            <p className="text-sm text-white/60 font-medium">Diseñado con psicología del comportamiento para ayudarte a reemplazar distracciones por hábitos de alto impacto.</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                icon: Smartphone,
+                title: 'Reduce tu tiempo en redes sociales',
+                desc: 'Establece límites inteligentes y recupera el control sobre TikTok, Instagram y YouTube sin esfuerzo.',
+                gradient: 'from-blue-500/10 to-indigo-500/10',
+                border: 'border-blue-500/30'
+              },
+              {
+                icon: Trophy,
+                title: 'Gana recompensas y sube de nivel',
+                desc: 'Acumula XP y diamantes por cada hora de enfoque. Desbloquea avatares, skins y entornos únicos.',
+                gradient: 'from-amber-500/10 to-yellow-500/10',
+                border: 'border-amber-500/30'
+              },
+              {
+                icon: Target,
+                title: 'Completa retos diarios',
+                desc: 'Desafíos gamificados diseñados para estudiantes y jóvenes profesionales que buscan superar sus límites.',
+                gradient: 'from-purple-500/10 to-pink-500/10',
+                border: 'border-purple-500/30'
+              },
+              {
+                icon: TrendingUp,
+                title: 'Mejora tus hábitos constantemente',
+                desc: 'Analítica avanzada respaldada por IA conductual para monitorear tu evolución día a día.',
+                gradient: 'from-emerald-500/10 to-teal-500/10',
+                border: 'border-emerald-500/30'
+              }
+            ].map((card, idx) => {
+              const Icon = card.icon;
+              return (
+                <motion.div 
+                  key={idx}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  className={`bg-gradient-to-br ${card.gradient} bg-[#0b0f19]/80 backdrop-blur-xl border ${card.border} rounded-3xl p-6 flex flex-col justify-between space-y-4 shadow-xl transition-all duration-300 group`}
+                >
+                  <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Icon size={24} className="text-white" />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-base font-black uppercase tracking-tight text-white">{card.title}</h3>
+                    <p className="text-xs text-white/60 font-medium leading-relaxed">{card.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* SECCIÓN DE CÓMO FUNCIONA */}
+        <section id="como-funciona" className="space-y-12">
+          <div className="text-center space-y-4 max-w-2xl mx-auto">
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-indigo-400">Paso a Paso</span>
+            <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight">Cómo Funciona</h2>
+            <p className="text-sm text-white/60 font-medium">Cuatro pasos sencillos para transformar tus hábitos digitales.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+            {[
+              { num: '01', title: 'Configura tus objetivos', desc: 'Elige las apps a bloquear y define tus metas diarias de concentración.' },
+              { num: '02', title: 'Completa desafíos', desc: 'Inicia sesiones de enfoque sin distracciones y supera los retos diarios.' },
+              { num: '03', title: 'Obtén recompensas', desc: 'Acumula experiencia (XP), diamantes e insignias de rango militar.' },
+              { num: '04', title: 'Mejora tus hábitos', desc: 'Visualiza tu racha y evoluciona tu mentalidad constantemente.' },
+            ].map((step, idx) => (
+              <div key={idx} className="relative bg-[#0b0f19]/70 backdrop-blur-xl border border-white/10 rounded-3xl p-6 flex flex-col justify-between space-y-6 shadow-lg hover:border-indigo-500/40 transition-all">
+                <div className="flex justify-between items-center">
+                  <span className="text-3xl font-black text-indigo-400/40">{step.num}</span>
+                  <div className="w-3.5 h-3.5 rounded-full bg-indigo-500 shadow-[0_0_12px_#6366f1]" />
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-sm font-black uppercase tracking-tight text-white">{step.title}</h4>
+                  <p className="text-xs text-white/60 font-medium leading-relaxed">{step.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* SISTEMA DE PROGRESO */}
+        <section id="progreso" className="space-y-12 bg-gradient-to-b from-indigo-950/20 via-purple-950/20 to-transparent p-8 sm:p-12 rounded-[40px] border border-white/10 backdrop-blur-2xl">
+          <div className="text-center space-y-4 max-w-2xl mx-auto">
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-indigo-400">Gamificación Élite</span>
+            <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight">Sistema de Progreso</h2>
+            <p className="text-sm text-white/60 font-medium">Evoluciona tu rango como en los mejores videojuegos de rol.</p>
+          </div>
+
+          {/* Level Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { id: 'principiante', name: 'Principiante', level: 'Nivel 1', color: '#22c55e', tag: 'COMÚN', icon: Sprout, xp: '0 - 500 XP', desc: 'Ideal para dar el primer paso hacia una mente libre de distracciones.' },
+              { id: 'novato', name: 'Novato', level: 'Nivel 2', color: '#3b82f6', tag: 'RARO', icon: Shield, xp: '500 - 1.5K XP', desc: 'Incrementa la intensidad y construye constancia diaria firme.' },
+              { id: 'profesional', name: 'Profesional', level: 'Nivel 3', color: '#a855f7', tag: 'ÉPICO', icon: Flame, xp: '1.5K - 3.5K XP', desc: 'Para mentes enfocadas que buscan transformar su rendimiento académico.' },
+              { id: 'leyenda', name: 'Leyenda', level: 'Nivel 4', color: '#eab308', tag: 'LEGENDARIO', icon: Crown, xp: '3.5K+ XP', desc: 'Dominio absoluto del tiempo. Cero excusas, disciplina de nivel élite.' },
+            ].map(lvl => {
+              const Icon = lvl.icon;
+              const isSel = activeTab === lvl.id;
+              return (
+                <button
+                  key={lvl.id}
+                  onClick={() => setActiveTab(lvl.id)}
+                  className={`p-6 rounded-3xl border text-left flex flex-col justify-between space-y-4 transition-all cursor-pointer ${isSel ? 'bg-white/10 border-white/40 shadow-2xl scale-[1.02]' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
+                  style={{ borderColor: isSel ? lvl.color : 'rgba(255,255,255,0.1)' }}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md" style={{ color: lvl.color, backgroundColor: `${lvl.color}20` }}>{lvl.tag}</span>
+                    <Icon size={24} style={{ color: lvl.color }} />
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="text-lg font-black uppercase text-white">{lvl.name}</h4>
+                    <span className="text-[10px] font-bold text-white/50 block">{lvl.xp}</span>
+                    <p className="text-xs text-white/60 font-medium pt-2 leading-relaxed">{lvl.desc}</p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* XP Progress Bar Showcase */}
+          <div className="bg-black/60 border border-white/10 rounded-3xl p-6 sm:p-8 space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <span className="text-[9px] font-black uppercase text-indigo-400 tracking-widest block">Barra de Experiencia</span>
+                <h3 className="text-xl font-black uppercase text-white">Rango Élite de Usuario</h3>
+              </div>
+              <div className="px-4 py-2 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-black uppercase flex items-center gap-2">
+                <Crown size={16} /> 7,450 / 10,000 XP
+              </div>
+            </div>
+
+            <div className="w-full h-4 bg-white/10 rounded-full overflow-hidden p-0.5 border border-white/10">
+              <motion.div initial={{ width: '0%' }} animate={{ width: '74.5%' }} transition={{ duration: 1.5, ease: "easeOut" }} className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-amber-400 rounded-full shadow-[0_0_15px_#f59e0b]" />
+            </div>
+
+            {/* Badges Showcase */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+              {[
+                { title: 'Insignia Foco', desc: '100 Horas sin Redes', icon: Zap, color: 'text-indigo-400' },
+                { title: 'Fuego Santo', desc: 'Racha de 30 Días', icon: Flame, color: 'text-amber-400' },
+                { title: 'Guardián Égida', desc: 'Nivel Élite', icon: Shield, color: 'text-purple-400' },
+                { title: 'Campeón Místico', desc: 'Top 1% Global', icon: Trophy, color: 'text-emerald-400' },
+              ].map((badge, i) => {
+                const BIcon = badge.icon;
+                return (
+                  <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                      <BIcon size={20} className={badge.color} />
+                    </div>
+                    <div>
+                      <h5 className="text-xs font-black uppercase text-white">{badge.title}</h5>
+                      <span className="text-[9px] text-white/50 font-medium block">{badge.desc}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* MOCKUPS DE LA APLICACIÓN */}
+        <section id="mockups" className="space-y-12">
+          <div className="text-center space-y-4 max-w-2xl mx-auto">
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-indigo-400">Demostración Visual</span>
+            <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight">Capturas de la Aplicación</h2>
+            <p className="text-sm text-white/60 font-medium">Una interfaz diseñada minuciosamente para inspirarte y mantenerte enfocado.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
+            {[
+              {
+                title: 'Panel de Control',
+                tag: 'DASHBOARD',
+                desc: 'Visualiza tus misiones diarias, racha de atención y el estado en tiempo real del bloqueador.',
+                mockupContent: (
+                  <div className="p-4 space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[10px] font-black text-indigo-400 uppercase">Focusly Dashboard</span>
+                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold">En Línea</span>
+                    </div>
+                    <div className="bg-indigo-900/40 border border-indigo-500/30 rounded-xl p-3 text-center">
+                      <span className="text-[8px] font-bold uppercase text-white/50 block">Sesión en Curso</span>
+                      <div className="text-xl font-black text-white my-1">25 : 00</div>
+                      <span className="text-[8px] font-bold text-amber-300 uppercase"> Recompensa: +150 XP</span>
+                    </div>
+                    <div className="space-y-1.5">
+                      <span className="text-[8px] font-black uppercase text-white/40">Apps Limitadas</span>
+                      <div className="bg-white/5 p-2 rounded-lg text-[9px] flex justify-between font-bold"><span>Instagram</span><span className="text-red-400">Bloqueado</span></div>
+                      <div className="bg-white/5 p-2 rounded-lg text-[9px] flex justify-between font-bold"><span>TikTok</span><span className="text-red-400">Bloqueado</span></div>
+                    </div>
+                  </div>
+                )
+              },
+              {
+                title: 'Colección de Avatares',
+                tag: 'TIENDA & SKIN',
+                desc: 'Equipa personajes 3D animados con auras y aspectos exclusivos.',
+                mockupContent: (
+                  <div className="p-4 space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[10px] font-black text-purple-400 uppercase">Colección & Avatares</span>
+                      <span className="text-[9px] text-amber-300 font-black"> 4,500 Gemas</span>
+                    </div>
+                    <div className="bg-purple-900/40 border border-purple-500/30 rounded-xl p-4 flex flex-col items-center justify-center text-center">
+                      <div className="w-16 h-16 rounded-full bg-purple-500/20 border-2 border-purple-400 flex items-center justify-center text-2xl shadow-[0_0_20px_#a855f7] mb-2">
+                        🔥
+                      </div>
+                      <h6 className="text-xs font-black uppercase text-white">Fuego Primordial</h6>
+                      <span className="text-[8px] font-bold text-purple-300 uppercase">Rango Épico</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      <div className="bg-white/5 p-2 rounded-lg text-center text-xs">🛡️</div>
+                      <div className="bg-white/5 p-2 rounded-lg text-center text-xs">👑</div>
+                      <div className="bg-white/5 p-2 rounded-lg text-center text-xs">💎</div>
+                    </div>
+                  </div>
+                )
+              },
+              {
+                title: 'Asistente IA Conductual',
+                tag: 'INTELIGENCIA ARTIFICIAL',
+                desc: 'Análisis inteligente en tiempo real para optimizar tu horario de estudio y descansos.',
+                mockupContent: (
+                  <div className="p-4 space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[10px] font-black text-cyan-400 uppercase">IA Coach Focusly</span>
+                      <span className="text-[9px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full font-bold">Activo</span>
+                    </div>
+                    <div className="bg-cyan-900/30 border border-cyan-500/30 rounded-xl p-3 space-y-2">
+                      <span className="text-[8px] font-bold uppercase text-cyan-300 block">Recomendación Personalizada</span>
+                      <p className="text-[9px] font-medium text-white/80 leading-relaxed">
+                        "Detectamos mayor distracción entre las 4 PM y 6 PM. Te sugerimos activar el reto Ayuno de Redes durante ese bloque."
+                      </p>
+                    </div>
+                    <div className="bg-white/5 p-2.5 rounded-xl text-[9px] font-bold flex justify-between items-center">
+                      <span>Plan de Hábitos Creado</span>
+                      <span className="text-emerald-400">100% Optimizado</span>
+                    </div>
+                  </div>
+                )
+              }
+            ].map((mock, idx) => (
+              <motion.div 
+                key={idx}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="bg-[#0b0f19] border border-white/10 rounded-3xl p-4 shadow-2xl flex flex-col space-y-4 hover:border-indigo-500/40 transition-all"
+              >
+                {/* Phone Frame */}
+                <div className="w-full aspect-[9/16] bg-[#030712] rounded-2xl border-2 border-white/10 overflow-hidden relative shadow-inner">
+                  {mock.mockupContent}
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[9px] font-black uppercase text-indigo-400 tracking-widest">{mock.tag}</span>
+                  <h4 className="text-base font-black uppercase text-white">{mock.title}</h4>
+                  <p className="text-xs text-white/60 font-medium leading-relaxed">{mock.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* ESTADÍSTICAS REALES / TECNOLOGÍA */}
+        <section className="bg-gradient-to-r from-indigo-900/40 via-purple-900/40 to-indigo-900/40 border border-white/10 rounded-3xl p-8 sm:p-12 backdrop-blur-xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { num: 'Supabase', label: 'Base de Datos Realtime' },
+              { num: 'OAuth & JWT', label: 'Autenticación Segura' },
+              { num: 'Realtime DB', label: 'Sincronización en Nube' },
+              { num: '0 ms', label: 'Persistencia Directa' },
+            ].map((stat, i) => (
+              <div key={i} className="space-y-2">
+                <div className="text-2xl sm:text-3xl font-black tracking-tight text-white bg-gradient-to-r from-indigo-300 via-purple-200 to-pink-300 bg-clip-text text-transparent">{stat.num}</div>
+                <span className="text-xs font-bold uppercase tracking-widest text-white/50 block">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* TESTIMONIOS */}
+        <section id="testimonios" className="space-y-12">
+          <div className="text-center space-y-4 max-w-2xl mx-auto">
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-indigo-400">Testimonios</span>
+            <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight">Lo que dice nuestra comunidad</h2>
+            <p className="text-sm text-white/60 font-medium">Historias reales de jóvenes que transformaron su rendimiento digital.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                name: 'Mateo R.',
+                role: 'Estudiante de Medicina',
+                comment: 'Pasé de gastar 5 horas al día en TikTok a estudiar sin distracciones. El sistema de XP me enganchó desde el primer día.',
+                gradient: 'from-blue-500 to-indigo-600'
+              },
+              {
+                name: 'Valeria G.',
+                role: 'Ingeniería de Software',
+                comment: 'Focusly se siente como jugar un RPG de productividad. Bloquear mi teléfono nunca había sido tan gratificante.',
+                gradient: 'from-purple-500 to-pink-600'
+              },
+              {
+                name: 'Lucas S.',
+                role: 'Estudiante de Bachillerato',
+                comment: 'Gracias a los desafíos y mentores IA logré organizar mis exámenes sin ansiedad. Es la mejor app que he probado.',
+                gradient: 'from-amber-500 to-orange-600'
+              }
+            ].map((t, idx) => (
+              <motion.div 
+                key={idx}
+                whileHover={{ y: -4 }}
+                className="bg-[#0b0f19]/80 border border-white/10 rounded-3xl p-6 space-y-4 shadow-xl hover:border-indigo-500/40 transition-all flex flex-col justify-between"
+              >
+                <p className="text-xs text-white/80 font-medium italic leading-relaxed">"{t.comment}"</p>
+                <div className="flex items-center gap-3 pt-2">
+                  <div className={`w-10 h-10 rounded-full bg-gradient-to-tr ${t.gradient} flex items-center justify-center text-xs font-black uppercase text-white shadow-md`}>
+                    {t.name.substring(0, 2)}
+                  </div>
+                  <div>
+                    <h5 className="text-xs font-black uppercase text-white">{t.name}</h5>
+                    <span className="text-[9px] text-white/40 font-bold uppercase tracking-widest block">{t.role}</span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA FINAL */}
+        <section className="relative overflow-hidden rounded-[40px] bg-gradient-to-r from-indigo-900 via-purple-900 to-indigo-950 p-8 sm:p-16 border border-white/20 shadow-[0_0_80px_rgba(99,102,241,0.4)] text-center space-y-8">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15)_0%,transparent_70%)] pointer-events-none" />
+          
+          <div className="space-y-4 max-w-2xl mx-auto relative z-10">
+            <span className="text-xs font-black uppercase tracking-[0.3em] text-indigo-300">Empieza Tu Transformación</span>
+            <h2 className="text-4xl sm:text-5xl font-black uppercase tracking-tight text-white">Empieza hoy a recuperar tu tiempo.</h2>
+            <p className="text-sm text-white/70 font-medium leading-relaxed">
+              Únete a miles de jóvenes que ya están convirtiendo sus distracciones en logros reales.
+            </p>
+          </div>
+
+          <div className="relative z-10 pt-2">
+            <button 
+              onClick={onFinish}
+              className="bg-white text-black font-black text-xs uppercase tracking-widest px-10 py-5 rounded-2xl shadow-[0_10px_30px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer inline-flex items-center gap-3"
+            >
+              Comenzar ahora <ArrowRight size={18} />
+            </button>
+          </div>
+        </section>
+      </main>
+
+      {/* FOOTER MINIMALISTA */}
+      <footer className="border-t border-white/10 bg-[#02050e] py-12 relative z-10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-500 p-0.5">
+              <div className="w-full h-full bg-[#02050e] rounded-[6px] flex items-center justify-center">
+                <Zap size={14} className="text-indigo-400" fill="currentColor" />
+              </div>
+            </div>
+            <span className="text-sm font-black uppercase tracking-tight text-white">Focusly</span>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-6 text-xs font-bold text-white/40 uppercase tracking-widest">
+            <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white transition-colors cursor-pointer">Inicio</button>
+            <button onClick={() => scrollToSection('beneficios')} className="hover:text-white transition-colors cursor-pointer">Beneficios</button>
+            <button onClick={() => scrollToSection('como-funciona')} className="hover:text-white transition-colors cursor-pointer">Cómo Funciona</button>
+            <button onClick={() => scrollToSection('progreso')} className="hover:text-white transition-colors cursor-pointer">Progreso</button>
+            <button onClick={() => scrollToSection('testimonios')} className="hover:text-white transition-colors cursor-pointer">Testimonios</button>
+          </div>
+
+          <div className="text-xs font-medium text-white/30 text-center md:text-right">
+            © 2026 Focusly Inc. Todos los derechos reservados.
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+const Onboarding = LandingPage;
+
 const LogoReveal = ({ onContinue, onBack }) => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-black z-50 flex flex-col text-white px-8 pt-20 pb-10">
-    <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} onClick={onBack} className="flex items-center gap-1 opacity-40 hover:opacity-100 transition-opacity -ml-2 w-max text-white">
+    <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} onClick={onBack} className="relative z-50 flex items-center gap-1 opacity-40 hover:opacity-100 transition-opacity -ml-2 p-2 w-max text-white cursor-pointer">
       <ChevronLeft size={24} />
     </motion.button>
     <div className="flex-1 flex flex-col items-center justify-center -mt-10">
@@ -2699,7 +3379,6 @@ const ShopView = ({ userDiamonds, onSelectItem, inventory }) => {
   );
 };
 
-
 // --- MODAL: ESTADÍSTICAS ---
 const StatsModal = ({ onClose, calendarTasks, completedCount, userXP }) => {
   const habits = (calendarTasks || []).filter(t => t.isHabit);
@@ -2971,7 +3650,7 @@ const LOG_ICONS = {
   Shield: Shield
 };
 
-const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, completedCount, activityLog, selectedApps, setSelectedApps, lang, setLang, userEmail, isAnonymous, onSignOut, onLinkAccount, onOpenStats, loginStreak }) => {
+const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, completedCount, activityLog, selectedApps, setSelectedApps, lang, setLang, userEmail, isAnonymous, onSignOut, onLinkAccount, onOpenStats, loginStreak, isLight, toggleMode, onOpenLanding }) => {
   const [activeProfileTab, setActiveProfileTab] = useState('estado');
   const [activeTab, setActiveTab] = useState('avatars');
   const [showAppSelector, setShowAppSelector] = useState(false);
@@ -3090,20 +3769,28 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
                   </div>
                   <ChevronDown size={20} className={`text-white/50 transition-transform duration-300 ${showAppSelector ? 'rotate-180' : ''}`} />
                 </button>
-                <button 
-                  onClick={() => {
-                    const nextBg = inventory.equippedBg === 'bg_light' ? 'bg_default' : 'bg_light';
-                    setInventory(prev => ({ ...prev, equippedBg: nextBg }));
-                  }} 
-                  className="w-16 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm rounded-[20px] border border-white/10 shadow-lg flex flex-col items-center justify-center shrink-0"
-                >
-                  <Palette size={18} className="text-white/50 mb-1" />
-                  <span className="text-[8px] font-black uppercase text-white tracking-widest">{inventory.equippedBg === 'bg_light' ? 'Claro' : 'Oscuro'}</span>
-                </button>
-                <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="w-16 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm rounded-[20px] border border-white/10 shadow-lg flex flex-col items-center justify-center shrink-0">
-                  <span className="text-[8px] text-white/50 font-bold uppercase tracking-widest mb-1">Idioma</span>
-                  <span className="text-sm font-black uppercase text-white">{lang}</span>
-                </button>
+                <div className="flex gap-2 shrink-0">
+                  <button onClick={() => setLang(lang === 'es' ? 'en' : 'es')} className="w-16 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm rounded-[20px] border border-white/10 shadow-lg flex flex-col items-center justify-center shrink-0">
+                    <span className="text-[8px] text-white/50 font-bold uppercase tracking-widest mb-1">Idioma</span>
+                    <span className="text-sm font-black uppercase text-white">{lang}</span>
+                  </button>
+                  {toggleMode && (
+                    <button onClick={toggleMode} className="w-16 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm rounded-[20px] border border-white/10 shadow-lg flex flex-col items-center justify-center shrink-0">
+                      <span className="text-[8px] text-white/50 font-bold uppercase tracking-widest mb-1">Tema</span>
+                      {isLight ? <Sun size={18} className="text-yellow-400" /> : <Moon size={18} className="text-white" />}
+                    </button>
+                  )}
+                  <button 
+                    onClick={() => {
+                      const nextBg = inventory.equippedBg === 'bg_light' ? 'bg_default' : 'bg_light';
+                      setInventory(prev => ({ ...prev, equippedBg: nextBg }));
+                    }} 
+                    className="w-16 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm rounded-[20px] border border-white/10 shadow-lg flex flex-col items-center justify-center shrink-0"
+                  >
+                    <Palette size={18} className="text-white/50 mb-1" />
+                    <span className="text-[8px] font-black uppercase text-white tracking-widest">{inventory.equippedBg === 'bg_light' ? 'Claro' : 'Oscuro'}</span>
+                  </button>
+                </div>
               </div>
               <AnimatePresence>
                 {showAppSelector && (
@@ -3171,6 +3858,15 @@ const ProfileView = ({ inventory, setInventory, userXP, username, onOpenItem, co
                     Cerrar Sesión
                   </button>
                 </div>
+              )}
+
+              {onOpenLanding && (
+                <button 
+                  onClick={onOpenLanding}
+                  className="w-full bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all border border-indigo-500/30 shadow-md text-center flex items-center justify-center gap-2 mt-4"
+                >
+                  <Globe size={14} /> Ver Landing Page
+                </button>
               )}
             </div>
 
@@ -3334,7 +4030,7 @@ const useBehavioralAI = (supabaseUserId, selectedApps, lang = 'es') => {
   return { recommendations, isLoading };
 };
 
-const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpenActive, onOpenAll, onCompleteChallenge, onPlayMinigame, userGender, selectedCoach, setSelectedCoach, completedActivities, setCompletedActivities, userXP, setUserXP, userDiamonds, setUserDiamonds, calendarTasks, setCalendarTasks, blockedAppsConfig, setBlockedAppsConfig, onOpenAICalendar, onOpenAIHabit, onOpenCreateHabit, lang, supabaseUserId, setCoachChatOpen }) => {
+const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpenActive, onOpenAll, onCompleteChallenge, onPlayMinigame, userGender, selectedCoach, setSelectedCoach, completedActivities, setCompletedActivities, userXP, setUserXP, userDiamonds, setUserDiamonds, calendarTasks, setCalendarTasks, blockedAppsConfig, setBlockedAppsConfig, onOpenAICalendar, onOpenAIHabit, onOpenCreateHabit, lang, supabaseUserId, setCoachChatOpen, isLight, toggleMode, onOpenLanding }) => {
   const [homeTab, setHomeTab] = useState('desafiate');
   const [organizeSubTab, setOrganizeSubTab] = useState('habitos');
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -3400,7 +4096,7 @@ const HomeDashboard = ({ selectedApps, activeChallenge, onSelectChallenge, onOpe
   return (
     <div className="absolute inset-0 flex flex-col z-40 text-white overflow-hidden bg-black/10 backdrop-blur-sm">
       <div className="flex-1 overflow-y-auto px-6 pt-16 pb-36 custom-scroll">
-        <div className="flex gap-1.5 bg-black/60 p-1.5 rounded-full border border-white/5 shadow-inner backdrop-blur-md mb-8 overflow-x-auto no-scrollbar">
+        <div className="flex gap-1.5 bg-black/60 p-1.5 rounded-full border border-white/5 shadow-inner backdrop-blur-md mb-8 overflow-x-auto no-scrollbar items-center">
           <button onClick={() => setHomeTab('desafiate')} className={`flex-1 py-2.5 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${homeTab === 'desafiate' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>{t.challenge}</button>
           <button onClick={() => setHomeTab('organizate')} className={`flex-1 py-2.5 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${homeTab === 'organizate' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>{t.organize}</button>
           <button onClick={() => setHomeTab('crece')} className={`flex-1 py-2.5 px-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${homeTab === 'crece' ? 'bg-white text-black shadow-md' : 'text-white/40 hover:text-white'}`}>{t.grow}</button>
@@ -5188,8 +5884,26 @@ const BottomNav = ({ activeTab, onChange, currentThemeBg, lang = 'es' }) => {
 
 // --- APP COMPONENT ---
 function App() {
-  const [step, setStep] = useState('splash');
+  const [step, setStep] = useState('onboarding');
   const [lang, setLang] = useState('es');
+  const [selectedApps, setSelectedApps] = useState([]);
+  const [isLight, setIsLight] = useState(() => localStorage.getItem('theme') === 'light');
+
+  const toggleMode = () => {
+    setIsLight(prev => {
+      const next = !prev;
+      localStorage.setItem('theme', next ? 'light' : 'dark');
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    if (isLight) {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+  }, [isLight]);
 
   // --- Supabase auth ---
   const [supabaseUserId, setSupabaseUserId] = useState(null);
@@ -5201,7 +5915,6 @@ function App() {
 
   const [username, setUsername] = useState('');
   const [userGender, setUserGender] = useState('any');
-  const [selectedApps, setSelectedApps] = useState([]);
   const [selectedLevel, setSelectedLevel] = useState(null);
 
   const [userXP, setUserXP] = useState(0);
@@ -5220,22 +5933,22 @@ function App() {
 
   const [inventory, setInventory] = useState({
     avatars: ['a_base'],
-    backgrounds: ['bg_default', 'bg_light'],
+    backgrounds: ['bg_default'],
     skins: [],
     equippedAvatar: 'a_base',
     equippedBg: 'bg_default',
     equippedSkins: { 'a_base': null }
   });
 
-  const isLight = inventory.equippedBg === 'bg_light';
+  const isBgLight = inventory.equippedBg === 'bg_light';
 
   useEffect(() => {
-    if (isLight) {
+    if (isBgLight) {
       document.body.classList.add('theme-light-active');
     } else {
       document.body.classList.remove('theme-light-active');
     }
-  }, [isLight]);
+  }, [isBgLight]);
 
   const [chatPerson, setChatPerson] = useState(null);
   const [unreadFilter, setUnreadFilter] = useState(false);
@@ -5345,7 +6058,9 @@ function App() {
           equippedBg:     rawInv.equippedBg     || 'bg_default',
           equippedSkins:  (rawInv.equippedSkins && typeof rawInv.equippedSkins === 'object') ? rawInv.equippedSkins : {},
         };
-        // Asegurar que bg_light (gratuito) siempre esté disponible
+        if (!safeInv.backgrounds.includes('bg_default')) {
+          safeInv.backgrounds = ['bg_default', ...safeInv.backgrounds];
+        }
         if (!safeInv.backgrounds.includes('bg_light')) {
           safeInv.backgrounds = [...safeInv.backgrounds, 'bg_light'];
         }
@@ -5376,8 +6091,10 @@ function App() {
           // Guardar racha en Supabase (silencia errores si columnas no existen aún)
           supabase.from('profiles').update({ login_streak: newStreak, last_login_date: today }).eq('id', uid).then(() => {});
         } catch (_) {}
-        // Saltar onboarding directamente al main
-        setStep('main');
+        // Si ya visitó la landing en esta sesión de navegador, marcar como cargado
+        if (sessionStorage.getItem('visited_landing') === 'true') {
+          setStep('main');
+        }
       } else {
         // Si el usuario ya está logueado de forma permanente pero no tiene perfil en la DB (o onboarding_done es false),
         // inicializamos un perfil por defecto para que no se quede atrapado en el onboarding slider.
@@ -5392,7 +6109,7 @@ function App() {
             user_diamonds: profile?.user_diamonds || 0,
             inventory: profile?.inventory || {
               avatars: ['a_base'],
-              backgrounds: ['bg_default', 'bg_light'],
+              backgrounds: ['bg_default'],
               skins: [],
               equippedAvatar: 'a_base',
               equippedBg: 'bg_default',
@@ -5593,8 +6310,20 @@ function App() {
         <div className="hidden sm:block absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-[#1a1a1a] rounded-b-[2rem] z-[110]" />
 
         <AnimatePresence mode="wait">
-          {step === 'splash' && <Splash key="splash" />}
-          {step === 'onboarding' && <motion.div key="onboarding" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }} transition={{ duration: 0.8 }} className="absolute inset-0 z-40"><Onboarding onFinish={() => setStep('logoReveal')} /></motion.div>}
+          {step === 'splash' && (
+            <Splash key="splash" onComplete={() => {
+              if (supabaseUserId && dbLoaded) {
+                setStep('main');
+              } else {
+                setStep('logoReveal');
+              }
+            }} />
+          )}
+          {step === 'onboarding' && (
+            <motion.div key="onboarding" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }} className="fixed inset-0 z-[200]">
+              <Onboarding onFinish={() => setStep('splash')} />
+            </motion.div>
+          )}
           {step === 'logoReveal' && <LogoReveal key="logoReveal" onContinue={() => setStep('auth')} onBack={() => setStep('onboarding')} />}
           {step === 'auth' && (
             <AuthScreen 
@@ -5688,7 +6417,7 @@ function App() {
           {step === 'main' && (
             <motion.div key="main" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-40">
               <AnimatePresence mode="wait">
-                {mainNav === 'home' && <motion.div key="h" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><HomeDashboard selectedApps={selectedApps} activeChallenge={activeChallenge} onSelectChallenge={setShowChallengeDetail} onOpenActive={() => setShowActiveInteractive(true)} onOpenAll={() => setShowAllChallenges(true)} onCompleteChallenge={handleCompleteChallenge} onPlayMinigame={setActiveMinigame} userGender={userGender} selectedCoach={selectedCoach} setSelectedCoach={setSelectedCoach} completedActivities={completedActivities} setCompletedActivities={setCompletedActivities} userXP={userXP} setUserXP={setUserXP} userDiamonds={userDiamonds} setUserDiamonds={setUserDiamonds} calendarTasks={calendarTasks} setCalendarTasks={setCalendarTasks} blockedAppsConfig={blockedAppsConfig} setBlockedAppsConfig={setBlockedAppsConfig} onOpenAICalendar={() => setShowAICalendar(true)} onOpenAIHabit={() => setShowAIHabit(true)} onOpenCreateHabit={() => setShowCreateHabit(true)} lang={lang} supabaseUserId={supabaseUserId} setCoachChatOpen={setCoachChatOpen} /></motion.div>}
+                {mainNav === 'home' && <motion.div key="h" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><HomeDashboard selectedApps={selectedApps} activeChallenge={activeChallenge} onSelectChallenge={setShowChallengeDetail} onOpenActive={() => setShowActiveInteractive(true)} onOpenAll={() => setShowAllChallenges(true)} onCompleteChallenge={handleCompleteChallenge} onPlayMinigame={setActiveMinigame} userGender={userGender} selectedCoach={selectedCoach} setSelectedCoach={setSelectedCoach} completedActivities={completedActivities} setCompletedActivities={setCompletedActivities} userXP={userXP} setUserXP={setUserXP} userDiamonds={userDiamonds} setUserDiamonds={setUserDiamonds} calendarTasks={calendarTasks} setCalendarTasks={setCalendarTasks} blockedAppsConfig={blockedAppsConfig} setBlockedAppsConfig={setBlockedAppsConfig} onOpenAICalendar={() => setShowAICalendar(true)} onOpenAIHabit={() => setShowAIHabit(true)} onOpenCreateHabit={() => setShowCreateHabit(true)} lang={lang} supabaseUserId={supabaseUserId} setCoachChatOpen={setCoachChatOpen} isLight={isLight} toggleMode={toggleMode} onOpenLanding={() => setStep('onboarding')} /></motion.div>}
                 {mainNav === 'forum' && <motion.div key="f" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><Forum onSelectChat={(p) => { setChatPerson(p); setStep('chat'); }} unreadFilter={unreadFilter} setUnreadFilter={setUnreadFilter} activeTab={activeForumTab} setActiveTab={setActiveForumTab} forumPosts={forumPosts} setForumPosts={setForumPosts} userAvatarItem={SHOP_ITEMS.find(i => i.id === inventory.equippedAvatar)} username={username} /></motion.div>}
                 {mainNav === 'rankings' && <motion.div key="r" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><Rankings userXP={userXP} inventory={inventory} username={username} /></motion.div>}
                 {mainNav === 'shop' && <motion.div key="s" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-10"><ShopView userDiamonds={userDiamonds} onSelectItem={openShopItem} inventory={inventory} /></motion.div>}
@@ -5717,6 +6446,9 @@ function App() {
                         }}
                         onOpenStats={() => setShowStats(true)}
                         loginStreak={loginStreak}
+                        isLight={isLight}
+                        toggleMode={toggleMode}
+                        onOpenLanding={() => setStep('onboarding')}
                       />
                     </ErrorBoundary>
                   </motion.div>

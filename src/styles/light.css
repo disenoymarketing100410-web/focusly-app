@@ -1,0 +1,298 @@
+/* src/styles/light.css */
+:root.light {
+  /* Backgrounds */
+  --bg-main: #ffffff;
+  --bg-card: #ffffff;
+  --bg-gradient: linear-gradient(135deg, #ffffff, #f3f4f6);
+  /* Text */
+  --text-primary: #000000;
+  --text-secondary: #1f2937;
+  --text-muted: #4b5563;
+  /* Accent colors */
+  --accent: #2563eb; /* blue-600 */
+  --accent-bg: #eff6ff; /* blue-50 */
+  --accent-border: #bfdbfe; /* blue-200 */
+  /* Borders (no shadows in light mode) */
+  --border: #e5e7eb; /* gray-200 */
+  --shadow: none;
+}
+
+/* Default (dark) fallback */
+:root {
+  --bg-main: #050505;
+  --bg-card: #0c0c0c;
+  --bg-gradient: linear-gradient(135deg, #111, #0a0a0a);
+  --text-primary: #f5f5f5;
+  --text-secondary: #c0c0c0;
+  --text-muted: #888888;
+  --accent: #3b82f6;
+  --accent-bg: #1a202c;
+  --accent-border: #374151;
+  --border: #2d2d2d;
+  --shadow: rgba(255, 255, 255, 0.1);
+}
+
+/* Light mode overrides for Tailwind utilities inside the application */
+.light {
+  color-scheme: light;
+}
+
+/* ===== GLOBAL: strip ALL box-shadows in light mode ===== */
+.light *:not(.absolute):not([class*="shadow-["]):not(button) {
+  box-shadow: none !important;
+}
+
+/* Force document and body backgrounds */
+.light body {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Force main application container to be white/light grey, overriding dark backgrounds */
+.light .sm\:rounded-\[60px\],
+.light .w-full.h-screen.sm\:w-\[390px\] {
+  background: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Hide dark mode animations, embers, stars and canvas grids in light mode */
+.light .absolute.inset-0.z-0.pointer-events-none {
+  display: none !important;
+}
+
+/* Overrides for text color classes */
+.light .text-white {
+  color: #000000 !important;
+}
+.light .text-white\/90 {
+  color: #111111 !important;
+}
+.light .text-white\/80 {
+  color: #1f2937 !important;
+}
+.light .text-white\/75 {
+  color: #27272a !important;
+}
+.light .text-white\/70,
+.light .text-white\/60 {
+  color: #374151 !important;
+}
+.light .text-white\/50,
+.light .text-white\/40,
+.light .text-white\/30 {
+  color: #52525b !important;
+}
+.light .text-white\/20,
+.light .text-white\/10 {
+  color: #71717a !important;
+}
+
+/* Force ALL cards, containers, dialogs and list items to be clean white in light mode */
+.light .bg-black,
+.light .bg-black\/95,
+.light .bg-black\/80,
+.light .bg-black\/60,
+.light .bg-black\/50,
+.light .bg-black\/40,
+.light .bg-black\/20,
+.light .bg-white\/5,
+.light .bg-white\/10,
+.light .bg-white\/15,
+.light .bg-white\/20,
+.light .bg-white\/30,
+.light .bg-slate-900,
+.light .bg-slate-800,
+.light .bg-gray-900,
+.light .bg-gray-800,
+.light .bg-zinc-900,
+.light .bg-zinc-800,
+.light .bg-\[\#020c1b\],
+.light .bg-\[\#1e293b\],
+.light .bg-\[\#0a0a0a\],
+.light .bg-\[\#0a0a0a\]\/50,
+.light .bg-\[\#111\],
+.light .bg-\[\#111\]\/80,
+.light .bg-\[\#111\]\/50,
+.light .bg-\[\#0c0c0c\],
+.light .bg-\[\#0c0c0c\]\/80,
+.light .bg-\[\#151515\],
+.light .bg-\[\#1a1a1a\],
+.light .bg-\[\#1a1a1a\]\/80,
+.light .bg-indigo-600\/20,
+.light .bg-blue-900\/20 {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Inner cards get a very faint tint to separate from the white parent */
+.light .bg-white\/5,
+.light .bg-white\/10,
+.light .bg-white\/15,
+.light .bg-white\/20,
+.light .bg-white\/30 {
+  background-color: #fafafa !important;
+}
+
+/* Input styling: default text, placeholders, and grey/border backgrounds for input boxes */
+.light input {
+  color: #000000 !important;
+}
+.light input::placeholder {
+  color: #71717a !important;
+}
+.light input[type="text"]:not(.bg-transparent) {
+  background-color: #f4f4f5 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 9999px !important;
+}
+
+/* Overrides for borders */
+.light .border,
+.light .border-white\/5,
+.light .border-white\/10,
+.light .border-white\/20 {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* White buttons and tags that need contrast */
+.light .bg-white {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+.light .text-black {
+  color: #ffffff !important;
+}
+.light .fill-black {
+  fill: #ffffff !important;
+}
+
+/* Force action buttons bg-white inside light mode */
+.light button.bg-white {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+.light button.bg-white .text-black {
+  color: #ffffff !important;
+}
+
+/* Headers: make headers solid white with a border and dark text */
+.light .px-6.pt-16.pb-4.bg-gradient-to-b {
+  background: #ffffff !important;
+  background-image: none !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+.light .px-6.pt-16.pb-4.bg-gradient-to-b h1,
+.light .px-6.pt-16.pb-4.bg-gradient-to-b h2,
+.light .px-6.pt-16.pb-4.bg-gradient-to-b span {
+  color: #000000 !important;
+}
+
+/* Navigation Menu Backdrop container override (fixes menu staying black!) */
+.light .absolute.bottom-8 .absolute.top-\[6px\] {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+/* Active and inactive items in bottom nav */
+.light .absolute.bottom-8 .bg-white {
+  background-color: #000000 !important; /* Active circle */
+}
+.light .absolute.bottom-8 .text-black {
+  color: #ffffff !important; /* Active icon */
+}
+.light .absolute.bottom-8 .text-white\/40 {
+  color: rgba(0, 0, 0, 0.4) !important; /* Inactive icons */
+}
+.light .absolute.bottom-8 .group-hover\:text-white:hover {
+  color: #000000 !important;
+}
+
+/* Light mode calendar picker indicator */
+.light input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0) !important;
+  opacity: 0.75 !important;
+}
+
+/* Custom scrollbars in light mode */
+.light .custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15) !important;
+}
+.light .custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* App selectors scaling and styling in light mode */
+.light .grayscale.opacity-30.scale-90.brightness-200 {
+  filter: grayscale(1) !important;
+  opacity: 0.45 !important;
+}
+.light .grayscale-0.opacity-100.scale-110.brightness-150 {
+  filter: none !important;
+  opacity: 1 !important;
+  transform: scale(1.1) !important;
+}
+
+/* Accent overrides */
+.light .text-\[\#8ab4f8\] {
+  color: #2563eb !important; /* blue-600 */
+}
+.light .bg-\[\#8ab4f8\] {
+  background-color: #2563eb !important; /* blue-600 */
+  color: #ffffff !important;
+}
+.light .bg-\[\#8ab4f8\]\/10,
+.light .bg-\[\#8ab4f8\]\/20 {
+  background-color: rgba(37, 99, 235, 0.08) !important;
+}
+.light .border-\[\#8ab4f8\]\/20,
+.light .border-\[\#8ab4f8\]\/30 {
+  border-color: rgba(37, 99, 235, 0.2) !important;
+}
+
+/* Banner gradients in Crece tab (from-blue-900/60 to-purple-900/60) */
+.light .bg-gradient-to-br.from-blue-900\/60.to-purple-900\/60 {
+  background-image: linear-gradient(135deg, #eff6ff, #f5f3ff) !important;
+  border-color: rgba(37, 99, 235, 0.12) !important;
+}
+
+/* Practice activity gradient */
+.light .bg-gradient-to-br.from-emerald-900\/60.to-teal-900\/60 {
+  background-image: linear-gradient(135deg, #f0fdf4, #f0fdfa) !important;
+  border-color: rgba(16, 185, 129, 0.18) !important;
+}
+
+/* Emerald action buttons in light mode */
+.light .bg-emerald-500,
+.light .bg-emerald-600 {
+  background-color: #059669 !important; /* solid premium emerald */
+  color: #ffffff !important;
+}
+.light .bg-emerald-500 .text-black,
+.light .bg-emerald-600 .text-black {
+  color: #ffffff !important;
+}
+
+/* Ascent/Descent zone badges in Rankings */
+.light .bg-green-950 {
+  background-color: #f0fdf4 !important;
+  color: #166534 !important;
+  border-color: rgba(34, 197, 94, 0.2) !important;
+}
+.light .bg-red-950 {
+  background-color: #fef2f2 !important;
+  color: #991b1b !important;
+  border-color: rgba(239, 68, 68, 0.2) !important;
+}
+
+/* Chats and other specific user message bubbles inside ChatView */
+.light .bg-white\/10.backdrop-blur-sm.self-start {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+.light .text-white\/30 {
+  color: #71717a !important;
+}
